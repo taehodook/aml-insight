@@ -1009,7 +1009,7 @@ function toggleTheme(){
 (function(){
   // 도메인 잠금: 배포 도메인만 허용 (예: 자신의 도메인으로 교체, 빈 배열이면 비활성)
   // 허용 도메인 — 새 배포 주소를 쓰면 여기에 추가하세요
-  const ALLOW=["taehodook.github.io","amlinsight-test1.netlify.app","localhost","127.0.0.1",""];
+  const ALLOW=[];   // 잠금 해제: 모든 도메인 허용 (GitHub Pages + Netlify 등)
   if(ALLOW.length){const h=location.hostname;
     if(!ALLOW.some(d=>h===d||h.endsWith("."+d))){
       document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center;padding:40px;color:#101114">'+
