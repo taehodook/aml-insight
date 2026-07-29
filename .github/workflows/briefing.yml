@@ -1,0 +1,59 @@
+name: daily-aml-briefing
+on:
+  schedule:
+    - cron: "30 22 * * *"   # 매일 07:30 KST
+  workflow_dispatch: {}      # Actions 탭에서 수동 실행 가능
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Collect & build
+        working-directory: briefing
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}   # 없으면 템플릿 브리핑으로 동작
+        run: |
+          python3 collect.py
+          python3 build.py
+      - name: Collect money flow
+        working-directory: flow
+        run: |
+          python3 collect_flow.py
+          python3 build_flow.py
+      - name: Collect business-risk (news RA)
+        working-directory: business-risk
+        run: python3 collect_ra.py || true
+      - name: Collect typology intelligence
+        working-directory: typology
+        run: python3 collect_method.py || true
+      - name: Send Telegram digest (optional)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python3 notify/send_telegram.py || true
+      - name: Send KakaoTalk memo (optional)
+        env:
+          KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
+          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python3 notify/send_kakao.py || true
+      - name: Weekly checker refresh (Mondays)
+        working-directory: checker
+        run: |
+          if [ "$(date +%u)" = "1" ]; then
+            python3 fetch_wanted.py || true
+            python3 convert.py
+            python3 build.py
+          fi
+      - name: Commit & push
+        run: |
+          git config user.name "briefing-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add briefing/data.json briefing/sanctions_snapshot.json briefing/index.html flow/flow_data.json flow/index.html business-risk/ra_news.json typology/methods.json checker/index.html checker/data.json checker/fbi.json 2>/dev/null || git add briefing flow business-risk typology
+          git diff --cached --quiet || git commit -m "briefing: $(date +'%Y-%m-%d')"
+          git push

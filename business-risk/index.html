@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>업종 위험 인텔리전스 — AML 인사이트</title>
+<meta name="description" content="국내외 자금세탁 뉴스를 기반으로 업종별 위험도를 자동 순위화합니다. 근거 기사 링크와 함께.">
+<meta property="og:title" content="업종 위험 인텔리전스 — AML 인사이트">
+<meta property="og:description" content="국내외 자금세탁 뉴스 기반 업종 위험 자동 순위 + 근거 기사.">
+<meta property="og:type" content="website">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/700.css");
+:root{
+  --bg:#FFFFFF; --tx:#101114; --sub:#5E626E; --dim:#9CA0AB; --line:#101114; --hair:#E6E6EA; --soft:#F7F8F4;
+  --lime:#D8FF3D; --lime-deep:#B7E600; --violet:#6C4DFF;
+  --r3:#E03150; --r3b:#FDEAEE; --r2:#C77B0A; --r2b:#FCF3E2; --r1:#0E9F6E; --r1b:#E7F7F0;
+  --mono:'JetBrains Mono',monospace; --disp:'Paperlogy',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,sans-serif;background:var(--bg);color:var(--tx);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--violet);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+::selection{background:var(--lime)}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+.top{border-bottom:2.5px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.bn{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.02em}
+.bn i{font-style:normal;background:var(--lime);padding:0 4px;border-radius:3px}
+.toplabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--sub)}
+.hero{padding:42px 0 26px;border-bottom:2.5px solid var(--line)}
+.kick{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--sub)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(30px,7vw,48px);line-height:1.1;letter-spacing:-.03em;margin-top:12px}
+h1 .hl{background:var(--lime);padding:0 .1em;border-radius:.12em}
+.hsub{font-size:14px;color:var(--sub);margin-top:13px;max-width:580px;line-height:1.85}
+.stat{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap}
+.stbox{font-family:var(--mono)}
+.stbox .n{font-size:26px;font-weight:700;color:var(--tx)}
+.stbox .l{font-size:10px;letter-spacing:.1em;color:var(--dim)}
+main{padding:30px 0 70px}
+.secttl{font-family:var(--disp);font-weight:800;font-size:20px;margin:8px 0 4px;display:flex;align-items:center;gap:9px}
+.secsub{font-size:12.5px;color:var(--sub);margin-bottom:18px}
+.rank{border:2px solid var(--line);border-radius:14px;margin-bottom:11px;overflow:hidden}
+.rankhd{display:flex;align-items:center;gap:14px;padding:15px 17px;cursor:pointer;background:#fff}
+.rankhd:hover{background:var(--soft)}
+.rno{font-family:var(--disp);font-weight:800;font-size:22px;width:34px;flex:none;text-align:center;color:var(--dim)}
+.rno.top{color:var(--violet)}
+.rmid{flex:1;min-width:0}
+.rname{font-family:var(--disp);font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lvl{font-family:var(--disp);font-weight:800;font-size:10px;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.lvl3{background:var(--r3b);color:var(--r3)} .lvl2{background:var(--r2b);color:var(--r2)} .lvl1{background:var(--r1b);color:var(--r1)}
+.rmeta{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:4px}
+.rmeta b{color:var(--violet)}
+.rscore{text-align:right;flex:none}
+.rscore .sc{font-family:var(--mono);font-weight:700;font-size:26px;line-height:1}
+.rscore .scl{font-size:9px;color:var(--dim);font-family:var(--mono);letter-spacing:.1em}
+.rbar{height:5px;background:var(--soft)}
+.rbar i{display:block;height:100%}
+.rbody{display:none;padding:0 17px 16px;border-top:1px solid var(--hair)}
+.rank.open .rbody{display:block}
+.rbody .bt{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);margin:14px 0 9px}
+.nlist{display:flex;flex-direction:column;gap:2px}
+.nitem{display:flex;gap:10px;padding:8px 4px;border-bottom:1px solid var(--hair);align-items:baseline}
+.nitem:last-child{border-bottom:none}
+.nlang{font-family:var(--mono);font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:5px;flex:none;margin-top:2px}
+.nlang.KR{background:#E7F0FF;color:#2456C7} .nlang.EN{background:#F0E7FF;color:#6C2BC7}
+.ntext{flex:1;min-width:0}
+.ntitle{font-size:13px;line-height:1.5;color:var(--tx)}
+.ntitle:hover{color:var(--violet);text-decoration:underline}
+.nsrc{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px}
+.flags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.flag{font-family:var(--mono);font-size:9px;font-weight:700;border:1.5px solid var(--violet);color:var(--violet);background:#F3F0FF;border-radius:999px;padding:2px 8px}
+.insight{border:2.5px solid var(--line);border-radius:16px;padding:17px 19px;margin-bottom:26px;background:var(--soft)}
+.insh{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--violet);font-weight:700;margin-bottom:10px}
+.insrow{font-size:13px;margin:7px 0;line-height:1.6}
+.insrow b{color:var(--tx)}
+.gap-chip{display:inline-block;font-size:11px;font-weight:700;background:#fff;border:1.5px solid var(--r2);color:var(--r2);border-radius:999px;padding:3px 10px;margin:3px 4px 0 0}
+.loading{text-align:center;color:var(--dim);padding:50px;font-size:14px}
+footer{border-top:2.5px solid var(--line);padding:20px 0 40px}
+.fnote{font-size:11px;color:var(--dim);line-height:1.85;max-width:700px}
+.fnote b{color:var(--tx)}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <a class="bn" href="../">AML 인사이트<i>.</i></a>
+  <span class="toplabel">RISK INTELLIGENCE</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <div class="kick">NEWS-DRIVEN INDUSTRY RISK</div>
+  <h1>뉴스가 말하는 <span class="hl">위험 업종</span></h1>
+  <div class="hsub">국내외 자금세탁·범죄 뉴스를 모아 업종별 위험도를 자동으로 순위화합니다. 점수는 기준 위험등급(FATF·특금법·FinCEN)과 최근 보도량을 결합한 값이며, 각 업종의 <b>근거 기사</b>를 함께 보여줍니다.</div>
+  <div class="stat" id="stat"></div>
+</div></header>
+<main class="wrap">
+  <div id="insight"></div>
+  <div class="secttl">📊 업종 위험 순위</div>
+  <div class="secsub">종합점수 = 구조적 위험(등급·기준) + 최근 뉴스 노출. 카드를 누르면 근거 기사가 펼쳐집니다.</div>
+  <div id="ranklist"><div class="loading">뉴스 데이터를 불러오는 중…</div></div>
+</main>
+<footer><div class="wrap">
+  <div class="fnote">
+    <b>방법론</b> 국내(한국어)·해외(영문) 자금세탁/범죄 뉴스를 Google News에서 수집해 업종 키워드로 매칭하고, 기준 위험등급과 보도량을 결합해 종합점수를 산출합니다. <b>면책</b> 보도량은 사회적 관심·언론 노출의 지표일 뿐 특정 업종·사업자의 위법을 단정하지 않습니다. 실제 고객 위험평가는 각 기관의 원천 규정(FATF 권고·특금법·FinCEN)과 내부 RBA 절차를 따르세요. 제재 대상자 조회는 <a href="../checker/">제재 체커</a>, 세탁 수법별 STR 점검 포인트는 <a href="../typology/">수법 인텔리전스</a>를 이용하세요.<br><br>
+    © 2026 AML 인사이트 · 무단 복제·재배포를 금합니다.
+  </div>
+</div></footer>
+<script>
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lvName=l=>({3:"고위험",2:"중위험",1:"일반"}[l]||"");
+function scoreColor(s){const h=Math.round(120-(s/100)*120);return "hsl("+h+" 80% 45%)";}
+fetch("./ra_news.json?"+Date.now()).then(r=>r.json()).then(render)
+  .catch(()=>{document.getElementById("ranklist").innerHTML='<div class="loading">데이터를 불러오지 못했습니다.</div>';});
+function render(d){
+  document.getElementById("stat").innerHTML=
+    '<div class="stbox"><div class="n">'+d.total_news+'</div><div class="l">수집 기사</div></div>'+
+    '<div class="stbox"><div class="n">'+d.kr+'</div><div class="l">국내 KR</div></div>'+
+    '<div class="stbox"><div class="n">'+d.en+'</div><div class="l">해외 EN</div></div>'+
+    '<div class="stbox"><div class="n">'+d.ranking.length+'</div><div class="l">분석 업종</div></div>';
+  const gap=d.ranking.filter(x=>x.level<3&&x.news_count>=3).sort((a,b)=>b.news_count-a.news_count).slice(0,4);
+  const topNews=[...d.ranking].sort((a,b)=>b.news_count-a.news_count)[0];
+  let ins='<div class="insh">INSIGHT · 지금 주목할 지점</div>';
+  if(topNews&&topNews.news_count>0)
+    ins+='<div class="insrow">🔺 최근 뉴스에 가장 많이 등장한 업종은 <b>'+esc(topNews.name)+'</b> ('+topNews.news_count+'건)입니다.</div>';
+  if(gap.length){
+    ins+='<div class="insrow">⚠ <b>재평가 후보</b> — 기준 등급은 고위험이 아니지만 최근 보도가 활발한 업종입니다. 사내 RA에서 낮게 보고 있다면 등급 상향을 검토해 보세요.</div><div>';
+    ins+=gap.map(x=>'<span class="gap-chip">'+esc(x.name)+' · 뉴스 '+x.news_count+'건 · '+lvName(x.level)+'</span>').join("")+'</div>';
+  }
+  document.getElementById("insight").innerHTML=ins;
+  const html=d.ranking.map((x,i)=>{
+    const hits=(x.hits||[]).map(h=>
+      '<div class="nitem"><span class="nlang '+h.lang+'">'+h.lang+'</span><div class="ntext">'+
+      '<a class="ntitle" href="'+esc(h.link)+'" target="_blank" rel="noopener">'+esc(h.t)+'</a>'+
+      '<div class="nsrc">'+esc(h.src||"")+'</div></div></div>').join("");
+    const flags=(x.flags||[]).map(f=>'<span class="flag">'+f+'</span>').join("");
+    return '<div class="rank">'+
+      '<div class="rankhd" onclick="this.parentNode.classList.toggle(\'open\')">'+
+        '<div class="rno '+(i<3?'top':'')+'">'+(i+1)+'</div>'+
+        '<div class="rmid"><div class="rname">'+esc(x.name)+' <span class="lvl lvl'+x.level+'">'+lvName(x.level)+'</span></div>'+
+        '<div class="rmeta">근거 뉴스 <b>'+x.news_count+'건</b> · 구조 '+x.struct+' + 뉴스 '+x.news_score+'</div></div>'+
+        '<div class="rscore"><div class="sc" style="color:'+scoreColor(x.total)+'">'+x.total+'</div><div class="scl">SCORE</div></div>'+
+      '</div>'+
+      '<div class="rbar"><i style="width:'+x.total+'%;background:'+scoreColor(x.total)+'"></i></div>'+
+      '<div class="rbody"><div class="flags">'+flags+'</div>'+
+        '<div class="bt">근거 기사 '+(x.hits?x.hits.length:0)+'건 (클릭 시 원문)</div>'+
+        '<div class="nlist">'+(hits||'<div style="font-size:12px;color:var(--dim);padding:8px 0">매칭된 최근 기사가 없습니다.</div>')+'</div>'+
+      '</div></div>';
+  }).join("");
+  document.getElementById("ranklist").innerHTML=html;
+  const first=document.querySelector(".rank"); if(first)first.classList.add("open");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STR 시나리오 라이브러리 — AML 인사이트</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="자료실 — AML 인사이트">
+<meta property="og:description" content="AML 실무 자료·양식·체크리스트.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/library/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="AML 실무자들이 익명으로 탐지 룰을 공유하고 함께 다듬는 위키. AML 인사이트 제공.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css");
+
+:root{
+  --blue:#101114; --blue-dark:#6C4DFF; --blue-tint:#D8FF3D;
+  --ink:#0A0B0D; --gray:#5B616E; --gray2:#8A919E;
+  --line:#EAECEF; --soft:#F5F6F9; --paper:#FFFFFF;
+  --red:#E5484D; --red-tint:#FEEDEE;
+  --green:#0A8754; --green-tint:#E8F7F0;
+  --amber:#B45309; --amber-tint:#FFF3E3;
+  --violet:#6B46F2; --violet-tint:#F0EBFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter Variable','Pretendard Variable',Pretendard,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.topbar{border-bottom:2.5px solid #101114;background:#fff}
+.tbwrap{max-width:920px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:#D8FF3D;border:2px solid #101114}
+.toplabel{font-size:12px;font-weight:600;color:var(--gray);background:var(--soft);border-radius:999px;padding:5px 12px}
+
+.hero{max-width:920px;margin:0 auto;padding:32px 20px 20px}
+h1{font-family:'Paperlogy',sans-serif;font-size:clamp(28px,7vw,42px);font-weight:800;letter-spacing:-.035em;line-height:1.14}
+h1 .accent{background:#D8FF3D;color:#101114;padding:0 .1em;border-radius:.12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hsub{font-size:14.5px;color:var(--gray);margin-top:10px;max-width:620px}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.stat{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--gray);background:#fff}
+.stat b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.stat.demo{background:var(--amber-tint);border-color:transparent;color:var(--amber);font-weight:700}
+
+.navwrap{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nwrap{max-width:920px;margin:0 auto;padding:12px 20px}
+.tabs{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px}
+.tab{border:none;background:transparent;border-radius:999px;padding:8px 18px;font-size:13.5px;font-weight:700;color:var(--gray);transition:all .15s}
+.tab.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(10,11,13,.12)}
+
+main{max-width:920px;margin:0 auto;padding:18px 20px 70px}
+.page{display:none}.page.on{display:block}
+
+/* 목록 도구 */
+.tools{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;align-items:center}
+#q{flex:1;min-width:150px;border:2px solid transparent;border-radius:999px;padding:9px 16px;font-size:13.5px;background:var(--soft)}
+#q:focus{outline:none;border-color:var(--blue);background:#fff}
+.f{border:none;background:var(--soft);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--gray);transition:all .15s}
+.f.on{background:var(--blue-tint);color:var(--blue)}
+
+/* 룰 카드 */
+.rcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px;margin-bottom:10px;transition:border-color .15s}
+.rcard:hover{border-color:#D7DAE0}
+.rtop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer}
+.rtitle{font-size:15.5px;font-weight:800;letter-spacing:-.015em}
+.rbadges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.bdg{font-size:11px;font-weight:700;border-radius:999px;padding:3.5px 11px}
+.b-cat{background:var(--blue-tint);color:var(--blue)}
+.b-seg{background:var(--soft);color:var(--gray)}
+.b-seed{background:var(--violet-tint);color:var(--violet)}
+.logicbox{background:var(--soft);border-radius:14px;padding:12px 15px;margin-top:11px;font-size:12.5px;color:var(--ink);line-height:1.75;font-variant-numeric:tabular-nums;word-break:break-word;white-space:pre-wrap}
+.rmeta{display:flex;align-items:center;gap:14px;margin-top:11px;font-size:12px;color:var(--gray2)}
+.likebtn{border:none;background:var(--soft);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:700;color:var(--gray);transition:all .15s}
+.likebtn.on{background:var(--blue-tint);color:var(--blue)}
+.rdetail{display:none;margin-top:13px;border-top:1px solid var(--line);padding-top:13px}
+.rdetail.on{display:block}
+.dh{font-size:11.5px;font-weight:800;color:var(--gray2);letter-spacing:.04em;text-transform:uppercase;margin-top:11px}
+.dh:first-child{margin-top:0}
+.dtext{font-size:13px;color:var(--gray);margin-top:5px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.fpbox{background:var(--amber-tint);border-radius:12px;padding:11px 14px;margin-top:5px;font-size:12.5px;color:var(--amber);line-height:1.7;white-space:pre-wrap}
+/* 댓글 */
+.cmt{border-top:1px dashed var(--line);padding:10px 2px;font-size:13px}
+.cmt .who{font-size:11px;color:var(--gray2);margin-bottom:3px}
+.cbox{display:flex;gap:8px;margin-top:10px}
+.cbox input{flex:1;border:2px solid transparent;border-radius:999px;padding:10px 16px;font-size:13.5px;background:var(--soft);min-width:0}
+.cbox input:focus{outline:none;border-color:var(--blue);background:#fff}
+.cbtn{background:var(--blue);color:#fff;border:none;border-radius:999px;padding:0 18px;font-size:13px;font-weight:700}
+
+/* 등록 폼 */
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:14px}
+.ctitle{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.cdesc{font-size:13px;color:var(--gray);margin-top:4px;line-height:1.65}
+.warncard{display:flex;gap:12px;background:var(--red-tint);border-radius:16px;padding:14px 16px;margin-top:14px;font-size:12.5px;color:#C0353A;line-height:1.65}
+.warncard .ic{flex:none;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.chk{display:flex;align-items:center;gap:9px;margin-top:13px;font-size:13.5px;background:var(--soft);border-radius:14px;padding:13px 15px;cursor:pointer;user-select:none}
+.chk input{width:18px;height:18px;accent-color:var(--blue)}
+.flabel{font-size:11.5px;font-weight:700;color:var(--gray);margin:14px 0 4px 4px}
+.inp,select,textarea.ta{width:100%;border:2px solid transparent;border-radius:14px;padding:12px 14px;font-size:14px;background:var(--soft);transition:all .15s}
+.inp:focus,select:focus,textarea.ta:focus{outline:none;border-color:var(--blue);background:#fff}
+textarea.ta{min-height:84px;resize:vertical;line-height:1.6}
+.gobtn{background:var(--blue);color:#fff;border:none;border-radius:999px;padding:14px 26px;font-size:15px;font-weight:700;width:100%;margin-top:16px}
+.gobtn:hover{background:var(--blue-dark)}
+.gobtn:disabled{background:var(--gray2)}
+.upresult{display:none;border-radius:16px;padding:14px 16px;margin-top:13px;font-size:13px;line-height:1.7}
+.upresult.ok{display:block;background:var(--green-tint);color:var(--green)}
+.upresult.bad{display:block;background:var(--red-tint);color:#C0353A}
+.empty{text-align:center;color:var(--gray);padding:48px 16px;font-size:14px;line-height:1.8}
+.ecircle{width:64px;height:64px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px}
+
+footer{border-top:1px solid var(--line);padding:24px 20px 32px;font-size:12px;color:var(--gray);line-height:1.75}
+.fwrap{max-width:920px;margin:0 auto}
+footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tbwrap">
+    <a class="logo" href="../" style="text-decoration:none;color:inherit"><span class="dot"></span>AML 인사이트</a>
+    <div class="toplabel">STR Scenario Library</div>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>탐지 룰을<br><span class="accent">함께 다듬는</span> 위키</h1>
+  <div class="hsub">"이 수법, 어떤 조건으로 잡으세요?" — 실무자들이 익명으로 탐지 시나리오의 조건식과 오탐 노트를 공유하고, 댓글로 함께 정교하게 만들어 갑니다.</div>
+  <div class="stats" id="stats"></div>
+</div>
+
+<div class="navwrap">
+  <div class="nwrap">
+    <div class="tabs">
+      <button class="tab on" data-p="list" onclick="go('list')">라이브러리</button>
+      <button class="tab" data-p="add" onclick="go('add')">룰 등록</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- ── 라이브러리 ── -->
+  <div class="page on" id="pg-list">
+    <div class="tools">
+      <input id="q" type="search" placeholder="룰 이름·조건·키워드 검색" oninput="renderList()">
+      <button class="f on" data-c="all" onclick="setCat(this)">전체</button>
+      <button class="f" data-c="분산입금" onclick="setCat(this)">분산입금</button>
+      <button class="f" data-c="PG·지급결제" onclick="setCat(this)">PG·지급결제</button>
+      <button class="f" data-c="가상자산" onclick="setCat(this)">가상자산</button>
+      <button class="f" data-c="현금·카드" onclick="setCat(this)">현금·카드</button>
+      <button class="f" data-c="법인·외환" onclick="setCat(this)">법인·외환</button>
+      <button class="f" data-c="기타" onclick="setCat(this)">기타</button>
+      <button class="f" id="sortbtn" onclick="toggleSort()">정렬: 도움순</button>
+    </div>
+    <div id="rlist"></div>
+  </div>
+
+  <!-- ── 등록 ── -->
+  <div class="page" id="pg-add">
+    <div class="card">
+      <div class="ctitle">탐지 룰 등록</div>
+      <div class="cdesc">조건식은 자유 서술로 적되, AND/OR와 임계값이 드러나게 써 주세요. 오탐 노트가 있는 룰이 가장 좋은 룰입니다.</div>
+      <div class="warncard"><div class="ic">!</div><div><b>사내 운영 기준 유출 주의.</b> 회사에서 실제 운영 중인 임계값·룰명을 그대로 올리지 마세요(내부 기준 유출이자, 회피 수법 학습 자료가 될 수 있습니다). 수치는 일반화된 범위(예: "건당 100만원 미만 수준")로 바꾸고, STR 보고 사실 등 법령상 비밀은 절대 포함하지 마세요.</div></div>
+      <label class="chk"><input type="checkbox" id="ruleok"> 사내 기준 원문이 아닌 <b>일반화된 내용</b>임을 확인합니다.</label>
+
+      <div class="flabel">룰 이름</div>
+      <input class="inp" id="rt" placeholder="예: 단기 다수 송금인 집중입금 탐지" maxlength="60">
+      <div class="flabel">카테고리 / 대상 세그먼트</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <select id="rc"><option>분산입금</option><option>PG·지급결제</option><option>가상자산</option><option>현금·카드</option><option>법인·외환</option><option>기타</option></select>
+        <select id="rs"><option>개인</option><option>법인</option><option>개인사업자</option><option>가맹점</option><option>공통</option></select>
+      </div>
+      <div class="flabel">조건식 (필수)</div>
+      <textarea class="ta" id="rl" placeholder="예: 동일 수취계좌 기준 24시간 내&#10;· 상이 송금인 수 ≥ N명 (예: 5명 수준)&#10;· AND 건당 금액 < 소액 기준&#10;· AND 합계 ≥ 보고 검토 기준" maxlength="800"></textarea>
+      <div class="flabel">권장 파라미터 범위 (선택)</div>
+      <textarea class="ta" id="rp" style="min-height:60px" placeholder="예: N=4~6명, 관찰window=24~72시간 (업권 규모에 따라 조정)" maxlength="300"></textarea>
+      <div class="flabel">오탐(FP) 노트 (선택 — 강력 추천)</div>
+      <textarea class="ta" id="rf" style="min-height:60px" placeholder="예: 회비·경조사 수금 계좌, 학원 수강료 계좌에서 오탐 다발 → 메모 키워드 제외 조건 필요" maxlength="400"></textarea>
+      <div class="flabel">근거 타이폴로지 / 참고 (선택)</div>
+      <input class="inp" id="rw" placeholder="예: KoFIU 사례집 분산입금형, FATF 보고서 등" maxlength="120">
+      <button class="gobtn" id="addbtn" onclick="submitRule()">룰 등록</button>
+      <div class="upresult" id="upresult"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="fwrap">
+    <b>이용 안내</b> · 본 라이브러리는 실무자 간 지식 공유를 위한 참고 자료이며, 게시된 룰의 도입·운영 판단과 책임은 각 기관에 있습니다. 사내 운영 기준 원문, 고객 정보, STR 보고 관련 사실 등 법령상 비밀의 게시를 금지하며, 위반 게시물은 사전 통지 없이 삭제될 수 있습니다.
+    <div style="margin-top:10px">© AML 인사이트 · 기여자 ID: <span id="myid"></span></div>
+  </div>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════
+   Firebase 설정 — Spark(무료) 플랜으로 충분합니다.
+   placeholder 상태면 데모 모드(기본 룰만, 등록은 세션 한정)로 동작.
+   DB 규칙 예시:
+   {"rules":{"strlib":{
+     "rules":{".read":true,"$id":{".write":"!data.exists()"}},
+     "likes":{".read":true,".write":true},
+     "comments":{".read":true,"$rid":{"$cid":{".write":"!data.exists()"}}}
+   }}}
+   (룰·댓글은 생성만 허용, 수정·삭제는 콘솔에서 — 무료 한도 내 어뷰징 방어)
+════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT"
+};
+
+/* ── 기본 제공 룰 (시드) ── */
+const SEED=[
+ {id:"s1",t:"단기 다수 송금인 집중입금 (스머핑)",c:"분산입금",s:"개인",
+  l:"동일 수취계좌 기준 24시간 내\n· 상이 송금인 수 ≥ N명\n· AND 건당 금액 < 소액 기준 (현금보고 회피 수준)\n· AND 합계 ≥ 검토 기준액",
+  p:"N=4~6명, window=24~72h. 신규 계좌는 N을 낮춰 민감하게.",
+  f:"회비·경조사·학원비 수금 계좌에서 오탐 다발. 적요 키워드(회비, 축의 등) 제외 조건과 병행 권장.",
+  w:"KoFIU 사례집 분산입금형 / FATF Smurfing",likes:0},
+ {id:"s2",t:"가상계좌 정산금 제3자 이전",c:"PG·지급결제",s:"가맹점",
+  l:"가상계좌 가맹점 기준\n· 정산계좌 예금주 ≠ 가맹점 사업자 (실명조회 불일치)\n· OR 정산 직후(당일) 제3자 계좌로 이체 비율 ≥ 고비율\n· AND 월 정산액 ≥ 검토 기준",
+  p:"이체 비율 80~90% 수준에서 시작 후 조정.",
+  f:"지급대행·에스크로 계약이 있는 정상 가맹점 오탐 → 계약서 징구 여부로 1차 필터.",
+  w:"금감원 가상계좌 재판매 행정지도(2026) 관련 유형",likes:0},
+ {id:"s3",t:"급조 계좌 고속 통과 (Pass-through)",c:"분산입금",s:"개인",
+  l:"계좌 개설 후 30일 이내\n· 입금 발생 → 1시간 내 출금·이체 비율 ≥ 고비율\n· AND 일 누적 ≥ 검토 기준\n· AND 잔액 체류시간 평균 < 단시간",
+  p:"통과비율 80%+, 체류 30~60분 미만 수준.",
+  f:"급여 이체 직후 카드대금·적금 자동이체 빠지는 신규 급여계좌 오탐 → 정기성(동일일자 반복) 제외.",
+  w:"보이스피싱 대포통장 수금 구조",likes:0},
+ {id:"s4",t:"집금→거래소 당일 연계",c:"가상자산",s:"개인",
+  l:"단일 계좌 기준 7일 내\n· 상이 송금인 ≥ N명으로부터 입금\n· AND 입금액의 ≥ 고비율이 당일 가상자산거래소 입금으로 연결",
+  p:"N=3~5명, 연계비율 70~90%.",
+  f:"P2P 중고거래 대금을 코인 투자로 돌리는 개인 오탐 존재 → 금액 규모·반복성으로 구분.",
+  w:"가상자산 환치기(불법 외환) 유형",likes:0},
+ {id:"s5",t:"상품권 업종 결제 집중",c:"현금·카드",s:"개인",
+  l:"개인 기준 월간\n· 상품권 업종(MCC) 결제 건수 ≥ N건\n· AND 총액 ≥ 검토 기준\n· AND 직업·소득 정보 대비 과다",
+  p:"N=8~12건 수준에서 시작.",
+  f:"명절 시즌(설·추석 전 2주) 오탐 급증 → 시즌 가중치 또는 기준 상향 운영.",
+  w:"상품권 깡 / 카드깡 유형",likes:0},
+ {id:"s6",t:"법인→대표 개인계좌 비정형 유출",c:"법인·외환",s:"법인",
+  l:"법인계좌 기준 월간\n· 대표(또는 UBO) 개인계좌로 이체 ≥ N회\n· AND 급여·배당 등 정형 사유 불일치\n· AND 회당 금액이 비정형(라운드 금액 반복 등)",
+  p:"N=3~5회. 급여일 ±2일 이체는 제외.",
+  f:"가수금 정산 등 회계상 정상 거래 오탐 → 반복 주기와 적요 패턴으로 구분.",
+  w:"법인자금 유출·횡령 연계 유형",likes:0}
+];
+
+/* ── 공통 ── */
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dot=ts=>{const d=new Date(ts);return d.getFullYear()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+String(d.getDate()).padStart(2,"0")+".";};
+let MYID=localStorage.getItem("strlib_cid");
+if(!MYID){MYID="C-"+Math.random().toString(36).slice(2,8).toUpperCase();localStorage.setItem("strlib_cid",MYID);}
+document.getElementById("myid").textContent=MYID;
+
+const DEMO=FIREBASE_CONFIG.apiKey==="YOUR_API_KEY";
+let db=null, RULES=[], LIKES={}, CMTS={}, openId=null, catF="all", sortBy="likes";
+let demoRules=[], demoLikes={}, demoCmts={};
+
+function initData(){
+  if(DEMO){merge();return;}
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db=firebase.database();
+  /* 초기 로드 + 실시간 동기화 — on('value') 단일 구조 */
+  db.ref("strlib").on("value",snap=>{
+    const v=snap.val()||{};
+    demoRules=Object.entries(v.rules||{}).map(([id,r])=>({id,...r}));
+    LIKES=v.likes||{};
+    CMTS=v.comments||{};
+    merge();
+  });
+}
+function merge(){
+  if(DEMO){LIKES=demoLikes;CMTS=demoCmts;}
+  RULES=[...SEED.map(r=>({...r,seed:1})),...demoRules];
+  renderStats();renderList();
+}
+function likeCount(id){return LIKES[id]?Object.keys(LIKES[id]).length:0;}
+function cmtList(id){return CMTS[id]?Object.values(CMTS[id]).sort((a,b)=>a.ts-b.ts):[];}
+
+function renderStats(){
+  const contrib=new Set(demoRules.map(r=>r.c2)).size;
+  document.getElementById("stats").innerHTML=
+    (DEMO?'<span class="stat demo">데모 모드 — Firebase 설정 시 공유 위키 전환</span>':"")+
+    `<span class="stat">룰 <b>${RULES.length}</b>개</span>`+
+    `<span class="stat">기본 제공 <b>${SEED.length}</b></span>`+
+    `<span class="stat">커뮤니티 <b>${demoRules.length}</b></span>`+
+    (contrib?`<span class="stat">기여자 <b>${contrib}</b></span>`:"");
+}
+
+function setCat(btn){catF=btn.dataset.c;document.querySelectorAll(".f[data-c]").forEach(b=>b.classList.toggle("on",b===btn));renderList();}
+function toggleSort(){sortBy=sortBy==="likes"?"new":"likes";document.getElementById("sortbtn").textContent="정렬: "+(sortBy==="likes"?"도움순":"최신순");renderList();}
+
+function renderList(){
+  const q=(document.getElementById("q").value||"").toLowerCase();
+  let arr=RULES.filter(r=>(catF==="all"||r.c===catF)&&
+    (!q||(r.t+r.l+(r.p||"")+(r.f||"")+(r.w||"")).toLowerCase().includes(q)));
+  arr.sort((a,b)=>sortBy==="likes"
+    ?likeCount(b.id)-likeCount(a.id)||(b.ts||0)-(a.ts||0)
+    :(b.ts||0)-(a.ts||0)||likeCount(b.id)-likeCount(a.id));
+  const box=document.getElementById("rlist");
+  if(!arr.length){box.innerHTML='<div class="empty"><div class="ecircle">📚</div>조건에 맞는 룰이 없습니다.</div>';return;}
+  box.innerHTML=arr.map(r=>{
+    const liked=LIKES[r.id]&&LIKES[r.id][MYID];
+    const open=openId===r.id;
+    const cs=cmtList(r.id);
+    return `<div class="rcard">
+      <div class="rtop" onclick="toggleOpen('${r.id}')">
+        <div><div class="rtitle">${esc(r.t)}</div>
+        <div class="rbadges">
+          ${r.seed?'<span class="bdg b-seed">기본 제공</span>':""}
+          <span class="bdg b-cat">${esc(r.c)}</span>
+          <span class="bdg b-seg">${esc(r.s)}</span>
+        </div></div>
+        <div style="color:var(--gray2);font-size:18px">${open?"−":"+"}</div>
+      </div>
+      <div class="logicbox">${esc(r.l)}</div>
+      <div class="rmeta">
+        <button class="likebtn ${liked?"on":""}" onclick="toggleLike('${r.id}')">👍 도움됨 ${likeCount(r.id)}</button>
+        <span>💬 ${cs.length}</span>
+        <span>${r.seed?"AML 인사이트":esc(r.c2||"")} ${r.ts?"· "+dot(r.ts):""}</span>
+      </div>
+      <div class="rdetail ${open?"on":""}">
+        ${r.p?`<div class="dh">권장 파라미터</div><div class="dtext">${esc(r.p)}</div>`:""}
+        ${r.f?`<div class="dh">오탐(FP) 노트</div><div class="fpbox">${esc(r.f)}</div>`:""}
+        ${r.w?`<div class="dh">근거 타이폴로지</div><div class="dtext">${esc(r.w)}</div>`:""}
+        <div class="dh">의견 ${cs.length}개</div>
+        ${cs.map(c=>`<div class="cmt"><div class="who">${esc(c.c2)} · ${dot(c.ts)}</div>${esc(c.b)}</div>`).join("")||'<div class="dtext" style="color:var(--gray2)">아직 의견이 없습니다. 임계값 경험을 나눠주세요.</div>'}
+        <div class="cbox">
+          <input id="ci-${r.id}" placeholder="임계값 경험, 오탐 사례, 개선 제안..." maxlength="300" onclick="event.stopPropagation()">
+          <button class="cbtn" onclick="addCmt('${r.id}')">등록</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+function toggleOpen(id){openId=openId===id?null:id;renderList();}
+
+function toggleLike(id){
+  event.stopPropagation();
+  if(DEMO){
+    demoLikes[id]=demoLikes[id]||{};
+    if(demoLikes[id][MYID])delete demoLikes[id][MYID];else demoLikes[id][MYID]=1;
+    merge();return;
+  }
+  const ref=db.ref("strlib/likes/"+id+"/"+MYID);
+  LIKES[id]&&LIKES[id][MYID]?ref.remove():ref.set(1);
+}
+function addCmt(id){
+  const inp=document.getElementById("ci-"+id);
+  const b=(inp.value||"").trim();
+  if(b.length<2)return;
+  const cmt={b:b.slice(0,300),c2:MYID,ts:Date.now()};
+  if(DEMO){
+    (demoCmts[id]=demoCmts[id]||{})["k"+Date.now()]=cmt;
+    merge();openId=id;renderList();return;
+  }
+  db.ref("strlib/comments/"+id).push(cmt);
+}
+
+/* ── 등록 ── */
+function submitRule(){
+  const el=document.getElementById("upresult");
+  if(!document.getElementById("ruleok").checked){el.className="upresult bad";el.innerHTML="<b>일반화 확인</b> 체크박스를 먼저 선택해 주세요. 사내 기준 원문은 등록할 수 없습니다.";return;}
+  const t=document.getElementById("rt").value.trim();
+  const l=document.getElementById("rl").value.trim();
+  if(t.length<4||l.length<10){el.className="upresult bad";el.innerHTML="룰 이름(4자 이상)과 조건식(10자 이상)을 입력해 주세요.";return;}
+  const rule={t:t.slice(0,60),c:document.getElementById("rc").value,s:document.getElementById("rs").value,
+    l:l.slice(0,800),p:document.getElementById("rp").value.trim().slice(0,300),
+    f:document.getElementById("rf").value.trim().slice(0,400),w:document.getElementById("rw").value.trim().slice(0,120),
+    c2:MYID,ts:Date.now()};
+  if(DEMO){
+    demoRules.unshift({id:"d"+Date.now(),...rule});merge();
+    el.className="upresult ok";el.innerHTML="<b>등록 완료</b> (데모 모드 — 이 세션에만 표시됩니다. Firebase 설정 시 모두에게 공유돼요.)";
+  }else{
+    db.ref("strlib/rules").push(rule);
+    el.className="upresult ok";el.innerHTML="<b>등록 완료!</b> 라이브러리 탭에서 확인하세요. 좋은 룰 감사합니다 🙌";
+  }
+  for(const id of["rt","rl","rp","rf","rw"])document.getElementById(id).value="";
+}
+
+function go(p){
+  document.querySelectorAll(".tab[data-p]").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("on"));
+  document.getElementById("pg-"+p).classList.add("on");
+}
+
+initData();
+</script>
+</body>
+</html>

@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관계 탐색기 — AML 인사이트</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="관계 탐색기 — AML 인사이트">
+<meta property="og:description" content="거래·KYC·실소유자 관계 그래프 분석 + STR 문안 자동 생성.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/relation/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<!-- 모든 라이브러리 로컬 번들 권장(오프라인). 개발 중엔 CDN, 배포 시 vendor/ 폴더로 교체 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --bg:#0E0F13; --panel:#16181F; --panel2:#1C1F28; --line:#262A35; --hair:#20232C;
+  --tx:#E8EAF0; --sub:#9AA0AE; --dim:#5C6170;
+  --lime:#D8FF3D; --lime-deep:#B7E600; --violet:#7C5CFF; --cyan:#3DD6C4;
+  --person:#C9CDD8; --corp:#7C5CFF; --acct:#3DD6C4; --ubo:#FF5470;
+  --warn:#FF5470; --ok:#3DD6C4; --graphbg:#0E0F13;
+  --mono:'JetBrains Mono','Courier New',monospace;
+}
+[data-theme="dark"] .slider .v{color:var(--lime-deep)}
+[data-theme="light"]{
+  --bg:#FFFFFF; --panel:#FFFFFF; --panel2:#F7F8F4; --line:#101114; --hair:#E6E6EA;
+  --tx:#101114; --sub:#5E626E; --dim:#9CA0AB;
+  --lime:#D8FF3D; --lime-deep:#B7E600; --violet:#6C4DFF; --cyan:#0E9F8E;
+  --person:#101114; --corp:#6C4DFF; --acct:#0E9F8E; --ubo:#E03150;
+  --warn:#E03150; --ok:#0E9F8E; --graphbg:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI','Pretendard',sans-serif;background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font-family:inherit;cursor:pointer;color:inherit}
+::selection{background:var(--lime);color:#101114}
+.app{display:flex;flex-direction:column;height:100vh}
+
+/* ── 타이틀바 ── */
+.titlebar{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:var(--panel);border-bottom:2.5px solid var(--line)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;letter-spacing:.02em}
+.brand .logo{width:22px;height:22px;border-radius:6px;background:radial-gradient(circle at 32% 32%,var(--lime),var(--lime-deep));position:relative}
+.brand .logo::after{content:"";position:absolute;inset:0;border-radius:6px;box-shadow:0 0 14px rgba(216,255,61,.5)}
+.brand em{font-style:normal;color:var(--lime)}
+[data-theme="light"] .brand em{background:var(--lime);color:#101114;padding:0 4px;border-radius:3px}
+.brand small{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.14em;margin-left:6px}
+.tbtns{display:flex;gap:7px}
+.tbtn{font-size:11.5px;font-weight:700;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:7px 13px}
+.tbtn:hover{border-color:var(--violet)}
+.tbtn.key{background:var(--lime);color:#101114;border-color:transparent}
+.tbtn.key:hover{background:var(--lime-deep)}
+
+/* ── 본문 3분할 ── */
+.main{flex:1;display:grid;grid-template-columns:300px 1fr 320px;min-height:0}
+.lpane,.rpane{background:var(--panel);overflow-y:auto}
+.lpane{border-right:2.5px solid var(--line)}
+.rpane{border-left:2.5px solid var(--line)}
+.center{position:relative;background:var(--graphbg);background-image:radial-gradient(circle at 1px 1px, var(--hair) 1px, transparent 0);background-size:24px 24px;transition:background .2s}
+#cy{width:100%;height:100%}
+
+.sec{padding:14px 15px;border-bottom:1px solid var(--hair)}
+.sect{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sect::before{content:"";width:14px;height:2.5px;background:var(--lime);border-radius:2px;flex:none}
+.ta{width:100%;min-height:120px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:var(--mono);font-size:11px;color:var(--tx);resize:vertical;line-height:1.7}
+.ta:focus{outline:none;border-color:var(--violet)}
+.row2{display:flex;gap:7px;margin-top:8px}
+.b{flex:1;font-weight:800;font-size:12px;background:var(--violet);border:none;border-radius:7px;padding:10px;color:#fff}
+[data-theme="light"] .b{background:#101114}
+[data-theme="light"] .b:hover{background:var(--violet)}
+.b:hover{filter:brightness(1.12)}
+.b.sub{background:var(--panel2);border:1px solid var(--line);color:var(--tx)}
+.b.lime{background:var(--lime);color:#101114}
+.fileb{display:block;text-align:center;font-weight:800;font-size:12px;background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:11px;margin-top:8px}
+.fileb:hover{border-color:var(--lime);color:var(--lime)}
+.msg{font-size:11px;color:var(--sub);margin-top:7px;line-height:1.6}
+
+.field{margin-bottom:11px}
+.field label{display:block;font-size:11px;color:var(--sub);margin-bottom:5px;font-weight:600}
+.slider{display:flex;align-items:center;gap:9px}
+.slider input[type=range]{flex:1;accent-color:var(--lime-deep)}
+.slider .v{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--violet);min-width:54px;text-align:right}
+.fltrow{display:flex;align-items:center;gap:7px;margin:7px 0}
+.fltrow label{font-size:11px;color:var(--sub);width:88px;flex:none}
+.fltrow input[type=number]{width:90px;background:var(--panel2);border:1px solid var(--hair);border-radius:7px;color:var(--tx);padding:6px 8px;font-size:12px;font-family:var(--mono)}
+.fltrow input[type=date]{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--hair);border-radius:7px;color:var(--tx);padding:5px 6px;font-size:11px;font-family:var(--mono)}
+.fltrow .tilde{color:var(--dim);font-size:11px}
+.fltinfo{font-size:10.5px;color:var(--lime-deep);margin:2px 0 4px;min-height:14px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+::-webkit-scrollbar-track{background:transparent}
+textarea:focus,input:focus{outline:1.5px solid var(--lime-deep);outline-offset:-1px}
+.strbtn{width:100%;margin-top:10px;background:var(--lime);color:#101114;border:none;border-radius:9px;padding:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+.strbtn:hover{background:var(--lime-deep)}
+.strmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:20px}
+.strbox{background:var(--panel);border:1px solid var(--hair);border-radius:14px;width:min(760px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.strhd{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--hair);font-size:14px}
+#strtext{flex:1;min-height:380px;background:var(--panel2);border:none;color:var(--tx);padding:16px;font-size:12.5px;line-height:1.8;font-family:var(--mono);resize:none;outline:none;white-space:pre-wrap}
+.strnote{padding:10px 16px;font-size:10.5px;color:var(--dim);border-top:1px solid var(--hair)}
+.chk{display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;margin-top:6px}
+.chk input{accent-color:var(--lime-deep);width:15px;height:15px}
+
+/* 분석 결과 카드 */
+.find{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 13px;margin-bottom:9px;border-left:3px solid var(--dim);transition:transform .15s, box-shadow .15s, border-color .15s}
+.find:hover{transform:translateX(2px);box-shadow:0 4px 14px rgba(0,0,0,.28);border-color:var(--hair)}
+.find.alert{border-left-color:var(--warn)}
+.find.warn{border-left-color:var(--lime-deep)}
+.find .ft{font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.find .fb{font-size:11px;color:var(--sub);margin-top:5px;line-height:1.65;font-family:var(--mono)}
+.badge{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--bg);color:var(--sub);white-space:nowrap}
+.badge.r{background:rgba(255,84,112,.16);color:var(--warn)}
+.badge.l{background:rgba(216,255,61,.16);color:var(--lime-deep)}
+
+table.rank{width:100%;border-collapse:collapse;font-size:11px}
+table.rank th{text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dim);padding:5px 6px;border-bottom:1px solid var(--line)}
+table.rank td{padding:6px;border-bottom:1px solid var(--hair);font-family:var(--mono)}
+table.rank tr:hover td{background:var(--panel2);cursor:pointer}
+.ubo-yes{color:var(--warn);font-weight:700}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:10.5px;color:var(--sub)}
+.lg{display:flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:50%}
+.ctrlbar{position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:5}
+.cb{font-family:var(--mono);font-size:10px;font-weight:700;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px 11px;color:var(--sub);transition:all .15s;cursor:pointer}
+.cb:hover{color:var(--tx);border-color:var(--lime-deep);transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.cb:active{transform:translateY(0)}
+.cb:hover{border-color:var(--violet);color:var(--tx)}
+.cb.on{background:var(--lime);color:#101114;border-color:transparent}
+
+.tl{position:absolute;bottom:0;left:0;right:0;background:#16181F;border-top:2px solid var(--lime-deep);padding:11px 16px;display:none}
+.tl.on{display:block}
+.tl .tlh{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:11px;font-weight:700;color:#FFFFFF;margin-bottom:7px}
+.tl input[type=range]{width:100%;accent-color:var(--lime-deep)}
+
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--dim);text-align:center;padding:30px;pointer-events:none}
+.empty .big{font-weight:800;font-size:17px;color:var(--sub)}
+.info{position:absolute;right:12px;top:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12px;max-width:240px;display:none;z-index:6}
+.info b{font-size:13.5px}
+.ihead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ix{cursor:pointer;color:var(--dim);font-size:13px;font-weight:700}
+.ix:hover{color:var(--warn)}
+.iflow{display:flex;gap:8px;margin-top:8px}
+.fin,.fout{flex:1;font-family:var(--mono);font-size:10.5px;font-weight:700;padding:5px 8px;border-radius:6px;text-align:center}
+.fin{background:rgba(61,214,196,.15);color:var(--ok)}
+.fout{background:rgba(255,84,112,.13);color:var(--warn)}
+.ihold{margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--sub);text-align:center}
+.ihold.warn{color:var(--warn);font-weight:700}
+.itx{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:160px;overflow:auto}
+.txr{font-family:var(--mono);font-size:10.5px;padding:3px 0;display:flex;align-items:center;gap:6px;color:var(--sub)}
+.dir{font-weight:700}.dir.in{color:var(--ok)}.dir.out{color:var(--warn)}
+.txd{margin-left:auto;color:var(--dim);font-size:9.5px}
+.info .m{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:5px;line-height:1.7}
+
+.riskmeter{display:flex;align-items:center;gap:12px}
+.rgauge{flex:1;height:11px;background:var(--panel2);border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.35)}
+.rgauge i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--lime-deep),currentColor);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.rscore{font-family:var(--mono);font-weight:700;font-size:26px;line-height:1;text-shadow:0 0 18px currentColor}
+.rlevel{font-size:11px;font-weight:700;margin-top:3px}
+.radvice{font-size:11px;color:var(--sub);margin-top:9px;line-height:1.7}
+.radvice b{color:var(--tx)}
+.prob{font-family:var(--mono);font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap;
+  color:#101114;background:hsl(calc(120 - var(--p)*1.2) 85% 60%)}
+.cnt{font-family:var(--mono);font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;margin-left:6px;
+  background:var(--lime);color:#101114;vertical-align:1px;transition:transform .15s}
+.cnt.zero{background:var(--panel2);color:var(--dim)}
+.cnt.pop{transform:scale(1.25)}
+.find .why{font-size:10.5px;color:var(--sub);margin-top:6px;line-height:1.6;padding-top:6px;border-top:1px dashed var(--line)}
+.find .why b{color:var(--tx)}
+.copyr{position:absolute;right:12px;bottom:12px;font-family:var(--mono);font-size:9px;font-weight:700;
+  color:var(--dim);letter-spacing:.05em;pointer-events:none;z-index:4;opacity:.7}
+.glegend{position:absolute;left:12px;bottom:12px;display:flex;gap:14px;align-items:center;
+  background:var(--panel);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;
+  font-size:10.5px;font-weight:600;color:var(--sub);flex-wrap:wrap;z-index:5}
+.gl{display:flex;align-items:center;gap:5px}
+.ll{width:16px;height:3px;border-radius:2px;display:inline-block}
+.ld{width:11px;height:11px;border-radius:50%;border:2.5px solid;display:inline-block}
+.glx{background:none;border:none;color:var(--dim);cursor:pointer;font-size:11px;padding:0 0 0 4px}
+.glx:hover{color:var(--warn)}
+.watermark{position:absolute;right:14px;bottom:14px;font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;pointer-events:none;z-index:4}
+
+/* ── 모바일 (세로 스택) ── */
+@media (max-width:760px){
+  body{overflow:auto}
+  .app{height:auto;min-height:100vh}
+  .titlebar{flex-wrap:wrap;gap:6px;padding:10px 12px}
+  .brand{font-size:13px}
+  .tbtns{flex-wrap:wrap;gap:5px}
+  .tbtn{font-size:10.5px;padding:6px 9px}
+  /* 3분할 → 세로 1열 */
+  .main{display:flex;flex-direction:column;height:auto}
+  .lpane,.rpane{width:100%;border:none;border-bottom:2.5px solid var(--line);max-height:none;overflow:visible}
+  .center{order:-1;height:62vh;min-height:380px;border-bottom:2.5px solid var(--line)}
+  #cy{height:100%}
+  /* 입력(좌) 먼저, 그래프 위로, 분석(우) 아래로 */
+  .lpane{order:0}
+  .center{order:1}
+  .rpane{order:2}
+  /* 컨트롤바·범례 모바일 축소 */
+  .ctrlbar{flex-wrap:wrap;gap:5px;position:static;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--hair)}
+  #ctrlbar2{position:static}
+  .cb{font-size:10px;padding:6px 9px}
+  .ctrlbar input#nodeSearch{width:100px}
+  .glegend{position:static;margin:8px 10px;flex-direction:row}
+  .copyr{position:static;text-align:center;padding:8px}
+  .info{position:static;max-width:none;margin:10px;width:auto}
+  .tl{position:static}
+  /* 입력창 적당히 */
+  .ta{min-height:90px}
+}
+@media (max-width:760px){
+  /* 우측 분석 패널 글자 세로눌림 방지: 충분한 너비 확보됨 */
+  .sect{white-space:normal}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="titlebar">
+    <a class="brand" href="../" style="text-decoration:none;color:inherit"><span class="logo"></span>AML 인사이트<em>.</em><small>관계 탐색기 · ON-DEVICE</small></a>
+    <div class="tbtns">
+      <a class="tbtn" href="../guide/" target="_blank" style="text-decoration:none">📖 사용법</a>
+      <button class="tbtn" onclick="saveCase()">케이스 저장</button>
+      <label class="tbtn" style="cursor:pointer">열기<input type="file" id="casef" accept=".json" style="display:none"></label>
+      <button class="tbtn" id="themebtn" onclick="toggleTheme()">DARK</button>
+      <button class="tbtn key" onclick="exportPDF()">PDF</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- 좌: 입력 -->
+    <div class="lpane">
+      <div class="sec" style="background:rgba(255,84,112,.06)">
+        <div style="display:flex;gap:9px;align-items:flex-start">
+          <span style="font-size:16px">🔒</span>
+          <div style="font-size:11px;line-height:1.6;color:var(--sub)"><b style="color:var(--tx)">원본 데이터 금지</b> — 모든 처리는 브라우저 안에서만 일어나며 서버로 전송되지 않습니다. 실명·실계좌 대신 가명·변환 데이터를 쓰고, 아래 ‘가명화’ 옵션을 활용하세요.</div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sect">데이터 입력</div>
+        <textarea class="ta" id="input" spellcheck="false"></textarea>
+        <div class="msg" style="font-size:10.5px">형식: <b>출발 , 관계 , 도착 , 금액 , 일자</b><br>금액·일자는 선택. 관계=지분이면 4번째 칸은 지분율(%).</div>
+        <div class="msg" id="inputwarn" style="color:var(--warn);font-size:10.5px"></div>
+        <label class="fileb">📑 엑셀 · CSV 불러오기<input type="file" id="file" accept=".xlsx,.xls,.csv" style="display:none"></label>
+        <div class="row2">
+          <button class="b" onclick="run()">분석 실행</button>
+          <button class="b sub" onclick="loadSample()">예시</button>
+        </div>
+        <button class="b sub" style="width:100%;margin-top:7px" onclick="downloadTemplate()">엑셀 템플릿 받기</button>
+        <div class="msg" id="filemsg"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sect">탐지 임계값</div>
+        <div class="field">
+          <label>허브 최소 연결 수 (fan-in/out) <span class="cnt" id="cntHub"></span></label>
+          <div class="slider"><input type="range" id="thrHub" min="2" max="10" value="3" oninput="thrHubV.textContent=this.value+'개';runDebounced()"><span class="v" id="thrHubV">3개</span></div>
+        </div>
+        <div class="field">
+          <label>스머핑 기준금액 (원) <span class="cnt" id="cntSmurf"></span></label>
+          <div class="slider"><input type="range" id="thrAmt" min="1000000" max="50000000" step="1000000" value="10000000" oninput="thrAmtV.textContent=(this.value/10000).toLocaleString()+'만';runDebounced()"><span class="v" id="thrAmtV">1,000만</span></div>
+        </div>
+        <div class="field">
+          <label>UBO 지분 임계 (%) <span class="cnt" id="cntUbo"></span></label>
+          <div class="slider"><input type="range" id="thrUbo" min="5" max="50" value="25" oninput="thrUboV.textContent=this.value+'%';renderUBO&&renderUBO();runDebounced()"><span class="v" id="thrUboV">25%</span></div>
+        </div>
+        <div class="field">
+          <label>급속 통과 간격 (초 이내) <span class="cnt" id="cntRapid"></span></label>
+          <div class="slider"><input type="range" id="thrRapid" min="5" max="600" step="5" value="60" oninput="thrRapidV.textContent=this.value+'초';runDebounced()"><span class="v" id="thrRapidV">60초</span></div>
+        </div>
+        <div class="field">
+          <label>레이어링 최소 단계 <span class="cnt" id="cntLayer"></span></label>
+          <div class="slider"><input type="range" id="thrLayer" min="2" max="6" value="3" oninput="thrLayerV.textContent=this.value+'단계';runDebounced()"><span class="v" id="thrLayerV">3단계</span></div>
+        </div>
+        <div class="shead" style="margin-top:14px">표시 필터 <span style="font-weight:400;color:var(--dim);font-size:10px">— 조건에 맞는 거래만 분석</span></div>
+        <div class="fltrow">
+          <label>최소 금액(만원)</label>
+          <input type="number" id="fMin" placeholder="0" min="0" oninput="runDebounced()">
+        </div>
+        <div class="fltrow">
+          <label>기간</label>
+          <input type="date" id="fFrom" onchange="run()"><span class="tilde">~</span><input type="date" id="fTo" onchange="run()">
+        </div>
+        <div id="fltinfo" class="fltinfo"></div>
+        <label class="chk"><input type="checkbox" id="anon" onchange="run()"> 식별자 가명화 (개인_a1·법인_b2)</label>
+      </div>
+
+      <div class="sec" style="background:linear-gradient(180deg,rgba(216,255,61,.10),transparent)">
+        <div class="sect">데스크톱 버전</div>
+        <div style="font-size:11.5px;color:var(--sub);line-height:1.7;margin-bottom:9px">더 큰 데이터와 완전 오프라인 분석이 필요하면 설치형 데스크톱 버전(NEXUS)을 사용하세요. 데이터가 PC 밖으로 나가지 않습니다.</div>
+        <button class="b" style="width:100%;background:#101114" onclick="document.getElementById('nxinfo').style.display=document.getElementById('nxinfo').style.display==='block'?'none':'block'">데스크톱 버전 안내 ▾</button>
+        <div id="nxinfo" style="display:none;font-size:11px;color:var(--sub);line-height:1.7;margin-top:9px;padding:11px;background:var(--panel2);border-radius:8px">
+          · Windows/Mac 설치형(.exe / .dmg)<br>· 인터넷 연결 없이 작동<br>· 대용량·다중 케이스·PDF 보고서<br>· 영구 라이선스(1회 구매)<br><br><b style="color:var(--tx)">출시 예정 — 사전 문의는 게시판으로</b>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sect">범례</div>
+        <div class="legend">
+          <div class="lg"><span class="sw" style="background:var(--person)"></span>개인</div>
+          <div class="lg"><span class="sw" style="background:var(--corp)"></span>법인</div>
+          <div class="lg"><span class="sw" style="background:var(--acct)"></span>계좌</div>
+          <div class="lg"><span class="sw" style="background:var(--ubo)"></span>UBO·실소유</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 중앙: 그래프 -->
+    <div class="center">
+      <div class="ctrlbar" id="ctrlbar2" style="top:54px"><button class="cb" id="editbtn" onclick="toggleEdit()">✏ 편집</button>
+        <span id="editbar" style="display:none;gap:6px"><button class="cb" onclick="delNode()">− 노드 삭제</button><span id="editmsg" style="font-family:var(--mono);font-size:9.5px;font-weight:700;color:var(--violet);align-self:center"></span></span></div>
+      <div class="ctrlbar">
+        <button class="cb" onclick="cyFit()">전체 보기</button>
+        <input id="nodeSearch" placeholder="노드 검색…" oninput="searchNode(this.value)" style="font-family:var(--mono);font-size:11px;border:1.5px solid var(--line);border-radius:7px;padding:6px 10px;width:120px;background:var(--panel);color:var(--tx)">
+        <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--sub);align-self:center;margin-left:2px">Ctrl+휠=줌</span>
+        <button class="cb" onclick="relayout()">재배치</button>
+        <button class="cb" id="tlbtn" onclick="toggleTL()">타임라인</button>
+        <button class="cb" onclick="zoomBtn(1.25)" title="확대">＋</button>
+        <button class="cb" onclick="zoomBtn(0.8)" title="축소">－</button>
+        <button class="cb" onclick="exportPNG()">PNG</button>
+      </div>
+      <div id="cy"></div>
+      <div class="empty" id="empty"><div class="big">데이터를 입력하고 분석 실행</div><div>좌측에 입력하거나 엑셀을 불러오세요</div></div>
+      <div class="info" id="info"></div>
+      <div class="glegend" id="glegend">
+        <div class="gl"><span class="ll" style="background:#FF5470"></span>순환거래 경로</div>
+        <div class="gl"><span class="ll" style="background:#B7E600"></span>선택 노드 강조</div>
+        <div class="gl"><span class="ld" style="border-color:#FF5470"></span>허브(집금·분산)</div>
+        <button class="glx" onclick="document.getElementById('glegend').style.display='none'">✕</button>
+      </div>
+      <div class="copyr">© 2026 AML 인사이트 · 무단복제 금지</div>
+      
+      <div class="tl" id="tl">
+        <div class="tlh"><span>⏱ 타임라인 — 슬라이더를 끌면 그 시점까지의 거래만 표시 (일자 또는 일자+시각 지원)</span><span id="tlcur" style="color:var(--lime-deep)">전체 기간</span></div>
+        <input type="range" id="tlrange" min="0" max="100" value="100" oninput="applyTL(this.value)">
+      </div>
+    </div>
+
+    <!-- 우: 분석 결과 -->
+    <div class="rpane">
+      <div class="sec" id="scoresec" style="display:none">
+        <div class="sect">종합 리스크</div>
+        <div id="riskbox"></div>
+        <button class="strbtn" onclick="genSTR()">📝 STR 문안 초안 생성</button>
+      </div>
+      <div class="sec">
+        <div class="sect">패턴 탐지</div>
+        <div id="patterns"><div class="msg">분석을 실행하면 순환·집금·스머핑 패턴이 표시됩니다.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sect">중심성 랭킹</div>
+        <div id="centrality"><div class="msg">핵심 노드(차수·매개중심성) 순위.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sect">UBO 실효지분</div>
+        <select id="uboTarget" class="ta" style="min-height:auto;padding:8px;margin-bottom:8px" onchange="renderUBO()"></select>
+        <div id="ubo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let cy=null, DATA={nodes:[],edges:[]}, hubOn=false;
+
+/* ════ 엔진 ════ */
+function ntype(name){const n=(name||"").toLowerCase();
+  if(/계좌|acct|account|예금|virtual/.test(n))return "acct";
+  if(/ubo|실소유|수익자|benefic/.test(n))return "ubo";
+  if(/법인|㈜|주식회사|corp|company|inc|ltd|llc|법인/.test(n))return "corp";
+  return "person";}
+function COLS(){const c=getComputedStyle(document.documentElement);
+  return {person:c.getPropertyValue("--person").trim()||"#C9CDD8",
+          corp:c.getPropertyValue("--corp").trim()||"#7C5CFF",
+          acct:c.getPropertyValue("--acct").trim()||"#3DD6C4",
+          ubo:c.getPropertyValue("--ubo").trim()||"#FF5470"};}
+let COL=COLS();
+
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].slice(0,2).map(x=>x.toString(16).padStart(2,"0")).join("");}
+
+async function parseInput(){
+  const raw=document.getElementById("input").value.trim();
+  const anon=document.getElementById("anon").checked;
+  const map={},counters={};
+  async function id(label,t){if(!anon)return label;
+    if(!map[label]){counters[t]=(counters[t]||0)+1;const ab={person:"개인",corp:"법인",acct:"계좌",ubo:"UBO"}[t];
+      map[label]=`${ab}_${(await sha(label)).slice(0,2)}${counters[t]}`;}return map[label];}
+  const nodes={},edges=[];
+  for(const ln of raw.split("\n").map(l=>l.trim()).filter(Boolean)){
+    const p=ln.split(/[,，]/).map(x=>x.trim());
+    if(p.length<3)continue;
+    const a=p[0],rel=p[1]||"이체",b=p[2];
+    if(!a||!b)continue;
+    if(rel==="(미연결)"){const ta=ntype(a);const ia=await id(a,ta);if(!nodes[ia])nodes[ia]={id:ia,type:ta};continue;}
+    const ta=ntype(a),tb=ntype(b);
+    const ia=await id(a,ta),ib=await id(b,tb);
+    if(!nodes[ia])nodes[ia]={id:ia,type:ta};
+    if(!nodes[ib])nodes[ib]={id:ib,type:tb};
+    const e={id:"e"+edges.length,s:ia,t:ib,rel};
+    if(rel==="지분"){e.pct=parseFloat(p[3])||0;}
+    else{if(p[3]){const amt=parseFloat(String(p[3]).replace(/[^0-9.]/g,""));if(!isNaN(amt))e.amt=amt;}
+         if(p[4])e.date=p[4];}
+    edges.push(e);
+  }
+  return {nodes:Object.values(nodes),edges};
+}
+function adjacency(edges){const adj={},radj={};edges.forEach(e=>{(adj[e.s]=adj[e.s]||[]).push(e.t);(radj[e.t]=radj[e.t]||[]).push(e.s);});return {adj,radj};}
+
+function findCycles(nodes,edges){
+  const {adj}=adjacency(edges);const color={},stack=[],cycles=[];
+  function dfs(u){color[u]="g";stack.push(u);
+    for(const v of adj[u]||[]){
+      if(color[v]==="g"){const i=stack.indexOf(v);if(i>=0)cycles.push(stack.slice(i).concat(v));}
+      else if(!color[v])dfs(v);}
+    stack.pop();color[u]="b";}
+  nodes.forEach(n=>{if(!color[n.id])dfs(n.id);});
+  const seen=new Set(),uniq=[];
+  cycles.forEach(c=>{const k=[...c.slice(0,-1)].sort().join(">");if(!seen.has(k)){seen.add(k);uniq.push(c);}});
+  return uniq;
+}
+function findHubs(nodes,edges,thr){const {adj,radj}=adjacency(edges);const out=[];
+  nodes.forEach(n=>{const fi=(radj[n.id]||[]).length,fo=(adj[n.id]||[]).length;
+    if(fi>=thr)out.push({node:n.id,type:"집금 (fan-in)",in:fi,out:fo});
+    if(fo>=thr)out.push({node:n.id,type:"분산 (fan-out)",in:fi,out:fo});});
+  return out;}
+function findSmurf(edges,limit){const by={};
+  edges.forEach(e=>{if(e.amt==null)return;(by[e.s]=by[e.s]||[]).push(e);});
+  const out=[];Object.entries(by).forEach(([s,es])=>{
+    const near=es.filter(e=>e.amt>=limit*0.7&&e.amt<limit);  // 기준금액 70~100% 구간
+    if(near.length>=3)out.push({node:s,count:near.length,total:near.reduce((a,e)=>a+e.amt,0)});});
+  return out;}
+function findRapid(edges,maxGapSec){
+  const withT=edges.filter(e=>e.date&&parseTS(e.date)&&parseTS(e.date).hasTime)
+    .map(e=>({...e,ts:parseTS(e.date).t})).sort((a,b)=>a.ts-b.ts);
+  if(!withT.length)return [];
+  const chains=[];
+  withT.forEach(inEdge=>{
+    const outs=withT.filter(o=>o.s===inEdge.t && o.ts>=inEdge.ts && (o.ts-inEdge.ts)<=maxGapSec*1000);
+    outs.forEach(o=>{const gap=Math.round((o.ts-inEdge.ts)/1000);
+      chains.push({hop:`${inEdge.s} → ${inEdge.t} → ${o.t}`,gapSec:gap,via:inEdge.t,ts:fmtTS(inEdge.ts)});});
+  });
+  return chains.slice(0,12);
+}
+function findLayering(edges,minHops){
+  const adj={};
+  edges.filter(e=>e.rel!=="지분").forEach(e=>{(adj[e.s]=adj[e.s]||[]).push(e);});
+  const paths=[];
+  function dfs(node,path,visited){
+    if(path.length-1>=minHops)paths.push(path.slice());
+    if(path.length>8)return;
+    for(const e of adj[node]||[]){
+      if(visited.has(e.t))continue;
+      visited.add(e.t); dfs(e.t,path.concat(e.t),visited); visited.delete(e.t);
+    }
+  }
+  Object.keys(adj).forEach(start=>dfs(start,[start],new Set([start])));
+  // 순환(끝에서 시작으로 돌아오는) 경로는 순환거래로 따로 잡으므로 제외
+  const acyclic=paths.filter(p=>!(adj[p[p.length-1]]||[]).some(e=>e.t===p[0]));
+  acyclic.sort((a,b)=>b.length-a.length);
+  const kept=[];
+  acyclic.forEach(p=>{const str=p.join(">");if(!kept.some(k=>k.join(">").includes(str)))kept.push(p);});
+  return kept.slice(0,4);
+}
+function findSameEntity(edges){
+  const partners={};
+  edges.forEach(e=>{(partners[e.s]=partners[e.s]||new Set()).add("out:"+e.t);
+    (partners[e.t]=partners[e.t]||new Set()).add("in:"+e.s);});
+  const nodes=Object.keys(partners), susp=[];
+  const hasOut=n=>[...partners[n]].some(x=>x.startsWith("out:"));
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=partners[nodes[i]],b=partners[nodes[j]];
+    if(a.size<2||b.size<2)continue;
+    // 둘 다 능동적으로 보내는 주체여야 '동일 행위자' 의심 (순수 수취처 배제)
+    if(!hasOut(nodes[i])||!hasOut(nodes[j]))continue;
+    const inter=[...a].filter(x=>b.has(x)).length;
+    const uni=new Set([...a,...b]).size;
+    const jac=inter/uni;
+    if(jac>=0.6)susp.push({a:nodes[i],b:nodes[j],sim:Math.round(jac*100),shared:inter});
+  }
+  return susp.sort((x,y)=>y.sim-x.sim).slice(0,6);
+}
+function sigmoid(x){return 1/(1+Math.exp(-x));}
+function P(x){return Math.max(1,Math.min(99,Math.round(sigmoid(x)*100)));}
+function edgeAmt(edges,s,t){const e=edges.find(e=>e.s===s&&e.t===t&&e.amt!=null);return e?e.amt:null;}
+function cycleProb(cyc,edges){
+  const len=cyc.length-1;
+  let amts=[];for(let i=0;i<cyc.length-1;i++){const a=edgeAmt(edges,cyc[i],cyc[i+1]);if(a!=null)amts.push(a);}
+  const minAmt=amts.length?Math.min(...amts):0;
+  const first=edgeAmt(edges,cyc[0],cyc[1]), last=edgeAmt(edges,cyc[cyc.length-2],cyc[cyc.length-1]);
+  const ret=(first&&last)?last/first:0;
+  // 시간 간격
+  let gap=null;const ts=[];for(let i=0;i<cyc.length-1;i++){const e=edges.find(e=>e.s===cyc[i]&&e.t===cyc[i+1]&&e.date);if(e){const p=parseTS(e.date);if(p)ts.push(p.t);}}
+  if(ts.length>=2)gap=(Math.max(...ts)-Math.min(...ts))/1000;
+  let z=-1.5;
+  z+=(len<=3?1.4:len<=4?0.6:-0.3);
+  z+=(minAmt>=10000000?1.2:minAmt>=1000000?0.4:0);
+  if(gap!=null)z+=(gap<=60?1.6:gap<=3600?0.7:0);
+  z+=(ret>=0.9?1.5:ret>=0.7?0.7:0);
+  return P(z);
+}
+function hubProb(h,edges,thr){
+  const outs=edges.filter(e=>e.s===h.node);
+  const outAmts=outs.map(e=>e.amt||0);const tot=outAmts.reduce((a,b)=>a+b,0);
+  const conc=tot>0?Math.max(...outAmts)/tot:0;
+  let z=-1.2;
+  z+=Math.min(2.2,(h.in-thr)*0.5+0.5);
+  z+=(conc>=0.8?1.3:conc>=0.5?0.5:0);
+  return P(z);
+}
+function smurfProbCalc(s,limit){
+  const near=s.total/s.count; const nearness=near/limit;
+  let z=-1.0;
+  z+=Math.min(2.0,(s.count-3)*0.4+0.6);
+  z+=(nearness>=0.95?1.5:nearness>=0.85?0.8:0.2);
+  return P(z);
+}
+function rapidProbCalc(r,edges){
+  const inAmt=edgeAmt(edges,r.hop.split(" → ")[0],r.via);
+  const outAmt=edgeAmt(edges,r.via,r.hop.split(" → ")[2]);
+  const keep=(inAmt&&outAmt)?outAmt/inAmt:0.9;
+  let z=-0.5;
+  z+=(r.gapSec<=10?2.0:r.gapSec<=60?1.2:r.gapSec<=300?0.4:-0.5);
+  z+=(keep>=0.95?1.3:keep>=0.8?0.6:0);
+  return P(z);
+}
+function centrality(nodes,edges){
+  const un={};nodes.forEach(n=>un[n.id]=new Set());
+  edges.forEach(e=>{un[e.s].add(e.t);un[e.t].add(e.s);});
+  const deg={},btw={};nodes.forEach(n=>{deg[n.id]=un[n.id].size;btw[n.id]=0;});
+  nodes.forEach(s=>{const S=[],P={},sig={},d={};
+    nodes.forEach(t=>{P[t.id]=[];sig[t.id]=0;d[t.id]=-1;});
+    sig[s.id]=1;d[s.id]=0;const Q=[s.id];
+    while(Q.length){const v=Q.shift();S.push(v);
+      un[v].forEach(w=>{if(d[w]<0){d[w]=d[v]+1;Q.push(w);}if(d[w]===d[v]+1){sig[w]+=sig[v];P[w].push(v);}});}
+    const del={};nodes.forEach(t=>del[t.id]=0);
+    while(S.length){const w=S.pop();P[w].forEach(v=>del[v]+=(sig[v]/sig[w])*(1+del[w]));if(w!==s.id)btw[w]+=del[w];}});
+  return nodes.map(n=>({node:n.id,degree:deg[n.id],btw:+(btw[n.id]/2).toFixed(1)}))
+    .sort((a,b)=>b.degree-a.degree||b.btw-a.btw);}
+function uboTrace(edges,target,thr){const owners={};
+  function walk(node,acc){edges.filter(e=>e.rel==="지분"&&e.t===node).forEach(e=>{
+    const p=acc*((e.pct||0)/100);owners[e.s]=(owners[e.s]||0)+p*100;if(p*100>=1)walk(e.s,p);});}
+  walk(target,1);
+  return Object.entries(owners).map(([n,p])=>({owner:n,eff:+p.toFixed(2),ubo:p>=thr})).sort((a,b)=>b.eff-a.eff);}
+
+/* ════ 렌더 ════ */
+function drawGraph(){
+  document.getElementById("empty").style.display=DATA.nodes.length?"none":"flex";
+  const degMap={};DATA.edges.forEach(e=>{degMap[e.s]=(degMap[e.s]||0)+1;degMap[e.t]=(degMap[e.t]||0)+1;});
+  const els=[...DATA.nodes.map(n=>({data:{id:n.id,label:n.id,type:n.type,
+      sz:Math.min(46,20+(degMap[n.id]||0)*2.6)}})),
+    ...DATA.edges.map(e=>({data:{id:e.id,source:e.s,target:e.t,rel:e.rel,
+      w:e.amt?Math.max(1.2,Math.min(6,Math.log10(e.amt)-4.2)):1.3,date:e.date||"",amt:e.amt||0},
+      classes:e.rel==="지분"?"equity":""}))];
+  if(cy)cy.destroy();
+  COL=COLS();
+  const _cs=getComputedStyle(document.documentElement);
+  const LBLBG=(_cs.getPropertyValue("--graphbg").trim())||"#0E0F13";   // 라벨 외곽선=배경색
+  const LBL=(_cs.getPropertyValue("--tx").trim())||"#E8EAF0";          // 글자=텍스트색
+  const NODEBORDER=LBLBG;                                              // 노드 테두리=배경색(분리감)
+  const EDGEC=(document.documentElement.dataset.theme==="light")?"#B8BCC6":"#3A3F4D";
+  cy=cytoscape({container:document.getElementById("cy"),elements:els,
+    style:[
+      // ── 노드: 유형별 도형 + 연결수 비례 크기 + 소프트 글로우 ──
+      {selector:"node",style:{"background-color":e=>COL[e.data("type")]||"#C9CDD8","label":"data(label)",
+        "color":LBL,"font-size":"11px","font-weight":"700","font-family":"var(--mono)",
+        "text-outline-color":LBLBG,"text-outline-width":2.5,"text-outline-opacity":1,
+        "text-valign":"bottom","text-margin-y":6,
+        "width":"data(sz)","height":"data(sz)",
+        "border-width":2,"border-color":NODEBORDER,
+        "underlay-color":e=>COL[e.data("type")]||"#C9CDD8","underlay-padding":5,"underlay-opacity":.14,
+        "transition-property":"underlay-opacity, underlay-padding, border-width, opacity",
+        "transition-duration":"0.18s"}},
+      {selector:'node[type="person"]',style:{"shape":"ellipse"}},
+      {selector:'node[type="corp"]',style:{"shape":"round-rectangle"}},
+      {selector:'node[type="acct"]',style:{"shape":"diamond"}},
+      {selector:'node[type="ubo"]',style:{"shape":"round-hexagon"}},
+      // ── 엣지: 이체=실선, 지분=점선(보라) / 평행선 분리 ──
+      {selector:"edge",style:{"width":"data(w)","line-color":EDGEC,"target-arrow-color":EDGEC,
+        "target-arrow-shape":"triangle-backcurve","curve-style":"bezier","control-point-step-size":42,
+        "arrow-scale":.9,"label":"data(rel)",
+        "font-size":"9px","font-family":"var(--mono)","color":LBL,"text-rotation":"autorotate",
+        "text-outline-color":LBLBG,"text-outline-width":2.5,"text-outline-opacity":1,
+        "transition-property":"line-color, width, opacity","transition-duration":"0.18s"}},
+      {selector:"edge.equity",style:{"line-style":"dashed","line-dash-pattern":[7,4],
+        "line-color":"#7C5CFF","target-arrow-color":"#7C5CFF","opacity":.8}},
+      // ── 상태 ──
+      {selector:".faded",style:{"opacity":.08}},
+      {selector:"node.hov",style:{"underlay-opacity":.32,"underlay-padding":9}},
+      {selector:"edge.hi",style:{"line-color":"#B7E600","target-arrow-color":"#B7E600","width":3.2}},
+      {selector:"node.hi",style:{"border-color":"#B7E600","border-width":4,"underlay-opacity":.3,"underlay-padding":8}},
+      {selector:"node.edgesrc",style:{"border-color":"#7C5CFF","border-width":4}},
+      {selector:"node.hub",style:{"border-color":"#FF5470","border-width":3.5,
+        "underlay-color":"#FF5470","underlay-opacity":.2,"underlay-padding":7}},
+      {selector:".cycle",style:{"line-color":"#FF5470","target-arrow-color":"#FF5470","width":3.4,
+        "line-style":"dashed","line-dash-pattern":[9,4]}}
+    ],
+    layout:LAYOUT()});
+  cy.ready(()=>cy.fit(null,55));
+  cy.userZoomingEnabled(false); // 휠 기본 줌 끔 → 아래 리스너로 제어
+  // 호버: 노드+이웃 은은히 강조 (탭 고정과 별개)
+  cy.on("mouseover","node",ev=>{const n=ev.target;
+    n.addClass("hov");n.neighborhood("node").addClass("hov");});
+  cy.on("mouseout","node",ev=>{cy.nodes().removeClass("hov");});
+  cy.on("tap","node",ev=>{const n=ev.target;const id=n.id();
+    cy.elements().addClass("faded").removeClass("hi");
+    n.removeClass("faded").addClass("hi");
+    n.connectedEdges().removeClass("faded").addClass("hi").connectedNodes().removeClass("faded").addClass("hi");
+    // 유입/유출 금액 집계
+    const ins=DATA.edges.filter(e=>e.t===id&&e.rel!=="지분");
+    const outs=DATA.edges.filter(e=>e.s===id&&e.rel!=="지분");
+    const sumIn=ins.reduce((a,e)=>a+(e.amt||0),0), sumOut=outs.reduce((a,e)=>a+(e.amt||0),0);
+    const won=v=>v>=1e8?Math.round(v/1e8).toLocaleString()+"억":v>=1e4?Math.round(v/1e4).toLocaleString()+"만":v.toLocaleString();
+    const tname=({person:"개인",corp:"법인",acct:"계좌",ubo:"UBO"})[n.data("type")];
+    const txList=[...ins.map(e=>({d:"in",o:DATA.nodes.find(x=>x.id===e.s)?.id||e.s,e})),
+                  ...outs.map(e=>({d:"out",o:DATA.nodes.find(x=>x.id===e.t)?.id||e.t,e}))]
+      .sort((a,b)=>{const ta=a.e.date?parseTS(a.e.date)?.t||0:0,tb=b.e.date?parseTS(b.e.date)?.t||0:0;return ta-tb;})
+      .slice(0,8).map(x=>`<div class="txr"><span class="dir ${x.d}">${x.d==="in"?"←":"→"}</span>${x.o}${x.e.amt?` · ${won(x.e.amt)}`:""}${x.e.date?`<span class="txd">${x.e.date.slice(5)}</span>`:""}</div>`).join("");
+    const inf=document.getElementById("info");inf.style.display="block";
+    inf.innerHTML=`<div class="ihead"><b>${n.data("label")}</b><span class="ix" onclick="document.getElementById('info').style.display='none'">✕</span></div>
+      <div class="m">${tname} · 연결 ${n.degree()}개</div>
+      <div class="iflow"><span class="fin">유입 ${won(sumIn)}</span><span class="fout">유출 ${won(sumOut)}</span></div>
+      ${(sumIn>0&&sumOut>0)?`<div class="ihold ${(sumOut/sumIn>=0.9)?'warn':''}">통과율 ${Math.round(sumOut/sumIn*100)}%</div>`:""}
+      ${txList?`<div class="itx">${txList}</div>`:""}`;});
+  cy.on("tap","edge",ev=>{const e=ev.target;const d=e.data();
+    const won=v=>v>=1e8?Math.round(v/1e8).toLocaleString()+"억":v>=1e4?Math.round(v/1e4).toLocaleString()+"만":(v||0).toLocaleString();
+    cy.elements().addClass("faded");e.removeClass("faded");e.source().removeClass("faded");e.target().removeClass("faded");
+    const inf=document.getElementById("info");inf.style.display="block";
+    inf.innerHTML=`<div class="ihead"><b>${d.source} → ${d.target}</b><span class="ix" onclick="document.getElementById('info').style.display='none'">✕</span></div>
+      <div class="m">관계: ${d.rel}${d.amt?`<br>금액: ${won(d.amt)}원`:""}${d.date?`<br>일시: ${d.date}`:""}</div>`;});
+  cy.on("tap",ev=>{if(ev.target===cy){cy.elements().removeClass("faded hi");document.getElementById("info").style.display="none";}});
+}
+function LAYOUT(){return {name:"cose",animate:true,animationDuration:600,padding:55,
+  nodeRepulsion:()=>130000,idealEdgeLength:()=>135,edgeElasticity:()=>120,gravity:.15,
+  numIter:2000,componentSpacing:150,nodeOverlap:26,randomize:true,fit:true};}
+function relayout(){if(cy)cy.layout(LAYOUT()).run();}
+function cyFit(){if(cy)cy.fit(null,55);}
+function zoomBtn(f){if(!cy)return;const c=cy.container();const z=cy.zoom()*f;
+  cy.zoom({level:z,renderedPosition:{x:c.clientWidth/2,y:c.clientHeight/2}});}
+function exportPNG(){if(!cy)return;const a=document.createElement("a");a.href=cy.png({full:true,scale:2,bg:"#0E0F13"});a.download="nexus-graph.png";a.click();}
+
+let _rt=null;
+function runDebounced(){clearTimeout(_rt);_rt=setTimeout(()=>run(true),120);}
+async function run(skipGraph){
+  const raw=document.getElementById("input").value.trim();
+  if(!raw){alert("관계 데이터를 입력하세요.\n형식: 출발 , 관계 , 도착 , 금액(선택) , 일자(선택)");return;}
+  // 형식 오류 라인 검사
+  const lines=raw.split("\n").map(l=>l.trim()).filter(Boolean);
+  const bad=[];
+  lines.forEach((ln,i)=>{const p=ln.split(/[,，]/).map(x=>x.trim());
+    if(p.length<3||!p[0]||!p[2])bad.push(i+1);});
+  if(bad.length===lines.length){alert("올바른 형식의 데이터가 없습니다.\n예: 계좌A , 이체 , 법인1 , 9500000 , 2026-01-03");return;}
+  DATA=await parseInput();
+  if(!DATA.nodes.length){alert("유효한 관계를 찾지 못했습니다. 형식을 확인하세요.");return;}
+  // ─ 표시 필터 (금액·기간) ─
+  const fMin=(+document.getElementById("fMin")?.value||0)*10000;
+  const fFrom=document.getElementById("fFrom")?.value?new Date(document.getElementById("fFrom").value+"T00:00:00").getTime():null;
+  const fTo=document.getElementById("fTo")?.value?new Date(document.getElementById("fTo").value+"T23:59:59").getTime():null;
+  const totalE=DATA.edges.length;
+  if(fMin||fFrom||fTo){
+    DATA.edges=DATA.edges.filter(e=>{
+      if(e.rel==="지분")return true; // 지분 관계는 필터 제외 (구조 정보)
+      if(fMin&&(!(e.amt>=fMin)))return false;
+      if(fFrom||fTo){const pt=parseTS(e.date);if(!pt)return false;const t=pt.t;
+        if(fFrom&&t<fFrom)return false;if(fTo&&t>fTo)return false;}
+      return true;});
+    const used=new Set();DATA.edges.forEach(e=>{used.add(e.s);used.add(e.t);});
+    DATA.nodes=DATA.nodes.filter(n=>used.has(n.id));
+  }
+  const fi=document.getElementById("fltinfo");
+  if(fi)fi.textContent=(fMin||fFrom||fTo)?`필터 적용: ${DATA.edges.length}/${totalE}건 표시`:"";
+  if(!DATA.nodes.length){document.getElementById("patterns").innerHTML='<div class="msg">필터 조건에 맞는 거래가 없습니다.</div>';if(cy)cy.destroy();cy=null;return;}
+  // 형식 경고 (일부 라인만 오류)
+  const warnEl=document.getElementById("inputwarn");
+  if(warnEl)warnEl.textContent=bad.length?`⚠ ${bad.length}개 줄을 형식 오류로 건너뜀 (줄 ${bad.slice(0,5).join(", ")}${bad.length>5?"…":""})`:"";
+  if(!skipGraph)drawGraph();
+  const thrHub=+document.getElementById("thrHub").value;
+  const thrAmt=+document.getElementById("thrAmt").value;
+  const thrUbo=+document.getElementById("thrUbo").value;
+  // 패턴
+  const cyc=findCycles(DATA.nodes,DATA.edges),hubs=findHubs(DATA.nodes,DATA.edges,thrHub),smurf=findSmurf(DATA.edges,thrAmt);
+  const thrRapid=+(document.getElementById("thrRapid")?.value||60);
+  const rapid=findRapid(DATA.edges,thrRapid);
+  const thrLayer=+(document.getElementById("thrLayer")?.value||3);
+  const layering=findLayering(DATA.edges,thrLayer);
+  const sameEnt=findSameEntity(DATA.edges);
+  LAST={cyc,hubs,smurf,rapid,layering,sameEnt};
+  let ph="";
+  const probs=[];
+  if(cyc.length)cyc.forEach(c=>{const pr=cycleProb(c,DATA.edges);probs.push(pr);ph+=`<div class="find alert"><div class="ft">순환거래 <span class="prob" style="--p:${pr}">${pr}%</span></div><div class="fb">${c.join(" → ")}</div><div class="why"><b>왜 중요한가</b> 자금이 출발점으로 되돌아오는 구조는 거래의 실질을 가장해 자금 흐름을 흐리는 전형입니다. <b>확인사항</b> 각 단계의 거래 사유·세금계산서 등 실물 근거가 있는지, 동일 자금이 단기간에 회전했는지 점검하세요.</div></div>`;});
+  hubs.forEach(h=>{const pr=hubProb(h,DATA.edges,thrHub);probs.push(pr);ph+=`<div class="find warn"><div class="ft">${h.type} <span class="prob" style="--p:${pr}">${pr}%</span></div><div class="fb">${h.node} · 유입 ${h.in} / 유출 ${h.out}</div><div class="why"><b>왜 중요한가</b> 다수 계좌가 한 노드로 모이거나(집금) 한 노드에서 퍼지는(분산) 구조는 자금 통합·분산 단계의 신호일 수 있습니다. <b>확인사항</b> 허브 노드의 사업 실질과 거래상대 다양성, 단기 통과 여부를 보세요.</div></div>`;});
+  smurf.forEach(s=>{const pr=smurfProbCalc(s,thrAmt);probs.push(pr);ph+=`<div class="find alert"><div class="ft">스머핑 의심 <span class="prob" style="--p:${pr}">${pr}%</span></div><div class="fb">${s.node} · 임계 직하 ${s.count}건 · 합계 ${(s.total/10000).toLocaleString()}만원</div><div class="why"><b>왜 중요한가</b> 보고 기준금액 바로 아래로 거래를 쪼개는 것은 보고 회피의 대표 수법입니다. <b>확인사항</b> 분할의 합리적 사유가 있는지, 동일인·동일목적 거래가 인위적으로 나뉘었는지 확인하세요.</div></div>`;});
+  rapid.forEach(r=>{const pr=rapidProbCalc(r,DATA.edges);probs.push(pr);ph+=`<div class="find alert"><div class="ft">급속 통과 <span class="prob" style="--p:${pr}">${pr}% · ${r.gapSec}s</span></div><div class="fb">${r.hop} · ${r.gapSec}초 만에 통과 · ${r.ts}</div><div class="why"><b>왜 중요한가</b> 입금 직후 수초~수십초 내 재이체는 사람이 아닌 자동화(봇) 또는 사전 약정된 통과거래일 가능성이 높습니다. <b>확인사항</b> 경유 계좌(${r.via})의 자금 보유 시간, 동일 시각 다발 거래 여부를 점검하세요.</div></div>`;});
+  layering.forEach(p=>{const pr=Math.min(95,40+(p.length-1-thrLayer)*12+p.length*4);probs.push(pr);
+    ph+=`<div class="find alert"><div class="ft">레이어링 <span class="prob" style="--p:${pr}">${pr}% · ${p.length-1}단계</span></div><div class="fb">${p.join(" → ")}</div><div class="why"><b>왜 중요한가</b> 여러 단계를 거쳐 자금을 이동시키는 것은 출처 추적을 어렵게 만드는 전형적 자금세탁(레이어링) 수법입니다. <b>확인사항</b> 각 경유 단계에 실질적 거래 사유가 있는지, 단순 통과만 하는 계좌가 있는지 점검하세요.</div></div>`;});
+  sameEnt.forEach(x=>{const pr=x.sim;probs.push(Math.min(80,pr));
+    ph+=`<div class="find warn"><div class="ft">동일인 의심 <span class="prob" style="--p:${Math.min(80,pr)}">${pr}%</span></div><div class="fb">${x.a} ≈ ${x.b} · 거래상대 ${x.shared}곳 공유</div><div class="why"><b>왜 중요한가</b> 서로 다른 명의가 동일한 거래 상대들과 똑같이 거래하면, 실제로는 한 주체가 여러 명의를 쓰는 차명 의심이 있습니다. <b>확인사항</b> 두 명의의 실소유자·연락처·접속기록이 겹치는지 확인하세요.</div></div>`;});
+  if(!ph)ph='<div class="msg">탐지된 패턴이 없습니다. 임계값을 조정해 보세요.</div>';
+  document.getElementById("patterns").innerHTML=ph;
+  // 종합 리스크 스코어 (패턴 가중 합산, 0~100)
+  // 종합 리스크 = 최고 확률 패턴 + 다중 패턴 보정 (확률의 noisy-OR 결합)
+  let score;
+  if(probs.length){
+    const pNo=probs.reduce((acc,p)=>acc*(1-p/100),1); // 모두 무관일 확률
+    score=Math.round((1-pNo)*100);
+  }else score=0;
+  LAST.score=score;
+  const lvl=score>=70?["높음","var(--warn)"]:score>=35?["주의","var(--lime-deep)"]:score>0?["낮음","var(--ok)"]:["해당없음","var(--dim)"];
+  const tips=[];
+  if(cyc.length)tips.push(`순환거래 ${cyc.length}건`);
+  if(hubs.length)tips.push(`허브 ${hubs.length}개`);
+  if(smurf.length)tips.push(`스머핑 ${smurf.length}건`);
+  if(rapid.length)tips.push(`급속통과 ${rapid.length}건`);
+  if(layering.length)tips.push(`레이어링 ${layering.length}건`);
+  if(sameEnt.length)tips.push(`동일인의심 ${sameEnt.length}쌍`);
+  const maxP=probs.length?Math.max(...probs):0;
+  document.getElementById("scoresec").style.display="block";
+  document.getElementById("riskbox").innerHTML=
+    `<div class="riskmeter"><div><div class="rscore" style="color:${lvl[1]}">${score}</div><div class="rlevel" style="color:${lvl[1]}">${lvl[0]}</div></div>
+     <div class="rgauge"><i style="width:${score}%;background:linear-gradient(90deg,color-mix(in srgb,${lvl[1]} 55%,transparent),${lvl[1]})"></i></div></div>
+     <div class="radvice">${tips.length?`<b>탐지 요약:</b> ${tips.join(" · ")} · 최고 의심도 <b>${maxP}%</b>. `:"탐지된 위험 패턴이 없습니다. "}각 %는 패턴별 신호(금액·시간·구조)의 가중 추정이며, 임계값과 타임라인을 조정하면 함께 변합니다. 자동 판정이 아니므로 최종 판단은 거래 실질과 내부통제 절차를 따르세요.</div>`;
+  // 순환 엣지 강조
+  if(cy&&cyc.length){const set=new Set();cyc.forEach(c=>{for(let i=0;i<c.length-1;i++)set.add(c[i]+">"+c[i+1]);});
+    cy.edges().forEach(e=>{if(set.has(e.data("source")+">"+e.data("target")))e.addClass("cycle");});}
+  // 허브 노드 강조 (빨강 링+글로우)
+  if(cy&&hubs.length){const hset=new Set(hubs.map(h=>h.node));
+    cy.nodes().forEach(n=>{if(hset.has(n.id()))n.addClass("hub");});}
+  // 중심성
+  const cen=centrality(DATA.nodes,DATA.edges).slice(0,8);
+  document.getElementById("centrality").innerHTML=`<table class="rank"><tr><th>노드</th><th>차수</th><th>매개</th></tr>`+
+    cen.map(c=>`<tr onclick="focusNode('${c.node}')"><td>${c.node}</td><td>${c.degree}</td><td>${c.btw}</td></tr>`).join("")+`</table>`;
+  // UBO 대상 선택지 = 법인 노드
+  const corps=DATA.nodes.filter(n=>n.type==="corp");
+  const sel=document.getElementById("uboTarget");
+  sel.innerHTML=corps.length?corps.map(c=>`<option>${c.id}</option>`).join(""):'<option value="">법인 노드 없음</option>';
+  renderUBO();
+  // 타임라인 데이터 준비
+  // 슬라이더 옆 실시간 탐지 개수
+  const setC=(id,n,unit)=>{const el=document.getElementById(id);if(!el)return;
+    el.textContent=n>0?`${n}${unit} 탐지`:`0${unit}`;el.classList.toggle("zero",n===0);
+    el.classList.add("pop");setTimeout(()=>el.classList.remove("pop"),160);};
+  setC("cntHub",hubs.length,"건");
+  setC("cntSmurf",smurf.length,"건");
+  setC("cntRapid",rapid.length,"건");
+  setC("cntLayer",layering.length,"건");
+  const uboN=document.querySelectorAll("#ubo .ubo-yes").length;
+  setC("cntUbo",uboN,"명");
+  prepTL();
+}
+function focusNode(id){if(!cy)return;const n=cy.getElementById(id);if(n){cy.elements().addClass("faded").removeClass("hi");
+  n.removeClass("faded").addClass("hi");n.connectedEdges().removeClass("faded").addClass("hi").connectedNodes().removeClass("faded");cy.animate({center:{eles:n},zoom:1.4},{duration:400});}}
+function renderUBO(){
+  const tgt=document.getElementById("uboTarget").value;const thr=+document.getElementById("thrUbo").value;
+  if(!tgt){document.getElementById("ubo").innerHTML='<div class="msg">지분(rel=지분) 데이터가 있으면 실효지분을 계산합니다.</div>';return;}
+  const res=uboTrace(DATA.edges,tgt,thr);
+  document.getElementById("ubo").innerHTML=res.length?`<table class="rank"><tr><th>소유자</th><th>실효지분</th><th>UBO</th></tr>`+
+    res.map(r=>`<tr onclick="focusNode('${r.owner}')"><td>${r.owner}</td><td>${r.eff}%</td><td class="${r.ubo?'ubo-yes':''}">${r.ubo?'●':'–'}</td></tr>`).join("")+`</table>`
+    :'<div class="msg">해당 법인의 지분 관계가 없습니다.</div>';
+}
+
+/* ── 타임라인 ── */
+let TLD=[], TLHASTIME=false;
+function parseTS(s){ // "2026-01-03" 또는 "2026-01-03 14:23:05" / "2026-01-03T14:23:05"
+  if(!s)return null;
+  const norm=String(s).trim().replace("T"," ");
+  const hasTime=/\d{1,2}:\d{2}/.test(norm);
+  const d=new Date(norm.replace(" ","T"));
+  return isNaN(d)?null:{t:d.getTime(),hasTime};
+}
+function prepTL(){
+  const ps=DATA.edges.map(e=>e.date?parseTS(e.date):null).filter(Boolean);
+  TLD=ps.map(p=>p.t).sort((a,b)=>a-b);
+  TLHASTIME=ps.some(p=>p.hasTime);
+  document.getElementById("tlbtn").style.opacity=TLD.length?"1":".4";
+}
+function toggleTL(){const t=document.getElementById("tl");if(!TLD.length){alert("타임라인은 거래의 ‘일자’ 데이터가 있을 때 작동합니다.\n입력 형식: 출발 , 관계 , 도착 , 금액 , 일자(2026-01-03)\n예시 데이터를 불러오면 바로 확인할 수 있어요.");return;}
+  t.classList.toggle("on");document.getElementById("tlbtn").classList.toggle("on");}
+function fmtTS(ms){const d=new Date(ms);const z=n=>String(n).padStart(2,"0");
+  const ymd=`${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+  return TLHASTIME?`${ymd} ${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`:ymd;}
+function applyTL(v){if(!cy||!TLD.length)return;
+  const min=TLD[0],max=TLD[TLD.length-1];
+  const cutMs=min+(max-min)*(v/100);
+  document.getElementById("tlcur").textContent="~ "+fmtTS(cutMs);
+  cy.edges().forEach(e=>{const ts=parseTS(e.data("date"));e.style("display",(!ts||ts.t<=cutMs)?"element":"none");});}
+
+/* ── 파일 입출력 ── */
+document.getElementById("file").addEventListener("change",function(ev){
+  const f=ev.target.files[0];if(!f)return;const msg=document.getElementById("filemsg");msg.textContent="읽는 중...";
+  const rd=new FileReader();rd.onload=e=>{try{
+    const wb=XLSX.read(e.target.result,{type:"array"});const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false});
+    const h=(rows[0]||[]).map(x=>String(x||"").toLowerCase());
+    const hasH=h.some(x=>/출발|source|관계|relation|도착|target|금액|amount|일자|date/.test(x));
+    const find=(...k)=>{const i=h.findIndex(x=>k.some(y=>x.includes(y)));return i;};
+    let ci=hasH?[find("출발","source","from"),find("관계","relation","rel"),find("도착","target","to"),find("금액","amount","지분","pct"),find("일자","date")]:[0,1,2,3,4];
+    const out=[];for(let i=hasH?1:0;i<rows.length;i++){const r=rows[i];if(!r)continue;
+      const a=String(r[ci[0]]??"").trim(),rel=String(r[ci[1]]??"이체").trim()||"이체",b=String(r[ci[2]]??"").trim();
+      if(!a||!b)continue;let ln=`${a} , ${rel} , ${b}`;
+      if(ci[3]>=0&&r[ci[3]]!=null&&r[ci[3]]!=="")ln+=` , ${r[ci[3]]}`;
+      if(ci[4]>=0&&r[ci[4]]!=null&&r[ci[4]]!=="")ln+=` , ${r[ci[4]]}`;out.push(ln);}
+    if(!out.length){msg.textContent="데이터를 찾지 못했습니다. 템플릿을 확인하세요.";return;}
+    document.getElementById("input").value=out.join("\n");
+    msg.innerHTML=`<b style="color:var(--ok)">${out.length}건</b> 불러옴 · 파일은 외부로 전송되지 않습니다.`;run();
+  }catch(err){msg.textContent="읽기 실패: "+err;}};
+  rd.readAsArrayBuffer(f);ev.target.value="";});
+
+function downloadTemplate(){
+  const d=[["출발","관계","도착","금액/지분율","일자"],
+    ["계좌A","이체","법인갑","9500000","2026-01-03 09:15:02"],
+    ["법인갑","이체","계좌E","36000000","2026-01-03 09:15:14"],
+    ["계좌E","이체","계좌A","35000000","2026-01-03 09:15:31"],
+    ["홍길동","지분","법인갑","60",""],
+    ["법인을","지분","법인갑","40",""],
+    ["홍길동","지분","법인을","50",""]];
+  const ws=XLSX.utils.aoa_to_sheet(d);ws["!cols"]=[{wch:12},{wch:8},{wch:12},{wch:12},{wch:12}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"관계");XLSX.writeFile(wb,"NEXUS_입력템플릿.xlsx");}
+
+let LAST={};
+function fmtD(ts){const d=new Date(ts);return d.getFullYear()+"."+String(d.getMonth()+1).padStart(2,"0")+"."+String(d.getDate()).padStart(2,"0")+".";}
+function genSTR(){
+  if(!DATA||!DATA.nodes||!DATA.nodes.length){alert("먼저 분석을 실행하세요.");return;}
+  const L=LAST||{};
+  // 개요 집계
+  const cnt={person:0,corp:0,acct:0,ubo:0};DATA.nodes.forEach(n=>cnt[n.type]=(cnt[n.type]||0)+1);
+  const txE=DATA.edges.filter(e=>e.rel!=="지분");
+  const amtSum=txE.reduce((a,e)=>a+(e.amt||0),0);
+  const tss=txE.map(e=>{const p=parseTS(e.date);return p?p.t:null;}).filter(t=>t!=null);
+  const period=tss.length?fmtD(Math.min(...tss))+"~"+fmtD(Math.max(...tss)):"(일자 정보 없음)";
+  const today=fmtD(Date.now());
+  let t="";
+  t+="[혐의거래보고(STR) 문안 초안]  ※ 관계 탐색기 자동 생성 "+today+"\n";
+  t+="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+  t+="1. 분석 개요\n";
+  t+=" - 분석 대상: 개인 "+(cnt.person||0)+"·법인 "+(cnt.corp||0)+"·계좌 "+(cnt.acct||0)+(cnt.ubo?"·UBO "+cnt.ubo:"")+" 등 총 "+DATA.nodes.length+"개 명의, 거래 "+txE.length+"건\n";
+  t+=" - 거래 기간: "+period+"\n";
+  if(amtSum)t+=" - 총 거래금액: "+amtSum.toLocaleString()+"원 (금액 기재 거래 합계)\n";
+  t+="\n2. 탐지 패턴 및 혐의 사유\n";
+  let no=0;
+  (L.cyc||[]).slice(0,3).forEach(c=>{const pr=cycleProb(c,DATA.edges);
+    t+=" ("+(++no)+") 순환거래 — 의심도 "+pr+"%\n";
+    t+="   · 경로: "+c.join(" → ")+"\n";
+    t+="   · 자금이 출발 명의로 회귀하는 순환 구조가 확인됨. 거래 실질을 가장하여 자금 원천과 흐름을 은폐하는 전형적 수법에 해당하는 것으로 의심됨.\n";});
+  (L.hubs||[]).slice(0,3).forEach(h=>{const pr=hubProb(h,DATA.edges,+document.getElementById("thrHub").value);
+    t+=" ("+(++no)+") "+h.type+" — 의심도 "+pr+"%\n";
+    t+="   · 대상: "+h.node+" (유입 "+h.in+"건 / 유출 "+h.out+"건)\n";
+    t+="   · 다수 명의의 자금이 특정 명의로 집중 또는 분산되는 구조로, 자금 통합·분산(placement/layering) 단계의 신호로 의심됨.\n";});
+  (L.smurf||[]).slice(0,3).forEach(x=>{
+    t+=" ("+(++no)+") 분할거래(스머핑) 의심\n";
+    t+="   · 대상: "+x.node+" — 임계금액 직하 "+x.count+"건, 합계 "+x.total.toLocaleString()+"원\n";
+    t+="   · 보고 기준금액 바로 아래로 거래를 분할한 정황으로, 고액현금거래보고 등 보고 회피 목적이 의심됨.\n";});
+  (L.rapid||[]).slice(0,3).forEach(r=>{
+    t+=" ("+(++no)+") 급속 통과거래\n";
+    t+="   · 경로: "+r.hop+" — 입금 후 "+r.gapSec+"초 이내 재이체 ("+r.ts+")\n";
+    t+="   · 자금 보유 없이 즉시 통과시키는 거래로, 사전 약정된 경유거래 또는 자동화 거래로 의심됨.\n";});
+  (L.layering||[]).slice(0,3).forEach(p=>{
+    t+=" ("+(++no)+") 다단계 이전(레이어링) — "+(p.length-1)+"단계\n";
+    t+="   · 경로: "+p.join(" → ")+"\n";
+    t+="   · 다수 단계를 경유한 자금 이전으로 출처 추적을 곤란하게 하는 레이어링 수법으로 의심됨.\n";});
+  (L.sameEnt||[]).slice(0,3).forEach(x=>{
+    t+=" ("+(++no)+") 동일인 차명 의심\n";
+    t+="   · 대상: "+x.a+" ≈ "+x.b+" (거래상대 "+x.shared+"곳 공유, 유사도 "+x.sim+"%)\n";
+    t+="   · 상이한 명의가 동일 거래상대와 동일 패턴으로 거래하여, 실질 동일인의 차명거래로 의심됨.\n";});
+  if(!no)t+=" - 임계값 기준 탐지된 패턴 없음 (임계값 조정 후 재분석 가능)\n";
+  t+="\n3. 종합 의견\n";
+  const sc=L.score||0;
+  const lv=sc>=70?"높음":sc>=35?"주의":"낮음";
+  t+=" - 종합 의심도 "+sc+"점("+lv+"). ";
+  t+=no?"상기와 같이 "+no+"건의 의심 패턴이 확인되어 자금세탁 등 불법재산 은닉 혐의 관련 정황이 있다고 판단됨.\n":"자동 탐지 기준으로는 특이 패턴이 확인되지 않음.\n";
+  t+=" - 특정금융정보법 제4조(혐의거래보고) 해당 여부에 대해 거래 실질·고객확인(CDD/EDD) 정보를 종합하여 검토 필요.\n";
+  t+="\n※ 본 문안은 그래프 분석 기반 자동 초안으로, 최종 보고 여부와 내용은 보고책임자 판단 및 내부통제 절차에 따름.";
+  document.getElementById("strtext").value=t;
+  document.getElementById("strmodal").style.display="flex";
+}
+function copySTR(){
+  const ta=document.getElementById("strtext");ta.select();
+  navigator.clipboard.writeText(ta.value).then(()=>alert("복사되었습니다.")).catch(()=>{document.execCommand("copy");alert("복사되었습니다.");});
+}
+function saveCase(){
+  const blob=new Blob([JSON.stringify({input:document.getElementById("input").value,
+    thr:{hub:thrHub.value,amt:thrAmt.value,ubo:thrUbo.value,rapid:(document.getElementById("thrRapid")||{}).value},saved:new Date().toISOString()},null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="nexus-case-"+Date.now()+".json";a.click();}
+document.getElementById("casef").addEventListener("change",function(ev){
+  const f=ev.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=e=>{try{const c=JSON.parse(e.target.result);document.getElementById("input").value=c.input||"";
+    if(c.thr){thrHub.value=c.thr.hub;thrAmt.value=c.thr.amt;thrUbo.value=c.thr.ubo;
+      thrHubV.textContent=c.thr.hub+"개";thrAmtV.textContent=(c.thr.amt/10000).toLocaleString()+"만";thrUboV.textContent=c.thr.ubo+"%";
+      if(c.thr.rapid&&document.getElementById("thrRapid")){thrRapid.value=c.thr.rapid;thrRapidV.textContent=c.thr.rapid+"초";}}
+    run();}catch(err){alert("케이스 파일 오류: "+err);}};rd.readAsText(f);ev.target.value="";});
+
+async function exportPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF("p","mm","a4");
+  const M=12, PW=210, PH=297, CW=PW-M*2;
+  let y=M;
+  // 블록을 이미지로 만들어 페이지에 안전하게 쌓기 (카드 잘림 방지)
+  async function addBlock(html,opts={}){
+    const el=document.createElement("div");
+    el.style.cssText=`position:fixed;left:-9999px;top:0;width:720px;background:#fff;color:#161922;font-family:'Pretendard',-apple-system,'Segoe UI',sans-serif;padding:${opts.pad||0}px`;
+    el.innerHTML=html;
+    document.body.appendChild(el);
+    const cv=await html2canvas(el,{scale:1.3,backgroundColor:"#ffffff"});
+    document.body.removeChild(el);
+    const h=cv.height*CW/cv.width;
+    // 현재 페이지에 안 들어가면 새 페이지
+    if(y+h>PH-M){doc.addPage();y=M;}
+    doc.addImage(cv.toDataURL("image/jpeg",0.80),"JPEG",M,y,CW,h);
+    y+=h+(opts.gap!==undefined?opts.gap:3);
+  }
+  // 헤더
+  await addBlock(`<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2.5px solid #161922;padding-bottom:10px">
+    <div style="font-size:21px;font-weight:800">${"AML 인사이트 — 관계 분석 보고서"}</div>
+    <div style="font-family:monospace;font-size:10px;color:#888">OFFLINE · CONFIDENTIAL</div></div>
+    <div style="font-family:monospace;font-size:10px;color:#888;margin-top:6px">생성 ${new Date().toLocaleString("ko-KR")}</div>`,{gap:5});
+  // 1. 종합 리스크
+  const risk=document.getElementById("riskbox").innerText.replace(/\n+/g," ");
+  await addBlock(`<div style="font-size:15px;font-weight:800;margin-bottom:6px">1. 종합 리스크</div>
+    <div style="font-size:12px;line-height:1.7;background:#F4F5F7;border-radius:8px;padding:12px">${risk}</div>`,{gap:5});
+  // 2. 탐지된 패턴 — 카드별로 개별 블록(잘림 방지)
+  await addBlock(`<div style="font-size:15px;font-weight:800">2. 탐지된 패턴</div>`,{gap:2});
+  const cards=[...document.querySelectorAll("#patterns .find")];
+  if(cards.length){
+    for(const p of cards){
+      const t=p.querySelector(".ft").innerText.replace(/\s+/g," ");
+      const b=p.querySelector(".fb")?p.querySelector(".fb").innerText:"";
+      const w=p.querySelector(".why")?p.querySelector(".why").innerText:"";
+      await addBlock(`<div style="border-left:3px solid #6C4DFF;background:#F4F5F7;border-radius:8px;padding:11px 13px">
+        <div style="font-weight:800;font-size:13px">${t}</div>
+        <div style="font-family:monospace;font-size:11px;color:#444;margin-top:5px">${b}</div>
+        ${w?`<div style="font-size:11px;color:#555;margin-top:7px;line-height:1.7">${w}</div>`:""}</div>`,{gap:3});
+    }
+  }else{await addBlock(`<div style="color:#888;font-size:12px">탐지된 패턴 없음</div>`);}
+  // 3. 중심성 랭킹
+  const cenRows=[...document.querySelectorAll("#centrality tr")].map((tr,i)=>{
+    const c=[...tr.children].map(td=>td.innerText);
+    return i===0?`<tr style="color:#888;font-size:11px"><th align=left style="padding:4px 8px">${c.join('</th><th align=left style="padding:4px 8px">')}</th></tr>`
+      :`<tr>${c.map(x=>`<td style="padding:4px 8px;border-top:1px solid #eee">${x}</td>`).join("")}</tr>`;}).join("");
+  await addBlock(`<div style="font-size:15px;font-weight:800;margin-bottom:6px">3. 중심성 랭킹</div>
+    <table style="width:100%;border-collapse:collapse;font-family:monospace;font-size:11px">${cenRows}</table>`,{gap:5});
+  // 4. UBO
+  const uboRows=[...document.querySelectorAll("#ubo tr")].map((tr,i)=>{
+    const c=[...tr.children].map(td=>td.innerText);
+    return i===0?`<tr style="color:#888;font-size:11px"><th align=left style="padding:4px 8px">${c.join('</th><th align=left style="padding:4px 8px">')}</th></tr>`
+      :`<tr>${c.map(x=>`<td style="padding:4px 8px;border-top:1px solid #eee">${x}</td>`).join("")}</tr>`;}).join("");
+  if(uboRows)await addBlock(`<div style="font-size:15px;font-weight:800;margin-bottom:6px">4. UBO 실효지분</div>
+    <table style="width:100%;border-collapse:collapse;font-family:monospace;font-size:11px">${uboRows}</table>`,{gap:5});
+  // 5. 그래프 (라벨 또렷하게 라이트로 렌더)
+  if(cy){try{
+    const saved=[];
+    cy.nodes().forEach(n=>{saved.push([n,n.style("color"),n.style("text-outline-color"),n.style("text-outline-width"),n.style("font-size"),n.style("border-color")]);
+      n.style({"color":"#101114","text-outline-color":"#ffffff","text-outline-width":3,"font-size":"13px","border-color":"#ffffff"});});
+    const se=[];
+    cy.edges().forEach(e=>{se.push([e,e.style("color"),e.style("font-size"),e.style("text-outline-color"),e.style("text-outline-width")]);
+      e.style({"color":"#101114","font-size":"11px","text-outline-color":"#ffffff","text-outline-width":3});});
+    const g=cy.jpg({full:true,scale:1.4,bg:"#ffffff",quality:0.85});
+    saved.forEach(([n,c,oc,ow,fs,bc])=>n.style({"color":c,"text-outline-color":oc,"text-outline-width":ow,"font-size":fs,"border-color":bc}));
+    se.forEach(([e,c,fs,oc,ow])=>e.style({"color":c,"font-size":fs,"text-outline-color":oc,"text-outline-width":ow}));
+    doc.addPage(); y=M;
+    doc.setFontSize(14);doc.text("5. Relationship Graph",M,y+6); y+=12;
+    // 그래프 비율 유지
+    const tmp=new Image(); 
+    await new Promise(res=>{tmp.onload=res;tmp.src=g;});
+    let gw=CW, gh=tmp.height*gw/tmp.width;
+    if(gh>PH-y-M){gh=PH-y-M; gw=tmp.width*gh/tmp.height;}
+    doc.addImage(g,"JPEG",M,y,gw,gh);
+  }catch(e){}}
+  // 모든 페이지 하단에 저작권 푸터
+  const tot=doc.internal.getNumberOfPages();
+  for(let i=1;i<=tot;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(150);
+    doc.text("(C) 2026 AML Insight - All rights reserved. Unauthorized copying prohibited.",M,290);
+    doc.text(i+" / "+tot,196,290);}
+  doc.save("AML인사이트-report-"+Date.now()+".pdf");}
+
+function loadSample(){
+  document.getElementById("input").value=
+`스머퍼 , 이체 , 집금계좌 , 9800000 , 2026-01-03 09:15:02
+스머퍼 , 이체 , 집금계좌 , 9700000 , 2026-01-03 09:15:05
+스머퍼 , 이체 , 집금계좌 , 9900000 , 2026-01-03 09:15:08
+스머퍼 , 이체 , 집금계좌 , 9600000 , 2026-01-03 09:15:11
+집금계좌 , 이체 , 환전법인 , 38000000 , 2026-01-03 09:15:33
+환전법인 , 이체 , 경유계좌1 , 37000000 , 2026-01-03 09:16:05
+경유계좌1 , 이체 , 경유계좌2 , 36000000 , 2026-01-03 09:20:00
+경유계좌2 , 이체 , 최종계좌 , 35000000 , 2026-01-03 09:30:00
+대표송금 , 이체 , 분산허브 , 80000000 , 2026-01-04 14:00:00
+분산허브 , 이체 , 수취계좌1 , 19000000 , 2026-01-04 14:02:10
+분산허브 , 이체 , 수취계좌2 , 20000000 , 2026-01-04 14:03:30
+분산허브 , 이체 , 수취계좌3 , 20500000 , 2026-01-04 14:05:00
+차명A , 이체 , 상품권업체 , 5000000 , 2026-01-06 20:00:00
+차명A , 이체 , 환전소 , 3000000 , 2026-01-06 20:05:00
+차명B , 이체 , 상품권업체 , 5000000 , 2026-01-07 21:00:00
+차명B , 이체 , 환전소 , 3000000 , 2026-01-07 21:05:00
+정상거래A , 이체 , 정상거래B , 1500000 , 2026-01-10 11:00:00
+홍길동 , 지분 , 환전법인 , 60
+페이퍼법인 , 지분 , 환전법인 , 40
+홍길동 , 지분 , 페이퍼법인 , 70`;
+  run();}
+function toggleTheme(){
+  const cur=document.documentElement.dataset.theme==="light"?"dark":"light";
+  document.documentElement.dataset.theme=cur;
+  document.getElementById("themebtn").textContent=cur==="light"?"DARK":"LIGHT";
+  localStorage.setItem("rex_theme",cur);
+  if(cy)drawGraph(); // 그래프 노드 라벨색 등 재적용
+}
+(function(){const t=localStorage.getItem("rex_theme")||"light";
+  document.documentElement.dataset.theme=t;
+  document.getElementById("themebtn").textContent=t==="light"?"DARK":"LIGHT";})();
+/* ── 기본 도용 방지 (웹 특성상 완벽 차단은 불가, 진입장벽용) ── */
+(function(){
+  // 도메인 잠금: 배포 도메인만 허용 (예: 자신의 도메인으로 교체, 빈 배열이면 비활성)
+  // 허용 도메인 — 새 배포 주소를 쓰면 여기에 추가하세요
+  const ALLOW=["amlinsight-test1.netlify.app","localhost","127.0.0.1",""];
+  if(ALLOW.length){const h=location.hostname;
+    if(!ALLOW.some(d=>h===d||h.endsWith("."+d))){
+      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center;padding:40px;color:#101114">'+
+        '<div><div style="font-size:48px;margin-bottom:16px">🔒</div>'+
+        '<div style="font-size:20px;font-weight:800;margin-bottom:10px">허가되지 않은 접근</div>'+
+        '<div style="font-size:14px;color:#5E626E;line-height:1.7">이 도구는 AML 인사이트가 허가한 도메인에서만 실행됩니다.<br>무단 복제·재배포된 사본은 작동하지 않습니다.</div>'+
+        '<div style="font-family:monospace;font-size:11px;color:#9CA0AB;margin-top:18px">© 2026 AML 인사이트 · All rights reserved</div></div></div>';
+      throw new Error("unauthorized domain");}}
+  // 우클릭/소스 단축키 차단 (라이트 방어)
+  addEventListener("contextmenu",e=>e.preventDefault());
+  addEventListener("keydown",e=>{
+    if(e.key==="F12"||((e.ctrlKey||e.metaKey)&&e.shiftKey&&/[IJC]/i.test(e.key))||
+       ((e.ctrlKey||e.metaKey)&&/[US]/i.test(e.key)&&!/input|textarea/i.test(e.target.tagName)))e.preventDefault();
+  });
+  console.log("%c© 2026 AML 인사이트 (AML Insight)","color:#6C4DFF;font-weight:800;font-size:15px");
+  console.log("%cAll rights reserved. 이 소프트웨어의 코드·디자인·분석 로직은 저작권법의 보호를 받습니다.","color:#444;font-size:12px");
+  console.log("%c무단 복제·재배포·역설계를 금합니다. 위반 시 법적 책임을 물을 수 있습니다.","color:#D43A3F;font-size:12px;font-weight:700");
+  console.log("%c문의·정식 라이선스: AML 인사이트","color:#888;font-size:11px");
+})();
+function setupWheelZoom(){
+  const cont=document.getElementById("cy");
+  if(!cont||cont._wheelBound)return; cont._wheelBound=true;
+  cont.addEventListener("wheel",ev=>{
+    if(!cy)return;
+    if(ev.ctrlKey||ev.metaKey){
+      ev.preventDefault(); ev.stopPropagation();
+      const r=cont.getBoundingClientRect();
+      const z=cy.zoom()*(ev.deltaY<0?1.12:0.89);
+      cy.zoom({level:z,renderedPosition:{x:ev.clientX-r.left,y:ev.clientY-r.top}});
+    }
+  },{passive:false,capture:true});
+}
+setupWheelZoom();
+loadSample();
+</script>
+<div id="strmodal" class="strmodal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="strbox">
+    <div class="strhd">
+      <b>📝 STR 문안 초안</b>
+      <div style="display:flex;gap:8px">
+        <button class="cb" onclick="copySTR()">📋 복사</button>
+        <button class="cb" onclick="document.getElementById('strmodal').style.display='none'">✕ 닫기</button>
+      </div>
+    </div>
+    <textarea id="strtext" spellcheck="false"></textarea>
+    <div class="strnote">자동 생성 초안입니다. 거래 실질·고객확인 정보를 반영해 수정 후 사용하세요. 가명화 상태로 생성하면 문안에도 가명이 들어갑니다.</div>
+  </div>
+</div>
+</body>
+</html>

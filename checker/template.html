@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제재 통합 체커 — AML 인사이트</title>
+<meta name="description" content="OFAC SDN · UN 안보리 · EU 통합 제재 리스트를 한 번에 조회하는 무료 스크리닝 도구. AML 인사이트 제공.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css");
+
+:root{
+  --blue:#101114; --blue-dark:#6C4DFF; --blue-tint:#D8FF3D;
+  --ink:#0A0B0D; --gray:#5B616E; --gray2:#8A919E;
+  --line:#EAECEF; --soft:#F5F6F9; --paper:#FFFFFF;
+  --red:#E5484D; --red-tint:#FEEDEE;
+  --green:#0A8754; --green-tint:#E8F7F0;
+  --ofac:#6C4DFF; --ofac-t:#EFEBFF;
+  --un:#0E7C86;  --un-t:#E4F5F6;
+  --eu:#B45309;  --eu-t:#FFF3E3;
+  --int:#C2271C; --int-t:#FDEAE8; --fbi:#1F3A8A; --fbi-t:#E8ECFB;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter Variable','Pretendard Variable',Pretendard,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── 탑 바 ── */
+.topbar{border-bottom:2.5px solid #101114;background:#fff}
+.tbwrap{max-width:920px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:var(--blue);display:inline-block}
+.toplabel{font-size:12px;font-weight:600;color:var(--gray);background:var(--soft);border-radius:999px;padding:5px 12px}
+
+/* ── 히어로 ── */
+.hero{max-width:920px;margin:0 auto;padding:36px 20px 24px}
+h1{font-family:'Paperlogy',sans-serif;font-size:clamp(30px,7.5vw,44px);font-weight:800;letter-spacing:-.035em;line-height:1.12}
+h1 .accent{background:#D8FF3D;color:#101114;padding:0 .1em;border-radius:.12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hsub{font-size:15px;color:var(--gray);margin-top:10px;letter-spacing:-.01em}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.stat{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--gray);background:#fff}
+.stat b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ── 검색 영역 (스티키) ── */
+.searchbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.swrap{max-width:920px;margin:0 auto;padding:14px 20px}
+.tabs{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px;margin-bottom:12px}
+.tab{border:none;background:transparent;border-radius:999px;padding:7px 18px;font-size:13.5px;font-weight:700;color:var(--gray);letter-spacing:-.01em;transition:all .15s}
+.tab.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(10,11,13,.12)}
+.srow{display:flex;gap:10px}
+#q{flex:1;border:2px solid transparent;border-radius:999px;padding:14px 22px;font-size:16px;font-family:inherit;background:var(--soft);min-width:0;transition:all .15s}
+#q::placeholder{color:var(--gray2)}
+#q:focus{outline:none;border-color:var(--blue);background:#fff}
+.gobtn{background:var(--blue);color:#fff;border:none;border-radius:999px;padding:0 26px;font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:-.01em;transition:background .15s}
+.gobtn:hover{background:var(--blue-dark)}
+.gobtn:active{transform:scale(.98)}
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.f{border:none;background:var(--soft);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;color:var(--gray);transition:all .15s}
+.f.on{background:var(--blue-tint);color:var(--blue)}
+.fdiv{width:1px;background:var(--line);margin:4px 3px}
+#batchbox{display:none}
+#batchta{width:100%;height:130px;border:2px solid transparent;border-radius:18px;padding:14px 18px;font-size:14px;font-family:inherit;background:var(--soft);resize:vertical;transition:all .15s}
+#batchta:focus{outline:none;border-color:var(--blue);background:#fff}
+.bhint{font-size:12px;color:var(--gray2);margin:0 0 8px 4px}
+
+/* ── 스크리닝 리포트 배너 ── */
+main{max-width:920px;margin:0 auto;padding:18px 20px 64px}
+.report{display:none;border-radius:20px;padding:18px 20px;margin-bottom:16px;align-items:flex-start;gap:14px}
+.report.show{display:flex}
+.report.hit{background:var(--red-tint)}
+.report.clear{background:var(--green-tint)}
+.ricon{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;font-weight:800}
+.hit .ricon{background:var(--red)}
+.clear .ricon{background:var(--green)}
+.rtitle{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.hit .rtitle{color:#C0353A}
+.clear .rtitle{color:var(--green)}
+.rdesc{font-size:13px;color:var(--gray);margin-top:3px}
+.rts{font-size:11px;color:var(--gray2);margin-top:5px;font-variant-numeric:tabular-nums}
+
+/* ── 결과 카드 ── */
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-bottom:10px;transition:box-shadow .15s,border-color .15s}
+.card:hover{border-color:#D7DAE0;box-shadow:0 4px 16px rgba(10,11,13,.06)}
+.crow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cname{font-size:16.5px;font-weight:700;letter-spacing:-.015em;word-break:break-word}
+.score{font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-tint);border-radius:999px;padding:4px 11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.bdg{font-size:11px;font-weight:700;border-radius:999px;padding:3.5px 11px;letter-spacing:.01em}
+.b-ofac{background:var(--ofac-t);color:var(--ofac)}
+.b-un{background:var(--un-t);color:var(--un)}
+.b-eu{background:var(--eu-t);color:var(--eu)}
+.b-int{background:var(--int-t);color:var(--int)}
+.b-fbi{background:var(--fbi-t);color:var(--fbi)}
+.b-type{background:var(--soft);color:var(--gray)}
+.cmeta{font-size:13px;color:var(--gray);margin-top:10px;line-height:1.65}
+.cmeta b{color:var(--ink);font-weight:600}
+.alias{margin-top:9px;font-size:13px;color:var(--gray);word-break:break-word}
+.alias b{color:var(--ink);font-weight:600}
+.alias mark,.cname mark{background:#FFE57F;border-radius:3px;padding:0 1px}
+.alias-toggle{background:none;border:none;color:var(--blue);font-size:12.5px;font-weight:700;padding:0;margin-top:4px}
+.morebtn{display:block;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:13px;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px;transition:all .15s}
+.morebtn:hover{background:var(--soft)}
+
+/* ── 일괄 결과 테이블 ── */
+.tcard{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.btable{width:100%;border-collapse:collapse;font-size:13.5px}
+.btable th{color:var(--gray2);font-weight:600;padding:13px 14px;text-align:left;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.btable td{padding:13px 14px;border-top:1px solid var(--line);word-break:break-word;vertical-align:middle}
+.btable tr:first-child td{border-top:none}
+.st{font-size:11.5px;font-weight:800;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.st-hit{background:var(--red-tint);color:#C0353A}
+.st-clear{background:var(--green-tint);color:var(--green)}
+.linkish{background:none;border:none;color:var(--blue);font-weight:700;font-size:13px;padding:0}
+
+/* ── 빈 화면 / 푸터 ── */
+.empty{text-align:center;color:var(--gray);padding:56px 16px;font-size:14px;line-height:1.8}
+.ecircle{width:64px;height:64px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px}
+footer{border-top:1px solid var(--line);padding:24px 20px 32px;font-size:12px;color:var(--gray);line-height:1.75}
+.fwrap{max-width:920px;margin:0 auto}
+footer b{color:var(--ink)}
+.srcnote{font-size:11px;color:var(--gray2);margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tbwrap">
+    <div class="logo"><span class="dot"></span>AML 인사이트</div>
+    <div class="toplabel">Watchlist Filtering</div>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>제재 리스트,<br><span class="accent">한 번에</span> 조회하세요</h1>
+  <div class="hsub">OFAC·UN·EU 제재 리스트와 FBI·인터폴 공개 수배 명단을 동시에 스캔합니다. 검색은 브라우저 안에서만 실행되고, 어디에도 저장되지 않습니다.</div>
+  <div class="stats" id="datastrip"></div>
+</div>
+
+<div class="searchbar">
+  <div class="swrap">
+    <div class="tabs">
+      <button class="tab on" id="tabSingle" onclick="setMode('single')">단건 조회</button>
+      <button class="tab" id="tabBatch" onclick="setMode('batch')">일괄 조회</button>
+    </div>
+    <div id="singlebox">
+      <div class="srow">
+        <input id="q" type="search" placeholder="이름 또는 단체명 입력 (영문 권장)" autocomplete="off" enterkeyhint="search">
+        <button class="gobtn" onclick="runSearch()">조회</button>
+      </div>
+    </div>
+    <div id="batchbox">
+      <div class="bhint">한 줄에 하나씩, 최대 100건까지 입력하세요.</div>
+      <textarea id="batchta" placeholder="KIM IL SU&#10;TECHNOPROMEXPORT&#10;..."></textarea>
+      <div class="srow" style="margin-top:10px">
+        <button class="gobtn" style="flex:1;padding:14px" onclick="runBatch()">일괄 스크리닝 실행</button>
+      </div>
+    </div>
+    <div class="filters">
+      <button class="f on" data-src="all" onclick="setSrc(this)">전체</button>
+      <button class="f" data-src="0" onclick="setSrc(this)">OFAC</button>
+      <button class="f" data-src="1" onclick="setSrc(this)">UN</button>
+      <button class="f" data-src="2" onclick="setSrc(this)">EU</button>
+      <button class="f" data-src="3" onclick="setSrc(this)">INTERPOL</button>
+      <button class="f" data-src="4" onclick="setSrc(this)">FBI</button>
+      <span class="fdiv"></span>
+      <button class="f on" data-t="all" onclick="setType(this)">유형 전체</button>
+      <button class="f" data-t="0" onclick="setType(this)">개인</button>
+      <button class="f" data-t="1" onclick="setType(this)">단체</button>
+      <button class="f" data-t="23" onclick="setType(this)">선박·항공기</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="report" id="report"></div>
+  <div id="results">
+    <div class="empty">
+      <div class="ecircle">🔍</div>
+      이름을 입력하고 조회하면 3개 제재 리스트를 동시에 스캔합니다.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="fwrap">
+    <b>이용 안내</b> · 본 도구는 공개된 원천 데이터를 가공한 참고용 보조 도구입니다. 제재 대상 여부에 대한 공식 판단은 반드시 각 기관의 원천 리스트와 사내 WLF 솔루션·내부통제 절차를 기준으로 하시기 바랍니다. 검색 결과는 동명이인 가능성을 포함하므로 식별정보(생년월일·국적·여권번호 등) 대조가 필요합니다. 수배 정보는 FBI·인터폴이 공개한 공식 수배 명단을 그대로 인용한 것이며, 수배는 유죄 확정을 의미하지 않습니다.
+    <div class="srcnote" id="srcnote"></div>
+    <div style="margin-top:10px">© AML 인사이트 · 문의/오류 제보는 사이트 내 게시판을 이용해 주세요.</div>
+  </div>
+</footer>
+
+<script>
+/*__DATA__*/
+
+/* ── 인덱스 구축 ── */
+const SRC=["OFAC","UN","EU","INTERPOL","FBI"], SRCCLS=["b-ofac","b-un","b-eu","b-int","b-fbi"];
+const TYPE=["개인","단체","선박","항공기","기타"];
+const R=DATA.records, N=R.length;
+const norm=s=>s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").normalize("NFC").replace(/[^a-z0-9\uac00-\ud7a3\u4e00-\u9fff]+/g," ").trim();
+const IDX=new Array(N);
+for(let i=0;i<N;i++){ IDX[i]=" "+norm(R[i][2]+" "+R[i][3]); }
+
+/* 메타 표시 */
+(function(){
+  const m=DATA.meta,c=m.counts,total=(c.ofac+c.un+c.eu).toLocaleString();
+  document.getElementById("datastrip").innerHTML=
+    `<span class="stat">총 <b>${total}</b>건</span>`+
+    `<span class="stat">OFAC <b>${c.ofac.toLocaleString()}</b></span>`+
+    `<span class="stat">UN <b>${c.un.toLocaleString()}</b></span>`+
+    `<span class="stat">EU <b>${c.eu.toLocaleString()}</b></span>`+
+    ((c.interpol||c.fbi)?`<span class="stat">수배 <b>${((c.interpol||0)+(c.fbi||0)).toLocaleString()}</b></span>`:"")+
+    `<span class="stat">빌드 <b>${m.built}</b></span>`;
+  document.getElementById("srcnote").textContent=
+    `Sources — OFAC SDN (treasury.gov) · UN Consolidated List ${m.un_date} (scsanctions.un.org) · EU Consolidated List ${m.eu_date} (webgate.ec.europa.eu)`+((m.counts.interpol||m.counts.fbi)?` · Interpol Red Notices (interpol.int) · FBI Most Wanted (fbi.gov)`:``)+` · Build ${m.built}`;
+})();
+
+/* ── 상태 ── */
+let srcF="all", typeF="all", mode="single", lastShown=0;
+
+function setMode(m){
+  mode=m;
+  document.getElementById("tabSingle").classList.toggle("on",m==="single");
+  document.getElementById("tabBatch").classList.toggle("on",m==="batch");
+  document.getElementById("singlebox").style.display=m==="single"?"block":"none";
+  document.getElementById("batchbox").style.display=m==="batch"?"block":"none";
+}
+function setSrc(btn){
+  srcF=btn.dataset.src;
+  document.querySelectorAll(".f[data-src]").forEach(b=>b.classList.toggle("on",b===btn));
+  if(mode==="single"&&document.getElementById("q").value.trim())runSearch();
+}
+function setType(btn){
+  typeF=btn.dataset.t;
+  document.querySelectorAll(".f[data-t]").forEach(b=>b.classList.toggle("on",b===btn));
+  if(mode==="single"&&document.getElementById("q").value.trim())runSearch();
+}
+function passFilter(rec){
+  if(srcF!=="all"&&rec[0]!==+srcF)return false;
+  if(typeF==="all")return true;
+  if(typeF==="23")return rec[1]===2||rec[1]===3;
+  return rec[1]===+typeF;
+}
+
+/* ── 매칭 엔진 ── */
+function bigrams(s){const g=new Set();for(let i=0;i<s.length-1;i++)g.add(s.slice(i,i+2));return g;}
+function dice(a,b){
+  if(a===b)return 1;
+  const ga=bigrams(a),gb=bigrams(b);
+  if(!ga.size||!gb.size)return 0;
+  let inter=0;ga.forEach(g=>{if(gb.has(g))inter++;});
+  return 2*inter/(ga.size+gb.size);
+}
+function search(qraw){
+  const q=norm(qraw); if(!q)return[];
+  const toks=q.split(" ").filter(t=>t.length>=2);
+  if(!toks.length)return[];
+  const out=[];
+  for(let i=0;i<N;i++){
+    if(!passFilter(R[i]))continue;
+    const hay=IDX[i]; /* 앞에 공백 패딩됨 — 단어 시작 매칭 */
+    let ok=true;
+    for(const t of toks){if(hay.indexOf(" "+t)===-1){ok=false;break;}}
+    if(!ok)continue;
+    const nm=norm(R[i][2]);
+    let score=Math.round(dice(q,nm)*100);
+    if(nm===q)score=100;
+    else if(nm.startsWith(q))score=Math.max(score,92);
+    else if(nm.indexOf(q)>-1)score=Math.max(score,85);
+    else score=Math.max(score,60); /* 별칭 매칭 등 */
+    out.push([i,score]);
+    if(out.length>=800)break;
+  }
+  out.sort((a,b)=>b[1]-a[1]);
+  return out;
+}
+
+/* ── 하이라이트 ── */
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function hi(text,qraw){
+  const toks=norm(qraw).split(" ").filter(t=>t.length>=2);
+  let h=esc(text);
+  for(const t of toks){
+    try{h=h.replace(new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),"<mark>$1</mark>");}catch(e){}
+  }
+  return h;
+}
+
+/* ── 단건 렌더 ── */
+let curHits=[], curQ="";
+function runSearch(){
+  const q=document.getElementById("q").value.trim();
+  if(q.length<2){report("none");document.getElementById("results").innerHTML=
+    '<div class="empty"><div class="ecircle">✏️</div>두 글자 이상 입력해 주세요.</div>';return;}
+  curQ=q; curHits=search(q); lastShown=0;
+  report(curHits.length?"hit":"clear",q,curHits.length);
+  document.getElementById("results").innerHTML="";
+  renderMore();
+  if(!curHits.length)document.getElementById("results").innerHTML=
+    '<div class="empty"><div class="ecircle">✓</div>3개 리스트에서 일치 항목이 없습니다.<br>철자 변형(이명·로마자 표기 차이)도 함께 확인해 보세요.</div>';
+}
+function renderMore(){
+  const box=document.getElementById("results");
+  const old=document.getElementById("morebtn"); if(old)old.remove();
+  const end=Math.min(lastShown+50,curHits.length);
+  let html="";
+  for(let k=lastShown;k<end;k++)html+=card(curHits[k][0],curHits[k][1],curQ,k);
+  box.insertAdjacentHTML("beforeend",html);
+  lastShown=end;
+  if(end<curHits.length)box.insertAdjacentHTML("beforeend",
+    `<button class="morebtn" id="morebtn" onclick="renderMore()">결과 더 보기 (${(curHits.length-end).toLocaleString()}건 남음)</button>`);
+}
+function card(i,score,q,k){
+  const r=R[i];
+  const als=r[3]?r[3].split(" | "):[];
+  const shown=als.slice(0,4), hidden=als.length-4;
+  let aliasHtml="";
+  if(als.length){
+    aliasHtml=`<div class="alias"><b>이명 ${als.length}건</b> · <span id="al-${k}">${hi(shown.join(" · "),q)}</span>`+
+      (hidden>0?` <button class="alias-toggle" onclick="expandAlias(${k},${i})">+${hidden}건 더 보기</button>`:"")+`</div>`;
+  }
+  const meta=[];
+  if(r[4])meta.push(`<b>프로그램</b> ${esc(r[4])}`);
+  if(r[5])meta.push(`<b>국적/소재</b> ${esc(r[5])}`);
+  if(r[6])meta.push(esc(r[6]));
+  return `<div class="card">
+    <div class="crow"><div class="cname">${hi(r[2],q)}</div><div class="score">유사도 ${score}</div></div>
+    <div class="badges"><span class="bdg ${SRCCLS[r[0]]}">${SRC[r[0]]}</span><span class="bdg b-type">${TYPE[r[1]]||"기타"}</span></div>
+    ${meta.length?`<div class="cmeta">${meta.join(" · ")}</div>`:""}
+    ${aliasHtml}
+  </div>`;
+}
+function expandAlias(k,i){
+  const als=R[i][3].split(" | ");
+  document.getElementById("al-"+k).innerHTML=hi(als.join(" · "),curQ);
+  event.target.remove();
+}
+function report(kind,q,n){
+  const el=document.getElementById("report");
+  el.className="report";
+  if(kind==="none")return;
+  el.classList.add("show",kind);
+  const ts=new Date().toISOString().slice(0,16).replace("T"," ");
+  if(kind==="hit"){
+    el.innerHTML=`<div class="ricon">!</div><div>
+      <div class="rtitle">잠재 일치 ${n.toLocaleString()}건 발견</div>
+      <div class="rdesc">"${esc(q)}" 관련 항목이 발견되었습니다. 식별정보 대조 후 판단하세요.</div>
+      <div class="rts">Screening report · ${ts} UTC</div></div>`;
+  }else{
+    el.innerHTML=`<div class="ricon">✓</div><div>
+      <div class="rtitle">일치 항목 없음</div>
+      <div class="rdesc">"${esc(q)}"에 대한 일치 항목이 없습니다. (OFAC·UN·EU 기준)</div>
+      <div class="rts">Screening report · ${ts} UTC</div></div>`;
+  }
+}
+
+/* ── 일괄 조회 ── */
+function runBatch(){
+  const lines=document.getElementById("batchta").value.split("\n").map(s=>s.trim()).filter(Boolean).slice(0,100);
+  if(!lines.length)return;
+  let hitN=0, rows="";
+  for(const name of lines){
+    const hits=search(name);
+    if(hits.length)hitN++;
+    const top=hits.length?R[hits[0][0]]:null;
+    rows+=`<tr><td style="font-weight:600">${esc(name)}</td>
+      <td><span class="st ${hits.length?"st-hit":"st-clear"}">${hits.length?"HIT "+hits.length:"CLEAR"}</span></td>
+      <td>${top?`<span class="bdg ${SRCCLS[top[0]]}">${SRC[top[0]]}</span> ${esc(top[2])}`:"—"}</td>
+      <td>${hits.length?`<button class="linkish" onclick="drill('${esc(name).replace(/'/g,"\\'")}')">상세</button>`:""}</td></tr>`;
+  }
+  report(hitN?"hit":"clear","일괄 "+lines.length+"건",hitN);
+  document.getElementById("results").innerHTML=
+    `<div class="tcard"><table class="btable"><thead><tr><th>조회명</th><th>결과</th><th>최상위 일치</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function drill(name){
+  setMode("single");
+  document.getElementById("q").value=name;
+  runSearch();
+  window.scrollTo({top:0});
+}
+
+/* Enter 키 */
+document.getElementById("q").addEventListener("keydown",e=>{if(e.key==="Enter")runSearch();});
+</script>
+</body>
+</html>

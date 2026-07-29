@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AML 인사이트 — 모든 세탁은 흔적을 남긴다</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="AML 인사이트 — 실무자의 책상 위 장비">
+<meta property="og:description" content="데일리 브리핑·제재 체커·관계 탐색기·수법 인텔리전스까지. 한국 AML 실무자를 위한 무료 도구 모음.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="자금세탁의 숨은 패턴에 밑줄을 긋는 한국 AML 실무자의 인사이트 허브.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/700.css");
+
+:root{
+  --bg:#FFFFFF; --tx:#101114; --sub:#5E626E; --dim:#9CA0AB;
+  --line:#101114; --hair:#E6E6EA;
+  --lime:#D8FF3D; --lime-deep:#B7E600; --violet:#6C4DFF;
+  --btnbg:#101114; --btntx:#FFFFFF; --tagbg:#101114; --tagtx:#FFFFFF;
+  --mono:'JetBrains Mono',monospace; --disp:'Paperlogy',sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0F1014; --tx:#F1F1F5; --sub:#A4A8B6; --dim:#5F6370;
+  --line:#F1F1F5; --hair:#26272E;
+  --lime:#D8FF3D; --lime-deep:#C7F000; --violet:#8B6FFF;
+  --btnbg:#D8FF3D; --btntx:#101114; --tagbg:#F1F1F5; --tagtx:#101114;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Pretendard Variable',Pretendard,sans-serif;background:var(--bg);color:var(--tx);line-height:1.65;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+::selection{background:var(--lime);color:#101114}
+:focus-visible{outline:2.5px solid var(--tx);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hl::before{transform:none!important}}
+.wrap{max-width:940px;margin:0 auto;padding:0 22px}
+
+/* ── 형광펜 스트로크 ── */
+.hl{position:relative;display:inline-block;white-space:nowrap}
+.hl::before{content:"";position:absolute;left:-.12em;right:-.14em;top:.14em;bottom:.02em;background:var(--lime);
+  z-index:-1;transform:scaleX(0);transform-origin:left;border-radius:.12em .3em .18em .26em;
+  transition:transform .55s cubic-bezier(.65,0,.3,1)}
+.hl.on::before{transform:scaleX(1) rotate(-.6deg)}
+[data-theme="dark"] .hl.on{color:#101114}
+[data-theme="dark"] .hl{transition:color .3s .15s}
+
+/* ── 헤더 ── */
+.top{border-bottom:2.5px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:30px;height:30px;border-radius:8px;flex:none}
+.bn{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.02em;white-space:nowrap}
+.right{display:flex;align-items:center;gap:14px}
+.nav{display:flex;gap:2px}
+.nav a{font-size:13px;font-weight:700;padding:8px 13px;border-radius:999px;transition:all .12s}
+.nav a:hover{background:var(--lime);color:#101114}
+@media(max-width:760px){.nav{display:none}}
+.ctrl{display:flex;gap:6px}
+.tgl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;border:1.5px solid var(--hair);
+  background:none;color:var(--sub);border-radius:999px;padding:7px 12px;transition:all .15s;white-space:nowrap}
+.tgl:hover{border-color:var(--tx);color:var(--tx)}
+.meta-strip{border-bottom:1px solid var(--hair)}
+.meta-strip .wrap{display:flex;justify-content:space-between;gap:10px;padding:9px 22px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--dim)}
+
+/* ── 히어로 ── */
+.hero{padding:72px 0 64px;border-bottom:2.5px solid var(--line)}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;color:var(--sub)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(44px,12vw,94px);line-height:1.08;letter-spacing:-.03em;margin-top:20px}
+.lede{margin-top:28px;font-size:15.5px;color:var(--sub);max-width:560px;line-height:1.95}
+.lede .hl{color:var(--tx);font-weight:600}
+[data-theme="dark"] .lede .hl.on{color:#101114}
+.ctarow{display:flex;align-items:center;gap:22px;margin-top:34px;flex-wrap:wrap}
+.statrow{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
+.st b{font-family:var(--mono);font-size:24px;font-weight:700;display:block}
+.st span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--dim)}
+.go{font-family:var(--disp);font-weight:800;font-size:15px;background:var(--btnbg);color:var(--btntx);padding:16px 28px;border-radius:999px;transition:all .15s;letter-spacing:-.01em}
+.go:hover{background:var(--violet);color:#fff}
+.go2{font-size:13.5px;font-weight:700;border-bottom:2px solid var(--lime-deep);padding-bottom:2px}
+
+/* ── 키워드 줄 ── */
+.kwline{border-bottom:1px solid var(--hair);overflow:hidden}
+.kw-in{display:flex;gap:40px;padding:14px 0;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--sub);white-space:nowrap;width:max-content;animation:roll 28s linear infinite}
+.kw-in b{background:var(--lime);color:#101114;font-weight:700;padding:1px 6px;border-radius:3px}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── 데일리 학습 / 스폰서 ── */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:20px}
+.dcard{border:2.5px solid var(--line);padding:19px 20px;position:relative}
+.dlabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--sub)}
+.den{font-family:var(--disp);font-weight:800;font-size:clamp(16px,4.2vw,20px);letter-spacing:-.015em;line-height:1.5;margin-top:12px}
+.dko{font-size:13px;color:var(--sub);margin-top:9px;line-height:1.75}
+.tp{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--hair);align-items:start}
+.tp:last-child{border-bottom:none}
+.tpn{font-family:var(--disp);font-weight:800;font-size:22px;line-height:1;color:var(--lime-deep)}
+.tpt{font-weight:700;font-size:14.5px;letter-spacing:-.01em;line-height:1.55}
+.tpm{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:5px;letter-spacing:.06em}
+.tpk{display:inline-block;font-size:10px;font-weight:700;background:var(--lime);color:#101114;border-radius:999px;padding:2px 8px;margin:6px 5px 0 0}
+.sponcard{border:2.5px solid var(--line);padding:19px 20px;margin-top:20px;display:grid;grid-template-columns:1fr;gap:12px}
+.sponcard.has{border-left:6px solid var(--lime-deep)}
+.sponlabel{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--sub)}
+.sponlabel b{background:var(--lime);color:#101114;padding:2.5px 9px;border-radius:999px;font-weight:700;letter-spacing:.14em}
+.spont{font-family:var(--disp);font-weight:800;font-size:clamp(17px,4.4vw,21px);letter-spacing:-.015em}
+.spond{font-size:13px;color:var(--sub);line-height:1.75}
+.sponimg{width:100%;max-width:480px;border-radius:10px;border:1.5px solid var(--hair)}
+.sponbtn{justify-self:start;font-family:var(--disp);font-weight:800;font-size:13.5px;background:var(--btnbg);color:var(--btntx);padding:11px 22px;border-radius:999px}
+.sponbtn:hover{background:var(--violet);color:#fff}
+
+/* ── 도구 색인 ── */
+.idx{padding:58px 0 10px}
+.idxh{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:14px;border-bottom:2.5px solid var(--line)}
+.idxh .t{font-family:var(--disp);font-weight:800;font-size:clamp(22px,5vw,30px);letter-spacing:-.02em}
+.idxh .m{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--dim)}
+.wfsec{margin:34px 0 44px;border:2.5px solid var(--line);border-radius:16px;padding:22px 24px;background:var(--panel2,#F7F8F4)}
+.wfh{font-family:var(--disp);font-weight:800;font-size:19px;display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.wfm{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--dim);font-weight:400}
+.wfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.wf{display:flex;flex-direction:column;gap:5px;padding:13px 15px;border:1.5px solid var(--hair);border-radius:11px;background:var(--bg,#fff);text-decoration:none;color:inherit;transition:all .16s}
+.wf:hover{border-color:var(--lime-deep);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.wf b{font-size:13.5px;font-weight:800}
+.wf span{font-size:11.5px;color:var(--sub);line-height:1.6}
+.live{display:inline-block;font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;background:var(--lime);color:#101114;padding:2px 8px;border-radius:999px;margin-left:9px;vertical-align:6px}
+.row{display:grid;grid-template-columns:88px 1fr auto;gap:18px;align-items:start;padding:26px 0;border-bottom:1px solid var(--hair);transition:padding-left .18s}
+a.row:hover{padding-left:8px}
+.no{font-family:var(--disp);font-weight:800;font-size:clamp(26px,6vw,40px);line-height:1;color:var(--hair);transition:color .15s;letter-spacing:-.03em}
+a.row:hover .no{color:var(--lime-deep)}
+.rt{font-family:var(--disp);font-weight:800;font-size:clamp(20px,5.2vw,27px);letter-spacing:-.02em;display:inline-block}
+a.row:hover .rt{background:var(--lime);color:#101114}
+.rd{font-size:13.5px;color:var(--sub);margin-top:8px;line-height:1.8;max-width:520px}
+.rm{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--dim);text-align:right;line-height:1.9;padding-top:10px}
+.row.prep .no,.row.prep .rt{color:var(--hair)}
+.row.prep .rd{color:var(--dim)}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;background:var(--tagbg);color:var(--tagtx);padding:3px 8px;border-radius:999px;margin-left:10px;vertical-align:4px}
+@media(max-width:560px){.row{grid-template-columns:56px 1fr}.rm{grid-column:2;text-align:left;padding-top:2px}}
+
+/* ── 메모 ── */
+.note{padding:64px 0 70px;border-bottom:2.5px solid var(--line)}
+.note .label{font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;color:var(--dim)}
+.note p{font-family:var(--disp);font-weight:800;font-size:clamp(21px,5.4vw,32px);line-height:1.55;letter-spacing:-.02em;margin-top:18px;max-width:800px}
+[data-theme="dark"] .note .hl.on{color:#101114}
+.note .by{margin-top:24px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim)}
+
+footer{padding:24px 0 42px}
+.fgrid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--dim)}
+.fgrid a:hover{background:var(--lime);color:#101114}
+.fnote{margin-top:16px;font-size:11.5px;color:var(--dim);line-height:1.85;max-width:640px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="logo.svg" alt=""><span class="bn" data-i18n="bn">AML 인사이트</span></a>
+    <div class="right">
+      <nav class="nav">
+        <a href="./briefing/" data-i18n="n1">브리핑</a><a href="./checker/" data-i18n="n2">체커</a><a href="./radar/" data-i18n="n3">레이더</a><a href="./library/" data-i18n="n4">라이브러리</a>
+      </nav>
+      <div class="ctrl">
+        <button class="tgl" id="langbtn" onclick="toggleLang()">EN</button>
+        <button class="tgl" id="themebtn" onclick="toggleTheme()">DARK</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="meta-strip">
+  <div class="wrap"><span data-i18n="meta">FIELD KIT FOR AML PRACTITIONERS</span><span id="todayline"></span></div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kick" data-i18n="kick">DAILY 07:30 KST — 매일 아침 발행</div>
+    <h1 data-i18n="h1">모든 세탁은<br><span class="hl">흔적</span>을 남긴다</h1>
+    <div class="lede" data-i18n="lede">
+      회비처럼 보이는 입금, 정산처럼 보이는 이체. 자금세탁은 <span class="hl rv">평범함 속에 숨는 기술</span>이고,
+      우리의 일은 그 평범함에 밑줄을 긋는 것입니다. 매일 아침의 브리핑부터 제재 스캔, 수법 재현까지 —
+      한국 AML 실무자의 책상 위 장비를 만듭니다.
+    </div>
+    <div class="ctarow">
+      <a class="go" href="./briefing/" data-i18n="cta1">오늘의 브리핑 읽기</a>
+      <a class="go2" href="#idx" data-i18n="cta2">도구 색인 ↓</a>
+    </div>
+    <div class="statrow">
+      <div class="st"><b>11</b><span>실무 도구</span></div>
+      <div class="st"><b>5</b><span>매일 자동 갱신</span></div>
+      <div class="st"><b>27,000+</b><span>제재·수배 명단</span></div>
+      <div class="st"><b>0원</b><span>온디바이스 · 무료</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="kwline"><div class="kw-in" id="kw"></div></div>
+
+<section class="idx" id="todaysec" style="display:none;padding-bottom:0">
+  <div class="wrap">
+    <div class="idxh"><div class="t" data-i18n="tdt">오늘 주목할 인사이트</div><div class="m" id="tdm">TODAY'S PICKS</div></div>
+    <div id="todaypicks"></div>
+    <a class="go2" href="./briefing/" style="display:inline-block;margin:16px 0 6px" data-i18n="tdmore">브리핑 전체 보기 →</a>
+  </div>
+</section>
+
+<section class="idx" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="idxh"><div class="t" data-i18n="dlt">오늘의 한 수</div><div class="m" id="dlm">DAILY LEARNING</div></div>
+    <div class="dgrid">
+      <div class="dcard">
+        <div class="dlabel" data-i18n="dlen">실무 영어 한 문장</div>
+        <div class="den" id="d_en"></div>
+        <div class="dko" id="d_ko"></div>
+      </div>
+      <div class="dcard">
+        <div class="dlabel" data-i18n="dlst">통계 한 입</div>
+        <div class="den" id="d_st"></div>
+        <div class="dko" id="d_sd"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="idx" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="sponcard" id="sponcard"></div>
+  </div>
+</section>
+
+<section class="idx" id="idx">
+  <div class="wrap">
+    <div class="wfsec">
+      <div class="wfh">이럴 때, 이 도구 <span class="wfm">PRACTITIONER WORKFLOW</span></div>
+      <div class="wfgrid">
+        <a class="wf" href="./briefing/"><b>출근 직후 동향 파악</b><span>데일리 브리핑 — 밤사이 규제·제재·뉴스 5분 요약</span></a>
+        <a class="wf" href="./relation/"><b>STR 심사·작성</b><span>관계 탐색기 — 거래망 패턴 분석 후 STR 문안 초안 자동 생성</span></a>
+        <a class="wf" href="./typology/"><b>탐지룰 점검·신설</b><span>수법 인텔리전스 — 지금 도는 수법과 STR 점검 포인트</span></a>
+        <a class="wf" href="./business-risk/"><b>RA 재평가 근거</b><span>업종 위험 — 뉴스 기반 자동 순위와 근거 기사</span></a>
+        <a class="wf" href="./checker/"><b>고객·거래처 필터링</b><span>제재 체커 — OFAC·UN·EU·FBI 27,000건 일괄 조회</span></a>
+      </div>
+    </div>
+
+    <div class="idxh"><div class="t" data-i18n="idxt">도구 색인</div><div class="m" data-i18n="idxm">INDEX OF INSTRUMENTS</div></div>
+
+    <a class="row" href="./briefing/">
+      <div class="no">01</div>
+      <div><span class="rt" data-i18n="t1">데일리 AML 브리핑</span>
+      <div class="rd" data-i18n="d1">매일 아침 자동 발행. 뉴스 키워드 트렌드와 제재 리스트 변동을 세 문단으로 — 오늘 점검할 STR 테마가 보입니다.</div></div>
+      <div class="rm" data-i18n="m1">AUTO<br>07:30 KST</div>
+    </a>
+    <a class="row" href="./checker/">
+      <div class="no">02</div>
+      <div><span class="rt" data-i18n="t2">제재 통합 체커</span>
+      <div class="rd" data-i18n="d2">OFAC·UN·EU 26,062건을 한 번에 스캔. 검색은 브라우저 밖으로 나가지 않습니다. 일괄 조회 100건.</div></div>
+      <div class="rm">OFAC·UN·EU<br>26,062</div>
+    </a>
+    <a class="row" href="./radar/">
+      <div class="no">03</div>
+      <div><span class="rt" data-i18n="t3">연결거래 레이더</span>
+      <div class="rd" data-i18n="d3">분산입금·중계 허브·순환거래를 그래프로 재현하는 시뮬레이터. 타이폴로지 도감 5편과 패턴 자동 탐지 내장.</div></div>
+      <div class="rm" data-i18n="m3">SIMULATOR<br>모의 데이터</div>
+    </a>
+    <a class="row" href="./library/">
+      <div class="no">04</div>
+      <div><span class="rt" data-i18n="t4">STR 룰 라이브러리</span>
+      <div class="rd" data-i18n="d4">탐지 룰의 조건식과 오탐 노트를 익명으로 공유하고, 댓글로 임계값을 함께 다듬는 실무자 위키.</div></div>
+      <div class="rm">WIKI<br>RULES 6+</div>
+    </a>
+    <a class="row" href="./flow/">
+      <div class="no">05</div>
+      <div><span class="rt" data-i18n="t5">머니 플로우</span>
+      <div class="rd" data-i18n="d5">증권 거래대금 상위와 가상자산 24시간 거래대금 상위를 한 화면에. 돈의 쏠림이 곧 테마점검 신호입니다.</div></div>
+      <div class="rm">DAUM·UPBIT<br>DAILY</div>
+    </a>
+        <a class="row" href="./calendar/">
+      <div class="no">06</div>
+      <div><span class="rt" data-i18n="t6">규제 캘린더</span>
+      <div class="rd" data-i18n="d6">특금법·감독규정 개정과 행정지도 시행일을 D-Day로 추적합니다.</div></div>
+      <div class="rm">REG TRACKER<br>D-DAY</div>
+    </a>
+    <a class="row" href="./country-risk/">
+      <div class="no">07</div>
+      <div><span class="rt" data-i18n="t7">국가위험평가</span>
+      <div class="rd" data-i18n="d7">9개 국제기구 데이터로 255개국의 자금세탁 위험을 합산 평가. EDD 대상국 판단의 근거 자료입니다.</div></div>
+      <div class="rm">255 COUNTRIES<br>9 SOURCES</div>
+    </a>
+    <a class="row" href="./relation/">
+      <div class="no">08</div>
+      <div><span class="rt" data-i18n="t9">관계 탐색기</span>
+      <div class="rd" data-i18n="d9">거래·KYC·실소유자(UBO) 관계를 옵시디언 그래프처럼 펼쳐 탐색. 100% 브라우저 처리, 가명·해시 변환 입력 권장.</div></div>
+      <div class="rm">GRAPH VIEW<br>ON-DEVICE</div>
+    </a>
+    <a class="row" href="./business-risk/">
+      <div class="no">09</div>
+      <div><span class="rt" data-i18n="t10">업종 위험 인텔리전스</span> <span class="live">AUTO</span>
+      <div class="rd" data-i18n="d10">국내외 자금세탁 뉴스 기반으로 업종 위험을 자동 순위화. 기준등급(FATF·특금법·FinCEN)과 보도량을 결합하고 근거 기사를 링크로 제공.</div></div>
+      <div class="rm">NEWS-DRIVEN<br>RANKING</div>
+    </a>
+    <a class="row" href="./typology/">
+      <div class="no">10</div>
+      <div><span class="rt">수법 인텔리전스</span> <span class="live">AUTO</span>
+      <div class="rd">지금 돌고 있는 자금세탁 수법(typology)을 뉴스·수사 사례에서 추출. 수법별 STR 점검 포인트와 당국 적발 동향을 함께 제공.</div></div>
+      <div class="rm">TYPOLOGY<br>STR CHECK</div>
+    </a>
+    <a class="row" href="https://english-trainer-weld.vercel.app" target="_blank" rel="noopener">
+      <div class="no">11</div>
+      <div><span class="rt" data-i18n="t8">잉글리시 트레이너</span>
+      <div class="rd" data-i18n="d8">AML 도메인 동사 50개 커리큘럼으로 훈련하는 실무 영어 — 청크, 듣기 빈칸, AI 작문 채점까지 50일 과정.</div></div>
+      <div class="rm">50-DAY COURSE<br>AML ENGLISH</div>
+    </a>
+  </div>
+</section>
+
+<section class="note">
+  <div class="wrap">
+    <div class="label">WHY WE BUILD</div>
+    <p data-i18n="note">의심은 어느 날 갑자기 오지 않는다. 매일 같은 데이터를 보던 사람에게 어느 날 <span class="hl rv">다른 무늬</span>가 보이는 것이다. 그래서 우리는 도구보다 먼저 <span class="hl rv">루틴</span>을 만든다.</p>
+    <div class="by" data-i18n="by">— AML INSIGHT · BY A PRACTITIONER, NOT A VENDOR</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <span>© 2026 AML INSIGHT</span>
+      <span><a href="./briefing/">BRIEFING</a> · <a href="./checker/">CHECKER</a> · <a href="./relation/">RELATION</a> · <a href="./typology/">TYPOLOGY</a> · <a href="./business-risk/">RISK</a> · <a href="./library/">LIBRARY</a></span>
+    </div>
+    <div class="fnote" data-i18n="fnote">데이터는 매일 07:30 KST 자동 갱신됩니다(브리핑·업종위험·수법·자금흐름 / 제재명단 주 1회). 본 사이트의 도구와 콘텐츠는 교육·연구·실무 참고 목적입니다. 제재 대상 판단과 의심거래 보고 등 법령상 의무는 각 기관의 원천 데이터와 내부통제 절차를 기준으로 하세요.</div>
+  </div>
+</footer>
+
+<script src="daily.js"></script>
+<script>
+/* ── 다국어 사전 ── */
+const I18N={
+ ko:{
+  bn:"AML 인사이트", n1:"브리핑", n2:"체커", n3:"레이더", n4:"라이브러리",
+  meta:"FIELD KIT FOR AML PRACTITIONERS",
+  kick:"DAILY 07:30 KST — 매일 아침 발행",
+  h1:'모든 세탁은<br><span class="hl">흔적</span>을 남긴다',
+  lede:'회비처럼 보이는 입금, 정산처럼 보이는 이체. 자금세탁은 <span class="hl rv">평범함 속에 숨는 기술</span>이고, 우리의 일은 그 평범함에 밑줄을 긋는 것입니다. 매일 아침의 브리핑부터 제재 스캔, 수법 재현까지 — 한국 AML 실무자의 책상 위 장비를 만듭니다.',
+  cta1:"오늘의 브리핑 읽기", cta2:"도구 색인 ↓",
+  idxt:"도구 색인", idxm:"INDEX OF INSTRUMENTS",
+  t1:"데일리 AML 브리핑", d1:"매일 아침 자동 발행. 뉴스 키워드 트렌드와 제재 리스트 변동을 세 문단으로 — 오늘 점검할 STR 테마가 보입니다.", m1:"AUTO<br>07:30 KST",
+  t2:"제재 통합 체커", d2:"OFAC·UN·EU 26,062건을 한 번에 스캔. 검색은 브라우저 밖으로 나가지 않습니다. 일괄 조회 100건.",
+  t3:"연결거래 레이더", d3:"분산입금·중계 허브·순환거래를 그래프로 재현하는 시뮬레이터. 타이폴로지 도감 5편과 패턴 자동 탐지 내장.", m3:"SIMULATOR<br>모의 데이터",
+  t4:"STR 룰 라이브러리", d4:"탐지 룰의 조건식과 오탐 노트를 익명으로 공유하고, 댓글로 임계값을 함께 다듬는 실무자 위키.",
+  t5:"머니 플로우", d5:"증권 거래대금 상위와 가상자산 24시간 거래대금 상위를 한 화면에. 돈의 쏠림이 곧 테마점검 신호입니다.",
+  t6:"규제 캘린더", d6:"특금법·감독규정 개정과 행정지도 시행일을 D-Day로 추적합니다.",
+  t7:"국가위험평가", d7:"9개 국제기구 데이터로 255개국의 자금세탁 위험을 합산 평가. EDD 대상국 판단의 근거 자료입니다.",
+  t10:"업종 위험평가", d10:"업종별 자금세탁 위험등급을 FATF·특금법·FinCEN·KSIC 기준으로 조회. 고객 업종 기반 RBA의 출발점.",
+  t9:"관계 탐색기", d9:"거래·KYC·실소유자(UBO) 관계를 옵시디언 그래프처럼 펼쳐 탐색. 100% 브라우저 처리, 가명·해시 변환 입력 권장.",
+  t8:"잉글리시 트레이너", d8:"AML 도메인 동사 50개 커리큘럼으로 훈련하는 실무 영어 — 청크, 듣기 빈칸, AI 작문 채점까지 50일 과정.",
+  note:'의심은 어느 날 갑자기 오지 않는다. 매일 같은 데이터를 보던 사람에게 어느 날 <span class="hl rv">다른 무늬</span>가 보이는 것이다. 그래서 우리는 도구보다 먼저 <span class="hl rv">루틴</span>을 만든다.',
+  by:"— AML INSIGHT · BY A PRACTITIONER, NOT A VENDOR",
+  fnote:"데이터는 매일 07:30 KST 자동 갱신됩니다(브리핑·업종위험·수법·자금흐름 / 제재명단 주 1회). 본 사이트의 도구와 콘텐츠는 교육·연구·실무 참고 목적입니다. 제재 대상 판단과 의심거래 보고 등 법령상 의무는 각 기관의 원천 데이터와 내부통제 절차를 기준으로 하세요.",
+  tdt:"오늘 주목할 인사이트", tdmore:"브리핑 전체 보기 →",
+  dlt:"오늘의 한 수", dlen:"실무 영어 한 문장", dlst:"통계 한 입",
+  sponask:"이 자리에 알리세요", sponaskd:"AML 행사·교육·도서를 실무자들에게 — 스폰서 등재 문의는 규제 캘린더의 안내를 참고하세요.",
+  kw:["가상자산 <b>16</b>","코인 <b>9</b>","자금세탁 <b>4</b>","상품권 <b>4</b>","제재 추적 <b>26,062</b>","타이폴로지 <b>5</b>","탐지 룰 <b>6+</b>","매일 발행 <b>07:30</b>"]
+ },
+ en:{
+  bn:"AML Insight", n1:"Briefing", n2:"Checker", n3:"Radar", n4:"Library",
+  meta:"FIELD KIT FOR AML PRACTITIONERS",
+  kick:"DAILY 07:30 KST — PUBLISHED EVERY MORNING",
+  h1:'Every laundering<br>leaves a <span class="hl">trace</span>',
+  lede:'A deposit that looks like membership dues. A transfer that looks like settlement. Money laundering is <span class="hl rv">the art of hiding in the ordinary</span> — and our job is to underline the ordinary. From the morning briefing to sanctions scans and typology replays, we build the desk kit for Korean AML practitioners.',
+  cta1:"Read today's briefing", cta2:"Index of tools ↓",
+  idxt:"Index of Tools", idxm:"INDEX OF INSTRUMENTS",
+  t1:"Daily AML Briefing", d1:"Auto-published every morning: news keyword trends and sanctions-list changes in three paragraphs — today's STR themes at a glance.", m1:"AUTO<br>07:30 KST",
+  t2:"Sanctions Checker", d2:"Scan 26,062 OFAC, UN and EU entries at once. Searches never leave your browser. Batch screening up to 100 names.",
+  t3:"Linked-Tx Radar", d3:"A simulator that replays smurfing, layering hubs and circular flows as graphs. Five typology cases and automatic pattern detection built in.", m3:"SIMULATOR<br>MOCK DATA ONLY",
+  t4:"STR Rule Library", d4:"Share detection-rule logic and false-positive notes anonymously, and refine thresholds together in the comments.",
+  t5:"Money Flow", d5:"Top equity trading values and 24h crypto-exchange volumes on one board — where money piles up, themes begin.",
+  t6:"Reg Calendar", d6:"D-Day tracking for AML statute amendments and supervisory guidance effective dates.",
+  t7:"Country Risk", d7:"Aggregated ML risk scores for 255 jurisdictions from nine international bodies — the evidence base for EDD designations.",
+  t10:"Industry Risk", d10:"Look up money-laundering risk grades by industry across FATF, Korean AML law, FinCEN and KSIC — the starting point for customer RBA.",
+  t9:"Relation Explorer", d9:"Explore transaction, KYC and UBO relationships as an Obsidian-style graph. Fully on-device; pseudonymized or hashed input recommended.",
+  t8:"English Trainer", d8:"Practical English built on 50 AML-domain verbs — chunks, listening gaps and AI-graded writing across a 50-day course.",
+  note:'Suspicion never arrives out of nowhere. It comes to the person who watches the same data every day — until one day <span class="hl rv">a different pattern</span> appears. That is why we build the <span class="hl rv">routine</span> before the tool.',
+  by:"— AML INSIGHT · BY A PRACTITIONER, NOT A VENDOR",
+  fnote:"All tools and content on this site are for education, research and practitioner reference. Sanctions determinations and statutory obligations such as STR filing must follow each institution's source data and internal controls.",
+  tdt:"Today's Picks", tdmore:"Read the full briefing →",
+  dlt:"Daily Learning", dlen:"One line of working English", dlst:"A bite of statistics",
+  sponask:"Your message here", sponaskd:"Reach AML practitioners with your event, course or book — see the Reg Calendar for sponsor listings.",
+  kw:["CRYPTO <b>16</b>","COINS <b>9</b>","LAUNDERING <b>4</b>","GIFT CARDS <b>4</b>","SANCTIONS <b>26,062</b>","TYPOLOGIES <b>5</b>","RULES <b>6+</b>","DAILY <b>07:30</b>"]
+ }
+};
+
+let LANG=localStorage.getItem("ai_lang")||"ko";
+let THEME=localStorage.getItem("ai_theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+
+function applyLang(){
+  const d=I18N[LANG];
+  document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.dataset.i18n;
+    if(d[k]!==undefined)el.innerHTML=d[k];
+  });
+  const half=d.kw.map(t=>`<span>${t}</span>`).join("");
+  document.getElementById("kw").innerHTML=half+half;
+  document.getElementById("langbtn").textContent=LANG==="ko"?"EN":"한국어";
+  /* 형광펜 즉시 점등 (전환 시 재생 없이) */
+  document.querySelectorAll(".hl").forEach(el=>el.classList.add("on"));
+}
+function toggleLang(){LANG=LANG==="ko"?"en":"ko";localStorage.setItem("ai_lang",LANG);applyLang();}
+
+function applyTheme(){
+  document.documentElement.dataset.theme=THEME;
+  document.getElementById("themebtn").textContent=THEME==="dark"?"LIGHT":"DARK";
+}
+function toggleTheme(){THEME=THEME==="dark"?"light":"dark";localStorage.setItem("ai_theme",THEME);/* ── 오늘 주목할 인사이트 (브리핑 데이터 fetch) ── */
+(async function(){
+  try{
+    const r=await fetch("./briefing/data.json",{cache:"no-store"});
+    if(!r.ok)return;
+    const d=await r.json();
+    const ps=(d.picks&&d.picks.length?d.picks:d.news.slice(0,3)).slice(0,3);
+    if(!ps.length)return;
+    document.getElementById("todaysec").style.display="block";
+    document.getElementById("tdm").textContent=(d.today||"").replaceAll("-",".")+". PICKS";
+    document.getElementById("todaypicks").innerHTML=ps.map((n,i)=>`
+      <a class="tp" href="${n.link}" target="_blank" rel="noopener">
+        <div class="tpn">${String(i+1).padStart(2,"0")}</div>
+        <div><div class="tpt">${n.t}</div>
+        <div class="tpm">${n.src} · ${n.ts}</div>
+        <div>${(n.kws||[]).slice(0,3).map(k=>`<span class="tpk">#${k}</span>`).join("")}</div></div>
+      </a>`).join("");
+    /* 키워드 띠도 실데이터로 교체 */
+    if(d.keywords&&d.keywords.length){
+      const items=d.keywords.slice(0,8).map(k=>`${k.k} <b>${k.n}</b>`);
+      const half=items.map(t=>`<span>${t}</span>`).join("");
+      document.getElementById("kw").innerHTML=half+half;
+    }
+  }catch(e){}
+})();
+
+/* ── 오늘의 한 수 (day-of-year 회전) ── */
+(function(){
+  if(typeof DAILY_EN==="undefined")return;
+  const now=new Date();
+  const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
+  const en=DAILY_EN[doy%DAILY_EN.length], st=DAILY_ST[doy%DAILY_ST.length];
+  document.getElementById("d_en").textContent=en.e;
+  document.getElementById("d_ko").textContent=en.k;
+  document.getElementById("d_st").textContent=st.t;
+  document.getElementById("d_sd").textContent=st.d;
+})();
+
+/* ── 스폰서 슬롯 (캘린더 등재 스폰서 자동 노출 / 없으면 모집 카드) ── */
+const SPON_FIREBASE={databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com"};
+(async function(){
+  const el=document.getElementById("sponcard");
+  const dict=()=>I18N[LANG];
+  function house(){
+    el.innerHTML=`<div class="sponlabel">AD · SPONSOR SLOT</div>
+      <div class="spont">${dict().sponask}</div>
+      <div class="spond">${dict().sponaskd}</div>
+      <a class="sponbtn" href="./calendar/">규제 캘린더 →</a>`;
+  }
+  if(SPON_FIREBASE.databaseURL.includes("YOUR_PROJECT")){house();return;}
+  try{
+    const r=await fetch(SPON_FIREBASE.databaseURL.replace(/\/$/,"")+"/calendar/events.json");
+    const d=await r.json()||{};
+    const sps=Object.values(d).filter(e=>e.sponsored&&new Date(e.d)>=new Date(new Date().toDateString()));
+    if(!sps.length){house();return;}
+    const e=sps.sort((a,b)=>(b.ts||0)-(a.ts||0))[0];
+    el.classList.add("has");
+    el.innerHTML=`<div class="sponlabel"><b>SPONSORED</b></div>
+      <div class="spont">${e.t}</div>
+      ${e.img?`<img class="sponimg" src="${e.img}" alt="" loading="lazy">`:""}
+      <div class="spond">${e.desc||""}</div>
+      ${e.url?`<a class="sponbtn" href="${e.url}" target="_blank" rel="noopener">자세히 보기 →</a>`:`<a class="sponbtn" href="./calendar/">캘린더에서 보기 →</a>`}`;
+  }catch(err){house();}
+})();
+
+applyTheme();}
+
+/* 날짜 */
+(function(){
+  const d=new Date(), z=n=>String(n).padStart(2,"0");
+  document.getElementById("todayline").textContent=`${d.getFullYear()}.${z(d.getMonth()+1)}.${z(d.getDate())}.`;
+})();
+
+/* ── 오늘 주목할 인사이트 (브리핑 데이터 fetch) ── */
+(async function(){
+  try{
+    const r=await fetch("./briefing/data.json",{cache:"no-store"});
+    if(!r.ok)return;
+    const d=await r.json();
+    const ps=(d.picks&&d.picks.length?d.picks:d.news.slice(0,3)).slice(0,3);
+    if(!ps.length)return;
+    document.getElementById("todaysec").style.display="block";
+    document.getElementById("tdm").textContent=(d.today||"").replaceAll("-",".")+". PICKS";
+    document.getElementById("todaypicks").innerHTML=ps.map((n,i)=>`
+      <a class="tp" href="${n.link}" target="_blank" rel="noopener">
+        <div class="tpn">${String(i+1).padStart(2,"0")}</div>
+        <div><div class="tpt">${n.t}</div>
+        <div class="tpm">${n.src} · ${n.ts}</div>
+        <div>${(n.kws||[]).slice(0,3).map(k=>`<span class="tpk">#${k}</span>`).join("")}</div></div>
+      </a>`).join("");
+    /* 키워드 띠도 실데이터로 교체 */
+    if(d.keywords&&d.keywords.length){
+      const items=d.keywords.slice(0,8).map(k=>`${k.k} <b>${k.n}</b>`);
+      const half=items.map(t=>`<span>${t}</span>`).join("");
+      document.getElementById("kw").innerHTML=half+half;
+    }
+  }catch(e){}
+})();
+
+/* ── 오늘의 한 수 (day-of-year 회전) ── */
+(function(){
+  if(typeof DAILY_EN==="undefined")return;
+  const now=new Date();
+  const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
+  const en=DAILY_EN[doy%DAILY_EN.length], st=DAILY_ST[doy%DAILY_ST.length];
+  document.getElementById("d_en").textContent=en.e;
+  document.getElementById("d_ko").textContent=en.k;
+  document.getElementById("d_st").textContent=st.t;
+  document.getElementById("d_sd").textContent=st.d;
+})();
+
+/* ── 스폰서 슬롯 (캘린더 등재 스폰서 자동 노출 / 없으면 모집 카드) ── */
+const SPON_FIREBASE={databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com"};
+(async function(){
+  const el=document.getElementById("sponcard");
+  const dict=()=>I18N[LANG];
+  function house(){
+    el.innerHTML=`<div class="sponlabel">AD · SPONSOR SLOT</div>
+      <div class="spont">${dict().sponask}</div>
+      <div class="spond">${dict().sponaskd}</div>
+      <a class="sponbtn" href="./calendar/">규제 캘린더 →</a>`;
+  }
+  if(SPON_FIREBASE.databaseURL.includes("YOUR_PROJECT")){house();return;}
+  try{
+    const r=await fetch(SPON_FIREBASE.databaseURL.replace(/\/$/,"")+"/calendar/events.json");
+    const d=await r.json()||{};
+    const sps=Object.values(d).filter(e=>e.sponsored&&new Date(e.d)>=new Date(new Date().toDateString()));
+    if(!sps.length){house();return;}
+    const e=sps.sort((a,b)=>(b.ts||0)-(a.ts||0))[0];
+    el.classList.add("has");
+    el.innerHTML=`<div class="sponlabel"><b>SPONSORED</b></div>
+      <div class="spont">${e.t}</div>
+      ${e.img?`<img class="sponimg" src="${e.img}" alt="" loading="lazy">`:""}
+      <div class="spond">${e.desc||""}</div>
+      ${e.url?`<a class="sponbtn" href="${e.url}" target="_blank" rel="noopener">자세히 보기 →</a>`:`<a class="sponbtn" href="./calendar/">캘린더에서 보기 →</a>`}`;
+  }catch(err){house();}
+})();
+
+applyTheme();
+/* 초기 로드: 한국어 기본 + 형광펜 모션 재생 */
+if(LANG!=="ko"){applyLang();}
+else{
+  const half=I18N.ko.kw.map(t=>`<span>${t}</span>`).join("");
+  document.getElementById("kw").innerHTML=half+half;
+  window.addEventListener("load",()=>{
+    setTimeout(()=>document.querySelector("h1 .hl").classList.add("on"),450);
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target);}})},{threshold:.6});
+    document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+  });
+}
+</script>
+</body>
+</html>

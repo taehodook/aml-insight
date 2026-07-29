@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데일리 AML 브리핑 — AML 인사이트</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="데일리 브리핑 — AML 인사이트">
+<meta property="og:description" content="매일 아침 자금세탁·제재·규제 뉴스를 5분 요약. STR 테마 점검 제안까지.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/briefing/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="매일 아침 자동 발행되는 AML 실무 브리핑 — 뉴스 키워드 트렌드, 제재 리스트 변동, STR 테마점검 제안.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css");
+
+:root{
+  --blue:#101114; --blue-dark:#6C4DFF; --blue-tint:#D8FF3D;
+  --ink:#0A0B0D; --gray:#5B616E; --gray2:#8A919E;
+  --line:#EAECEF; --soft:#F5F6F9; --paper:#FFFFFF;
+  --red:#E5484D; --red-tint:#FEEDEE;
+  --green:#0A8754; --green-tint:#E8F7F0;
+  --amber:#B45309; --amber-tint:#FFF3E3;
+  --ofac:#6C4DFF; --ofac-t:#EFEBFF; --un:#0E7C86; --un-t:#E4F5F6; --eu:#B45309; --eu-t:#FFF3E3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter Variable','Pretendard Variable',Pretendard,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.topbar{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:30}
+.tbwrap{max-width:880px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:#D8FF3D;border:2px solid #101114}
+.toplabel{font-size:12px;font-weight:600;color:var(--gray);background:var(--soft);border-radius:999px;padding:5px 12px}
+
+.hero{max-width:880px;margin:0 auto;padding:32px 20px 8px}
+.hdate{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+h1{font-family:'Paperlogy',sans-serif;font-size:clamp(28px,7vw,42px);font-weight:800;letter-spacing:-.035em;line-height:1.14;margin-top:4px}
+.hsub{font-size:14px;color:var(--gray);margin-top:8px}
+
+main{max-width:880px;margin:0 auto;padding:16px 20px 70px}
+.sec{margin-top:26px}
+.sech{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:11px}
+.sect{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.secn{font-size:12px;color:var(--gray2)}
+
+/* 브리핑 */
+.brief{background:#101114;border-radius:22px;padding:24px 24px 22px;color:#fff}
+.brief .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;background:#D8FF3D;color:#101114;border-radius:999px;padding:5px 13px}
+.brief p{font-size:14.5px;line-height:1.8;margin-top:13px;color:#E6E7ED}
+.brief p b{color:#fff}
+.brief .gen{font-size:11px;color:#8A8FA0;margin-top:14px}
+
+/* 키워드 트렌드 */
+.kcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px}
+.krow{display:flex;align-items:center;gap:10px;padding:6px 0}
+.kname{width:86px;flex:none;font-size:13px;font-weight:700}
+.kbarw{flex:1;height:10px;background:var(--soft);border-radius:999px;overflow:hidden}
+.kbar{height:100%;background:#B7E600;border-radius:999px}
+.kn{width:64px;flex:none;text-align:right;font-size:12px;color:var(--gray);font-variant-numeric:tabular-nums}
+.kn .up{color:var(--green);font-weight:700}
+.kn .dn{color:var(--gray2)}
+
+/* 제재 변동 */
+.scard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px}
+.schips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:12px;color:var(--gray)}
+.chip b{color:var(--ink);font-variant-numeric:tabular-nums}
+.chip.add{background:var(--red-tint);border-color:transparent;color:#C0353A;font-weight:700}
+.chip.rem{background:var(--green-tint);border-color:transparent;color:var(--green);font-weight:700}
+.snote{font-size:13px;color:var(--gray);margin-top:11px;line-height:1.7}
+.slist{margin-top:11px;border-top:1px solid var(--line)}
+.srow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.srow:last-child{border-bottom:none}
+.bdg{font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px;flex:none}
+.b-ofac{background:var(--ofac-t);color:var(--ofac)}.b-un{background:var(--un-t);color:var(--un)}.b-eu{background:var(--eu-t);color:var(--eu)}
+.b-add{background:var(--red-tint);color:#C0353A}.b-rem{background:var(--green-tint);color:var(--green)}
+.sname{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sprog{font-size:11px;color:var(--gray2);flex:none;max-width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 뉴스 */
+.ncard{display:block;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 17px;margin-bottom:8px;transition:border-color .15s,box-shadow .15s}
+.ncard:hover{border-color:#D7DAE0;box-shadow:0 4px 14px rgba(10,11,13,.05)}
+.nt{font-size:14px;font-weight:700;letter-spacing:-.01em;line-height:1.5}
+.nm{font-size:11.5px;color:var(--gray2);margin-top:5px}
+.morebtn{display:block;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:13px;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px}
+.morebtn:hover{background:var(--soft)}
+
+/* 레그워치 */
+(function(){
+  const rw=D.regwatch||{};
+  const fss=rw.fss||[];
+  if(fss.length){
+    document.getElementById("regsec").style.display="block";
+    document.getElementById("fsslist").innerHTML=fss.map(r=>`<tr>
+      <td style="font-weight:700">${esc(r.org)}</td>
+      <td style="color:var(--gray2);font-size:11.5px;white-space:nowrap">${esc(r.d).replaceAll("-",".")}.</td>
+      <td>${r.aml?'<span class="amlbdg">자금세탁방지실</span>':`<span class="deptb">${esc(r.dept)}</span>`}</td>
+      <td style="text-align:right">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:12px">PDF</a>`:""}</td>
+    </tr>`).join("");
+    const fsc=rw.fsc||[];
+    if(fsc.length){
+      document.getElementById("fscbox").innerHTML='<div class="sech" style="margin-top:18px"><div class="sect" style="font-size:16px">금융위 — 자금세탁 관련 의결·공시</div></div>'+
+        fsc.map(x=>`<a class="ncard" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="nt">${esc(x.t)}</div></a>`).join("");
+    }
+  }
+})();
+
+/* 리서치 */
+(function(){
+  const ps=D.papers||[];
+  if(!ps.length)return;
+  document.getElementById("papersec").style.display="block";
+  document.getElementById("paperlist").innerHTML=ps.map(p=>`<a class="ncard" href="${esc(p.url)}" target="_blank" rel="noopener">
+    <div class="nt" style="font-size:13.5px">${esc(p.t)}</div>
+    <div class="nm">arXiv · ${esc(p.d).replaceAll("-",".")}.</div></a>`).join("");
+})();
+
+/* 아카이브 */
+.acard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 17px;margin-bottom:8px}
+.atop{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.adate{font-size:13.5px;font-weight:800}
+.atags{font-size:11.5px;color:var(--gray2)}
+.abody{display:none;margin-top:10px;font-size:13px;color:var(--gray);line-height:1.75;border-top:1px solid var(--line);padding-top:10px}
+.abody.on{display:block}
+
+.pick{display:grid;grid-template-columns:44px 1fr;gap:14px;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:15px 17px;margin-bottom:8px;align-items:start}
+.pno{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:26px;line-height:1;color:#B7E600}
+.pkws{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pkw{font-size:10.5px;font-weight:700;background:var(--blue-tint);color:#101114;border-radius:999px;padding:2.5px 9px}
+.sortbtn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--gray);cursor:pointer}
+.sortbtn.on{background:var(--blue-tint);color:#101114;border-color:var(--ink)}
+.tcard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.btable{border-collapse:collapse;font-size:13px}
+.btable td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:middle}
+.btable tr:first-child td{border-top:none}
+.amlbdg{font-size:10px;font-weight:800;background:var(--blue-tint);color:#101114;border-radius:999px;padding:2.5px 9px;white-space:nowrap}
+.deptb{font-size:10px;font-weight:700;background:var(--soft);color:var(--gray);border-radius:999px;padding:2.5px 9px;white-space:nowrap}
+.likebtn{border:none;background:var(--soft);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--gray);cursor:pointer;margin-top:9px}
+.likebtn.on{background:var(--blue-tint);color:#101114}
+footer{border-top:1px solid var(--line);padding:24px 20px 32px;font-size:12px;color:var(--gray);line-height:1.75}
+.fwrap{max-width:880px;margin:0 auto}
+footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tbwrap">
+    <a class="logo" href="../" style="text-decoration:none;color:inherit"><span class="dot"></span>AML 인사이트</a>
+    <div class="toplabel">Daily Briefing</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hdate" id="hdate"></div>
+  <h1>데일리 <span style="background:#D8FF3D;padding:0 .1em;border-radius:.12em">AML 브리핑</span></h1>
+  <div class="hsub">매일 아침 자동 발행 — 뉴스 키워드 트렌드 · 제재 리스트 변동 · STR 테마점검 제안</div>
+</div>
+
+<main>
+  <div class="brief" id="brief"></div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">키워드 트렌드</div><div class="secn">최근 3일 보도 기준 · STR 테마점검 재료</div></div>
+    <div class="kcard" id="kcard"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">제재 리스트 변동</div><div class="secn">OFAC · UN · EU 일일 추적</div></div>
+    <div class="scard" id="scard"></div>
+  </div>
+
+  <div class="sec" id="picksec" style="display:none">
+    <div class="sech"><div class="sect">인사이트 픽</div><div class="secn">AML 직결 키워드 가중 분석 상위 3</div></div>
+    <div id="plist2"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">수집 뉴스</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="sortbtn" id="sortbtn" onclick="toggleNsort()">관심순</button>
+        <div class="secn" id="newsn"></div>
+      </div></div>
+    <div id="nlist"></div>
+  </div>
+
+  <div class="sec" id="regsec" style="display:none">
+    <div class="sech"><div class="sect">레그워치 — 자금세탁 제재공시</div><div class="secn">금감원 자금세탁방지실 조사 건</div></div>
+    <div class="tcard"><table class="btable" style="width:100%"><tbody id="fsslist"></tbody></table></div>
+    <div id="fscbox"></div>
+  </div>
+
+  <div class="sec" id="papersec" style="display:none">
+    <div class="sech"><div class="sect">리서치 — 최신 논문</div><div class="secn">arXiv · AML/FRAML</div></div>
+    <div id="paperlist"></div>
+  </div>
+
+  <div class="sec" id="archsec" style="display:none">
+    <div class="sech"><div class="sect">지난 브리핑</div><div class="secn">최근 14일</div></div>
+    <div id="alist"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="fwrap">
+    <b>안내</b> · 본 브리핑은 공개 뉴스와 제재 리스트 원천 데이터를 자동 수집·요약한 참고 자료입니다. 기사 내용의 사실 확인은 원문 링크를, 제재 대상 판단은 각 기관 원천 리스트와 사내 WLF 절차를 기준으로 하세요.
+    <div style="margin-top:8px">© AML 인사이트 · 자동 발행 시각: <span id="gen"></span></div>
+  </div>
+</footer>
+
+<script>
+const DATA={"generated":"2026-06-12 19:05","today":"2026-06-12","briefing":{"mode":"template","paras":["오늘 수집된 AML 관련 뉴스는 42건입니다. 가장 두드러진 키워드는 가상자산(15건), 자금세탁(12건), 코인(7건), 환치기(2건)입니다.","STR 테마점검 제안: 오늘의 키워드와 연관된 집금→거래소 당일 연계 룰의 가동 여부와 임계값을 점검해 보세요.","제재 변동: 오늘은 OFAC·UN·EU 신규 지정 및 해제가 없습니다."]},"keywords":[{"k":"가상자산","n":15,"prev":16},{"k":"자금세탁","n":12,"prev":12},{"k":"코인","n":7,"prev":7},{"k":"환치기","n":2,"prev":2},{"k":"제재","n":2,"prev":2},{"k":"외환","n":2,"prev":2},{"k":"보이스피싱","n":1,"prev":1},{"k":"대포통장","n":1,"prev":1},{"k":"거래소","n":1,"prev":1},{"k":"사기","n":1,"prev":1},{"k":"피싱","n":1,"prev":1}],"news":[{"t":"\"자금세탁방지 부실\"..SBI저축은행 '기관주의'","src":"포쓰저널","link":"https://news.google.com/rss/articles/CBMiZEFVX3lxTE44Ti02aWhUYVhuWm5NM28xZTNXbmwxemlOZEo2el9rVVFkQ0ZKTXFxVEZHdmpOQ1QtYjRTVHp4SnB6N2xROHVKU2Fra1l2WEd5Ymw3TTZTdWxpa1AyNGNJcE0tRUQ?oc=5","ts":"2026-06-12 17:44","q":"자금세탁"},{"t":"SBI저축은행, 자금세탁 137건 확인 누락...금감원 제재","src":"데일리브리프","link":"https://news.google.com/rss/articles/CBMibkFVX3lxTFBxd3p6Y3hpekhLc1N6NkIwbVhxNmhwVldySUxWSEllY1o0aVVmUzloZkdqUjRxanRxQ2VvTXFrdzJNWGtNQ192Y2dUNkVHWmFwTUxud09laUZXeUttbG42VW1STGJ5Ri1JWm5QY0FB?oc=5","ts":"2026-06-12 16:35","q":"자금세탁"},{"t":"“발행 후 자금세탁 막아야” 월가 은행권, 디파이 규제 확대 요구…지니어스법 둘러싼 공방","src":"비온미디어","link":"https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5RelRocHBaTVVTaWxaa2gwMk9veExkR1JtOEcwaDh3RVl4ZkNvbUttVl9KZl9Va181UHVWVl9sN251U2RpdVlUQWhnVGxhMWgzT19qZndMb0FRX1pLdGF2NUUwOGJ4dDTSAWtBVV95cUxQUFRnczNUdHptcW53ZWR6WUgwM01yT01NRUV4M3lhNGNhLWJNWUNpcjFBaHlGZUxoMURCMTVOWUxFNG1sZFlqV1oxLXVVRWdzT04wT3JvSGNRZXA2ZVdzNVNqb3BobUVfeUVtYw?oc=5","ts":"2026-06-12 14:46","q":"자금세탁"},{"t":"DSRV, 자금세탁방지 체계 고도화…제도권 금융 협업 대비","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiT0FVX3lxTE5KVlFIRjVCVWRKSlMtNU9IcjhCQmNLWGFQN0VvRG0xNndoREVhTkU3TFJGcTlKUkdrQjdpQ0JHRTNzaDROU21TNXNKdkktdlU?oc=5","ts":"2026-06-12 11:20","q":"자금세탁"},{"t":"日 디지털자산 규제 금상법 이관 개정안, 중의원 본회의 통과","src":"디지털애셋","link":"https://news.google.com/rss/articles/CBMickFVX3lxTE1jVmxSUHVySlFnMzFHT0hCeExBWkJwLUZCLWxBVFB6NWx0YW9TUXNxM0djODMxdm1EN2hrUjh5RlNpUXZrWWY2NktRY29SckVDY0VRWGdsdExjRWh1d0RIYjlHX0dCNEdldmZZanVzbjNUQQ?oc=5","ts":"2026-06-12 11:01","q":"가상자산 규제"},{"t":"DSRV, 금융권 수준 자금세탁방지 시스템 도입","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiRkFVX3lxTE53TWpxd3RWdmdyOVFpY1BtZnhRZERQU2xZZEdGakNuZGpZdTJUM25sVU1OS2hDNDNicnpwLWRFeDdxNWJSVUE?oc=5","ts":"2026-06-12 10:57","q":"자금세탁"},{"t":"DSRV, 자금세탁방지 모니터링 시스템 도입","src":"지디넷코리아","link":"https://news.google.com/rss/articles/CBMiVkFVX3lxTE9QaEFIQ09GWTQzdTZ5YkhfeTdqV3pDTWRSZXZmZE02NFZoelBCT0NOOHVhdXFMaWlBZzJKRnUyMk9xUHBnN0dwUFRva2NRWUZIWGpfenpB?oc=5","ts":"2026-06-12 10:51","q":"자금세탁"},{"t":"DSRV, 자금세탁방지 체계 고도화…전통 금융사 접점 확대","src":"네이트","link":"https://news.google.com/rss/articles/CBMiU0FVX3lxTE9xQUQ1NXZncjBTVHo0akFCVGtIanhic0JLNGZkNDdYTmE0Nzg0MnJCX21DZFlOR0k1dHUzWGM1c21vZ0lpNlNXS3Q5MlB5cFBIQmdF?oc=5","ts":"2026-06-12 10:45","q":"자금세탁"},{"t":"DSRV, 자금세탁방지 시스템 도입…리스크 적기 대응","src":"SBSBiz","link":"https://news.google.com/rss/articles/CBMiWEFVX3lxTE9zY1lKR2p4d3JFWHd6ajNGMFhhd2RfR0VTQXpydlpTdy1qWmlDMkk0ZWt1ZWIxb0VPdTNGX1gwZW9reVlNNTVNcVlpaHIzbmhRdXJzZk96azY?oc=5","ts":"2026-06-12 10:35","q":"자금세탁"},{"t":"DSRV, 자금세탁방지 체계 고도화…기관 협업 내부통제 강화","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiVEFVX3lxTFBuakpkVElURE8yaGI4QUpXVTVQQlFFanFTR2w3QnJwWFh2VWhvLW5nNXNoM1NHVF8tZVhZRGozT2t2TFJJbmFqanBLcE8xcWZEeWhEVQ?oc=5","ts":"2026-06-12 10:15","q":"자금세탁"},{"t":"美 CFTC 위원장 \"가상자산 무기한 선물, 규제 안으로 들여올 것\"","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTE5NdEk5TjJmRmlwMGpma2t0VS1UTUJOb1dQWjRxRzBrVk8zNWc2azcyRUY4MUUzNmxmTXY3eXVBU2twLVpiTFd1bDRvX1BMb0dW?oc=5","ts":"2026-06-12 09:39","q":"가상자산 규제"},{"t":"\"걸리면 징역 20년\" 전 세계 해커들 돈줄 끊겼다…비트코인 1만 개 세탁한 일당 체포","src":"핀포인트뉴스","link":"https://news.google.com/rss/articles/CBMic0FVX3lxTE4wb0Y2UFNZb2xRbnA4aTJJbnBVUEppR2t6c3RrblVxMWpkOV9vSnBRZmdSVl9CaTZVZ25qazV1SnpsTm9UMkF0SVRweEM0X1VFdVNuZjh5SUpHUnZ6NkRCWC1DWndLLXUxME0tXzJsSlFyMzg?oc=5","ts":"2026-06-12 08:07","q":"자금세탁"},{"t":"美 중소은행 단체, 스테이블코인 '리워드 허용' 반대 광고 캠페인 착수","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTFBRSFNGWDU5bFNjUmNQWjVxdXRsMGdGcHB2OEtPMWJOQ1RUTi1zSkNpZGwycGNyUzBZc3dreTNGMGxFMzZXQzNpd1lxR2ZlVGUz?oc=5","ts":"2026-06-12 02:09","q":"가상자산 규제"},{"t":"AudiA6, 암호화폐 세탁 5% 서비스…DOJ 적발","src":"BeInCrypto","link":"https://news.google.com/rss/articles/CBMicEFVX3lxTE1neTUtU0dvdXZlT0lnbHU1UU5vVmtzWEV4WDg2RDVrRmJfV1F3UVcta0FuR05OQnYtNkZPckxPVjdabVhaVFZnVE9vY0NXZUMyQndSSFdFNG5CNHRLSWhXWGZBemQ5WFo2VjYyYTFabTc?oc=5","ts":"2026-06-12 00:57","q":"자금세탁"},{"t":"[이슈+] 일본, 가상자산 금상법 편입 법안 국회 심사 진전...2028년 20% 분리과세 현실화","src":"비즈트리뷴","link":"https://news.google.com/rss/articles/CBMicEFVX3lxTFBBUjUyaEdJcFlQbTFCVlBQSE1nUG12MVJiOUxsZWFWbktHR3dhOVZHTUZhbGpualkxWkVHdEpkZWJCUHg3Unc0UXMyT19HU3JGRVhsTXRzX3BWUk83dXlqLWlkSzNuNHZYcW9ZZFllNDQ?oc=5","ts":"2026-06-11 22:54","q":"가상자산 규제"},{"t":"美 당국, 3억9000만달러 규모 가상자산 세탁 조직 적발…운영자 2명 체포","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTE15b1ZqS19wYVR4b2I2aW1SLUJvUXdnUEo1SDZWSmQ0eEpENUx1WVllajhjTG5wbkZSdndaU0YyclZFTTM4cEYwUjFFblIzWmx1?oc=5","ts":"2026-06-11 22:40","q":"자금세탁"},{"t":"헝가리, 가상자산 거래 규제 완화…무허가 거래 처벌 폐지 검토","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTE1jUmx3elV3NGVTUF9aZ3VHSUdzLUk2aEdjb3FsVkZNcWpzekNiS3V2eW81eVJkdVdFTDE5SU5wM21lWXEtdjVEbXFoQ3FlNmh1?oc=5","ts":"2026-06-11 21:54","q":"가상자산 규제"},{"t":"디지털 자산을 이용한 자금 세탁의 위험성.","src":"Vietnam.vn","link":"https://news.google.com/rss/articles/CBMiakFVX3lxTFBUaE9VR2tKQjBfU1ZNMFlJZWdac3B3TzBiVzJGeERGVktieV93ZkVUTVc2VzNZNmgyTnZxN2dsWkVPeklidXd5b1VoeXVFM2F4RnRiQXNsR1hxdHo5SUY3N3RVaFZwZm1iMXc?oc=5","ts":"2026-06-11 21:25","q":"자금세탁"},{"t":"[기고] 디지털자산 제도권 편입, 글로벌 규제는 어디로 가고 있나","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiT0FVX3lxTE9UeG5YVmo1SkU1QkMwTEhQRndwb0FicFJvUFNVNHpoY2oxeTdxWEdYNmtOejFvdDRhblpRSFloT0F6WEp6QWl5NXRGdnMxV0E?oc=5","ts":"2026-06-11 19:18","q":"가상자산 규제"},{"t":"디지털자산 범죄 고도화에…체이널리시스·경찰청 수사 공조","src":"마켓인","link":"https://news.google.com/rss/articles/CBMic0FVX3lxTE9Na3FUaG5zTzNkQmxPOWNZQXVvS05SY2h5dmpsNUxEblZOUTVfaVljSFNNck9XNGVYTzJYSHZVT0VCa2oyQ3NqUlp0N2NiSDV6dG8tekxTVzROVmRiQTFBR2Zval9jMEQ1U0VhMUJYWTFzQW8?oc=5","ts":"2026-06-11 17:47","q":"자금세탁"},{"t":"쉬운 돈의 유혹 대포통장의 덫","src":"광주타임즈","link":"https://news.google.com/rss/articles/CBMiakFVX3lxTE15ZTdFMlNOWUY4OUVpSDdldzFLaEFzQWpQSnN3SFlHdDFvZnB6QVMtM3duVndHVGFPbXBrOGEwczgwNTJoMWY4LWFVanN0MENjZUQ4TDV6TWlZa2k5ZGNGcTE0Q3EtOHNZa0E?oc=5","ts":"2026-06-11 17:26","q":"대포통장"},{"t":"'정식 근로계약서' 믿고 일했는데, 보이스피싱 자금세탁범이라니","src":"로톡뉴스","link":"https://news.google.com/rss/articles/CBMiWkFVX3lxTFBLU292QllwYnp1ODV3NWJRZnAtVW1nUC1yLWNPSEVwOVU3TXNyNk9peElXRjNYaUdwTWhMekdibjkycnY0UHNrQmlLU1g5N0pvUjFZQWlabXRhdw?oc=5","ts":"2026-06-11 17:12","q":"자금세탁"},{"t":"핀테크 비즈니스 모델 발굴 세션- 실전용 아이디어 30개 중 총 25개","src":"핀테크투데이","link":"https://news.google.com/rss/articles/CBMic0FVX3lxTE9tUU9sZlNhRW1lOF9UMWpsYWU2V3BOcEFkNFpwdkZtcExkc3IzZlpnMDlBTkpEeFFOMmp2c2QyMUlXZmpmMUhqMkMzeENzM0NkQ0ZNdUdfMkUtdXYtQ2xibUNlU2xSenZMYkwteWg1VWRyZGPSAXNBVV95cUxPbVFPbGZTYUVtZThfVDFqbGFlNldwTnBBZDRacHZGbXBMZHNyM2ZaZzA5QU5KRHhRTjJqdnNkMjFJV2ZqZjFIajJDM3hDczNDZENGTXVHXzJFLXV2LUNsYm1DZVNsUnp2TGJMLXloNVVkcmRj?oc=5","ts":"2026-06-11 15:19","q":"가상자산 규제"},{"t":"美 주정부들, 가상자산 ATM 퇴출 움직임 확산…\"사기 온상\" 지적","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UcVZ3UkNXWDduYzN6YkpnRVdvaVg3dEZDNXowY0dJZ0ZBVTdjNnFIaEtLZGpDclB0MGRjODlHdDdwLTR2SEYwSUlCTmxHc3RK?oc=5","ts":"2026-06-11 14:01","q":"가상자산 규제"},{"t":"비트코인은 주식일까 금일까… 코인 시장규칙 다시 짠다[코인, 법안으로 ①]","src":"뉴시스","link":"https://news.google.com/rss/articles/CBMiYEFVX3lxTE9kTDNtai1aVUdVQTBVSXBBVnYwem5OVl9IN29ZeV9Zc1VJX3lobktaNDJzbjluUGgwLXBjemhUY2hrUHE2czFvLWRpMGRCUVByWVJuZENkQjlBTk1UNGdRd9IBeEFVX3lxTE9tUmVOTWR2NllzX0VHeGVzZW5aX0JCbjlhUFhuNzhIMFFSY1dEVTlaUHVRazByNWNOU1VkWnNxb2pUU21YNng5REc0WVRTWks0cnBLdXpMLU1Kck9qREoxdDhpVnNXOGd1WHJyWl9idThTNVhQXzZnaQ?oc=5","ts":"2026-06-11 13:30","q":"가상자산 규제"},{"t":"7000억 캄보디아 범죄자금 세탁 30대 구속기소","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiT0FVX3lxTE1JV2plclFiazlaNXpXQVJqeGE3dHJ3UFF0cVI1OHZ6d3VYR3owaVhjZEVSMUFSeEFnc0Zhb0ExcE5zLThOU1V1cWc4SWVZTTg?oc=5","ts":"2026-06-11 11:33","q":"자금세탁"},{"t":"체인링크 “韓 블록체인 산업, 규제 마련되는 순간 크게 도약할 것”[매일코인]","src":"매일경제 마켓","link":"https://news.google.com/rss/articles/CBMiUkFVX3lxTE5rVXhCUHpuNnFVUWdNVTY4STFudmlONU04LW9qZ1V4OXgyYmszSHNoajQ0djNYMjJBX3FiR0hGMlI1MGlDZk9ReVlqeUFJVU5xNFE?oc=5","ts":"2026-06-11 11:29","q":"가상자산 규제"},{"t":"[인터뷰] 황석진 교수 \"가상자산 규제, '핵심 리스크'만 법으로 제어해야\"","src":"연합인포맥스","link":"https://news.google.com/rss/articles/CBMicEFVX3lxTE1kWW0wcWZ0T2s1dm9DcjFoa0M4MjR6UnlEMURSRVdnZ2oyTlNDRFEwOXpPdENjU09kV0l4STNWT1UtdjVNYWI2Ukp2X252Rkg1Z3JfZ2FVUUk5d3g5NDVaOWE4SVFTM0ZzaVR2Zk5QZHg?oc=5","ts":"2026-06-11 08:52","q":"가상자산 규제"},{"t":"이정훈 교수 “가상자산 거래와 게임산업법 규제 예외 가능할까?”","src":"게임톡","link":"https://news.google.com/rss/articles/CBMibEFVX3lxTFBLOVpRaVFCSUVGeGtwQUY2bEJodkFBQWh6X1J6eDdRMmRxcjJZbWN3Ym50U2hBZ2U3YnZQUXBHRTR0TlZXaTlLSmV3N0ZPVDFrdWM4dXlLakZ0SVVVZzFadF9JLUlJaXMxb29HcQ?oc=5","ts":"2026-06-11 08:07","q":"가상자산 규제"},{"t":"[기자수첩] 가상자산 갈라파고스 누가 만드나","src":"딜사이트","link":"https://news.google.com/rss/articles/CBMiWEFVX3lxTE11MHdRaWV4U3l2cDU2VzBBWFAzRlUwVk1YZFVFelpxSG9BdWI4X19uUVlpSEpPMnlGOTVlZ1NaYVdqMXJqalV4azhFRkVQM252M2NQbUdjS3Y?oc=5","ts":"2026-06-11 08:06","q":"가상자산 규제"},{"t":"지선 끝나도 '가상자산 선진화' 무소식…연내 입법 '불투명'","src":"메트로신문","link":"https://news.google.com/rss/articles/CBMiYEFVX3lxTE82RWJjQXNZMEJSRUstZGVUcTEtR0M4VF9ubjR3SVVCOF8yMTUtbTh5cFVFendPdS1ObjU0Y0E0T2FOaTA5THl2X0tsSGlYT3VpSF90NTVrSDJ5YzdLdGNESA?oc=5","ts":"2026-06-11 07:53","q":"가상자산 규제"},{"t":"'언체인드 서밋' 열린 베트남…\"디지털자산 규제 논의 본격화\"","src":"블루밍비트","link":"https://news.google.com/rss/articles/CBMiUEFVX3lxTFA0SjJqQ0xjX0VEWHl0M3VBZ3JSSDNqOU1Fbm5QSEx4RHhTMFZsdC1PUWk1QVN2VElyTE9CVDdUaWlXSW1UanlyVFpLRzFnb0Rf?oc=5","ts":"2026-06-10 21:11","q":"가상자산 규제"},{"t":"정부, 불법 외환거래 4154억 적발…환치기·가상자산 결제 정조준","src":"뉴시스","link":"https://news.google.com/rss/articles/CBMieEFVX3lxTE1jZFVBTHUwN0tybVJMcWF5QUt3MGhPdWhIQWxGVEpQb2gyR1FxZGdHNS1LNlpwYnFvM0hfT291ekFrSjNFN3VJQUw1UEF3eEN1eXZ5b0kzMGZYSDhJMzF1al9uTnFSNmxDdTRxNjJXNkNXbnpXdEJnTtIBeEFVX3lxTE1jZFVBTHUwN0tybVJMcWF5QUt3MGhPdWhIQWxGVEpQb2gyR1FxZGdHNS1LNlpwYnFvM0hfT291ekFrSjNFN3VJQUw1UEF3eEN1eXZ5b0kzMGZYSDhJMzF1al9uTnFSNmxDdTRxNjJXNkNXbnpXdEJnTg?oc=5","ts":"2026-06-10 16:27","q":"불법 환치기"},{"t":"이정훈 중앙대 법학대학원 교수, 웹3 게임 가상자산 규제 쟁점 짚는다","src":"지디넷코리아","link":"https://news.google.com/rss/articles/CBMiVkFVX3lxTE0yc21zTC1RRk95UVhoMWlfTG52bWtObmFBa3ZmZjRpOUpjNnpnRHdsRm5ZOXBYc191c01wSTRpUjUtVWtCV2hKdzMwMVFGWkgyN0ZyMFB3?oc=5","ts":"2026-06-10 16:00","q":"가상자산 규제"},{"t":"이정훈 중앙대 교수, 블록체인 웹3 게임 컨퍼런스서 가상자산·사행성 규제 쟁점 짚는다","src":"v.daum.net","link":"https://news.google.com/rss/articles/CBMiT0FVX3lxTE9aX2V3VjluV3BDN0pnUTdsS2dXb2Z0WVdXbmRnWlE5US1ZN3ljdjZMWHNqMXFKaldnSkptZUdRRUhtOTVNTG1haGRiWUQ1TnM?oc=5","ts":"2026-06-10 11:33","q":"가상자산 규제"},{"t":"이정훈 교수, 웹3 게임 컨퍼런스서 가상자산 규제 쟁점 조명","src":"경향게임스","link":"https://news.google.com/rss/articles/CBMibEFVX3lxTFB2YTdBYzNlQTF2czc3NjlaWmR3bUZNUnViX3FLV2RBZk90TXRjSDBpeEFMUno3MnB5emc4M2lPRFI1Zm1xakJvNnRKdXhPTkJ5TjdGcW1YM1V1Q0ZTQ0N2eG55V0lYbkxGOFNiWQ?oc=5","ts":"2026-06-10 10:57","q":"가상자산 규제"},{"t":"금감원 \"금융사 해외사업 리스크 관리 강화\"","src":"jabon.co.kr","link":"https://news.google.com/rss/articles/CBMiZ0FVX3lxTE4zbHZ6SjlpQmRPbVlxb3NxTkRmNjJsRFZxdm93ckJDU3BYMDI3YVotZmVUaFVDSUNsN2hZcWZFXzJNVXV4MUttbU9PTmw3dC1uaXVHX1B0dFFkeFVwSlVXZS1haFlyWjQ?oc=5","ts":"2026-06-10 10:50","q":"자금세탁"},{"t":"자금세탁 방지는 국가 금융 안보를 확보하는 데 기여합니다.","src":"Vietnam.vn","link":"https://news.google.com/rss/articles/CBMilAFBVV95cUxPWG93a1FpT2ZQeWJ6QnZTZGszR2Zheld4dGR3RlJoLVk3RG8zSXoyTmstU3lWaXFkanRXbXRveFBaaWNQMVVua2Z3SFRjRmE3WVNuWlVjaldrT0ZfV3VOM2U0c0tTWFh3M3NFRzlUN2F4UUxGWjktMG00b2ZTblFOOWxXRldtaFF3QVNNZlROMFp6eGxY?oc=5","ts":"2026-06-10 10:36","q":"자금세탁"},{"t":"닥사·가상자산사업자, 경찰에 불법 코인 거래소 12곳 수사의뢰","src":"연합뉴스","link":"https://news.google.com/rss/articles/CBMiW0FVX3lxTE9vMTJRenh1NXllTkg4NUpzSnNKRFpRVzd1VVl1aG9JaFlHX2VHaEl5UGM3Q3JENl9CWXZSYWRVNXNPbEVoM2NIVFl1SDZPQnByRXhuejgwRi1fVTTSAWBBVV95cUxORGtMdjcyWGVsNDVSNDd4Z3gxX3JRbE1CS3VHUVZJdmpnV2lTbkw0MUFiSzMxd1pqZlk1c1B1WUtIeERHYzVKMzYxR29EZUFQa0FqM05yaGdhQWxhT01Hb28?oc=5","ts":"2026-06-10 10:08","q":"금융정보분석원"},{"t":"이세훈 금감원 수석부원장 \"美·동남아 IT·자금세탁 제재, 본점차원 점검\" 당부","src":"아시아경제","link":"https://news.google.com/rss/articles/CBMiYEFVX3lxTE1TT0JGSkJZQm9LWGhxS1ByNkxNbnIyMk5FWlJiYmdVcXNPU3FCOUh1TmNqY0UzSzZEeHhYdC11R2kzcmNpaVNCMjM3YjBkaXo4XzNiWEZSc3FoM2Y0YnY5Qg?oc=5","ts":"2026-06-10 10:00","q":"자금세탁"},{"t":"“불법 환치기·시세 조작 차단”… 당국, 외환시장 교란행위 ‘칼날’","src":"스카이데일리","link":"https://news.google.com/rss/articles/CBMiXEFVX3lxTE1ZcFgwSW9QVVNUR0V5Z0dyNlk1djZiMlpfNlFHaVRtNnVJV3Y1eHVCX0ROR0RPazJ4VTJudXdWU1BnX2Z0enVTT083bHdPM3NPME5nX2NfODV2QVdJ?oc=5","ts":"2026-06-10 10:00","q":"불법 환치기"},{"t":"DAXA, 불법 가상자산업자 12곳 적발…경찰 수사 의뢰","src":"네이트","link":"https://news.google.com/rss/articles/CBMiU0FVX3lxTE5hV3RzVWNDWDRuLW55VnY3bi1wRExOa05VcjBfWW9MRnNlVEJJdm1Mcmp2a3gwalA1d0FsVEhoYjR5dy1UMTBnd1RKWWM0TTBUQ2Yw?oc=5","ts":"2026-06-10 09:33","q":"금융정보분석원"}],"picks":[{"t":"'정식 근로계약서' 믿고 일했는데, 보이스피싱 자금세탁범이라니","src":"로톡뉴스","link":"https://news.google.com/rss/articles/CBMiWkFVX3lxTFBLU292QllwYnp1ODV3NWJRZnAtVW1nUC1yLWNPSEVwOVU3TXNyNk9peElXRjNYaUdwTWhMekdibjkycnY0UHNrQmlLU1g5N0pvUjFZQWlabXRhdw?oc=5","ts":"2026-06-11 17:12","q":"자금세탁","kws":["자금세탁","보이스피싱","피싱"],"score":6},{"t":"SBI저축은행, 자금세탁 137건 확인 누락...금감원 제재","src":"데일리브리프","link":"https://news.google.com/rss/articles/CBMibkFVX3lxTFBxd3p6Y3hpekhLc1N6NkIwbVhxNmhwVldySUxWSEllY1o0aVVmUzloZkdqUjRxanRxQ2VvTXFrdzJNWGtNQ192Y2dUNkVHWmFwTUxud09laUZXeUttbG42VW1STGJ5Ri1JWm5QY0FB?oc=5","ts":"2026-06-12 16:35","q":"자금세탁","kws":["자금세탁","제재"],"score":5},{"t":"정부, 불법 외환거래 4154억 적발…환치기·가상자산 결제 정조준","src":"뉴시스","link":"https://news.google.com/rss/articles/CBMieEFVX3lxTE1jZFVBTHUwN0tybVJMcWF5QUt3MGhPdWhIQWxGVEpQb2gyR1FxZGdHNS1LNlpwYnFvM0hfT291ekFrSjNFN3VJQUw1UEF3eEN1eXZ5b0kzMGZYSDhJMzF1al9uTnFSNmxDdTRxNjJXNkNXbnpXdEJnTtIBeEFVX3lxTE1jZFVBTHUwN0tybVJMcWF5QUt3MGhPdWhIQWxGVEpQb2gyR1FxZGdHNS1LNlpwYnFvM0hfT291ekFrSjNFN3VJQUw1UEF3eEN1eXZ5b0kzMGZYSDhJMzF1al9uTnFSNmxDdTRxNjJXNkNXbnpXdEJnTg?oc=5","ts":"2026-06-10 16:27","q":"불법 환치기","kws":["가상자산","환치기","외환"],"score":5}],"regwatch":{"fss":[{"org":"에스비아이저축은행","d":"2026-06-09","dept":"자금세탁방지실","aml":1,"url":"https://www.fss.or.kr/fss.hpdownload?path=/dtm/opn/&file=202500493_12_%EA%B0%9C%EC%84%A0%EC%82%AC%ED%95%AD+%EB%93%B1+%EA%B3%B5%EA%B0%9C%28%EC%97%90%EC%8A%A4%EB%B9%84%EC%95%84%EC%9D%B4%EC%A0%80%EC%B6%95%EC%9D%80%ED%96%89%29.pdf"},{"org":"KB라이프생명보험","d":"2026-02-19","dept":"자금세탁방지실","aml":1,"url":"https://www.fss.or.kr/fss.hpdownload?path=/dtm/opn/&file=202500444_12_%EC%BC%80%EC%9D%B4%EB%B9%84%EB%9D%BC%EC%9D%B4%ED%94%84%EC%83%9D%EB%AA%85%EB%B3%B4%ED%97%98_%EA%B0%9C%EC%84%A0%EC%82%AC%ED%95%AD+%EA%B3%B5%EA%B0%9C%EC%95%88_F.pdf"},{"org":"미래에셋증권 주식회사","d":"2026-02-10","dept":"자금세탁방지실","aml":1,"url":"https://www.fss.or.kr/fss.hpdownload?path=/dtm/opn/&file=202500594_11_260220_%EA%B0%9C%EC%84%A0%EC%82%AC%ED%95%AD+%EA%B3%B5%EA%B0%9C_%EB%AF%B8%EB%9E%98%EC%97%90%EC%85%8B%EC%A6%9D%EA%B6%8C.pdf"}],"fsc":[]},"papers":[{"t":"Provably Communication-Efficient and Privacy-Preserving Federated Graph Neural Networks","d":"2026-05-25","url":"http://arxiv.org/abs/2605.26243v1"},{"t":"Graph-Driven Cross-Industry Real-Time Monitoring Framework for Anti-Money Laundering Detection in Converged Mobility-Energy Supply Chain Networks","d":"2026-05-13","url":"http://arxiv.org/abs/2605.18844v1"},{"t":"Rethinking LLMOps for Fraud and AML: Building a Compliance-Grade LLM Serving Stack","d":"2026-05-11","url":"http://arxiv.org/abs/2605.11232v1"},{"t":"From Accuracy to Auditability: A Survey of Determinism in Financial AI Systems","d":"2026-05-11","url":"http://arxiv.org/abs/2605.23955v2"},{"t":"The Balance between Nuance and Clarity: Decluttering Tabular Sequential Graphs to Counter Money Laundering","d":"2026-05-11","url":"http://arxiv.org/abs/2605.10522v1"},{"t":"CyberAId: AI-Driven Cybersecurity for Financial Service Providers","d":"2026-05-03","url":"http://arxiv.org/abs/2605.01892v1"},{"t":"Do Transaction-Level and Actor-Level AML Queues Agree? An Empirical Evaluation of Granularity Effects on the Elliptic++ Graph","d":"2026-04-26","url":"http://arxiv.org/abs/2604.23494v1"},{"t":"Mechanism Design for Decentralized Risk Detection: Strict Propriety, Network Coalitions, and the Backfiring Mandat","d":"2026-04-23","url":"http://arxiv.org/abs/2604.21789v4"}],"sanctions":{"date":"2026-06-12","added":[],"removed":[],"addedN":0,"removedN":0,"counts":{"OFAC":19065,"UN":1002,"EU":5994},"first":false},"history":[{"date":"2026-06-11","paras":["오늘 수집된 AML 관련 뉴스는 43건입니다. 가장 두드러진 키워드는 가상자산(16건), 코인(9건), 자금세탁(4건), 상품권(4건)입니다.","STR 테마점검 제안: 오늘의 키워드와 연관된 집금→거래소 당일 연계 룰, 상품권 업종 결제 집중 룰의 가동 여부와 임계값을 점검해 보세요.","제재 리스트 기준 스냅샷을 생성했습니다 (OFAC 19,066 · UN 1,002 · EU 5,994건). 내일부터 신규 지정·해제 변동을 추적합니다."],"top":["가상자산","코인","자금세탁"]}]};
+
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const D=DATA;
+const WD=["일","월","화","수","목","금","토"];
+(function(){
+  const[y,m,d]=D.today.split("-").map(Number);
+  const wd=WD[new Date(Date.UTC(y,m-1,d)).getUTCDay()];
+  document.getElementById("hdate").textContent=`${y}년 ${m}월 ${d}일 (${wd})`;
+  document.getElementById("gen").textContent=D.generated+" KST";
+})();
+
+/* 브리핑 */
+document.getElementById("brief").innerHTML=
+  `<span class="tag">${D.briefing.mode==="ai"?"AI BRIEFING":"TODAY'S BRIEFING"}</span>`+
+  D.briefing.paras.map(p=>`<p>${esc(p)}</p>`).join("")+
+  `<div class="gen">자동 생성 · ${esc(D.generated)} KST</div>`;
+
+/* 키워드 트렌드 */
+(function(){
+  const ks=D.keywords||[];
+  if(!ks.length){document.getElementById("kcard").innerHTML='<div style="color:var(--gray2);font-size:13px">오늘 집계된 키워드가 없습니다.</div>';return;}
+  const max=ks[0].n;
+  const hasPrev=(D.history&&D.history.length>0)||ks.some(k=>(k.prev||0)>0);
+  document.getElementById("kcard").innerHTML=ks.map(k=>{
+    const d=k.n-(k.prev||0);
+    const delta=hasPrev?(d>0?`<span class="up">▲${d}</span>`:(d<0?`<span class="dn">▼${-d}</span>`:`<span class="dn">—</span>`)):"";
+    return `<div class="krow"><div class="kname">${esc(k.k)}</div>
+      <div class="kbarw"><div class="kbar" style="width:${Math.max(6,k.n/max*100)}%"></div></div>
+      <div class="kn"><b style="color:var(--ink)">${k.n}</b>건 ${delta}</div></div>`;
+  }).join("");
+})();
+
+/* 제재 변동 */
+(function(){
+  const s=D.sanctions, el=document.getElementById("scard");
+  let html=`<div class="schips">
+    <span class="chip add">신규 <b>${s.addedN??s.added.length}</b>건</span>
+    <span class="chip rem">해제 <b>${s.removedN??s.removed.length}</b>건</span>
+    <span class="chip">OFAC <b>${(s.counts.OFAC||0).toLocaleString()}</b></span>
+    <span class="chip">UN <b>${(s.counts.UN||0).toLocaleString()}</b></span>
+    <span class="chip">EU <b>${(s.counts.EU||0).toLocaleString()}</b></span></div>`;
+  if(s.first){
+    html+=`<div class="snote">오늘 기준 스냅샷을 생성했습니다. 내일부터 신규 지정·해제 내역이 이 자리에 표시됩니다.</div>`;
+  }else if(!s.added.length&&!s.removed.length){
+    html+=`<div class="snote">오늘은 3개 리스트 모두 변동이 없습니다.</div>`;
+  }else{
+    const cls={OFAC:"b-ofac",UN:"b-un",EU:"b-eu"};
+    html+=`<div class="slist">`+
+      s.added.slice(0,40).map(a=>`<div class="srow"><span class="bdg b-add">신규</span><span class="bdg ${cls[a.s]}">${a.s}</span><span class="sname">${esc(a.name)}</span><span class="sprog">${esc(a.prog)}</span></div>`).join("")+
+      s.removed.slice(0,20).map(a=>`<div class="srow"><span class="bdg b-rem">해제</span><span class="bdg ${cls[a.s]}">${a.s}</span><span class="sname">${esc(a.name)}</span><span class="sprog">${esc(a.prog)}</span></div>`).join("")+
+      `</div><div class="snote">상세 식별정보 확인은 제재 통합 체커에서 이름으로 조회하세요.</div>`;
+  }
+  el.innerHTML=html;
+})();
+
+/* ── 좋아요 (Firebase 선택 / 미설정 시 브라우저 저장) ──
+   Firebase 사용 시 아래 설정 교체. 규칙 예: {"rules":{"blikes":{".read":true,".write":true}}} */
+const FIREBASE_CONFIG={apiKey:"YOUR_API_KEY",databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com"};
+const LDEMO=FIREBASE_CONFIG.apiKey==="YOUR_API_KEY";
+let MYID=localStorage.getItem("bf_cid")||("C-"+Math.random().toString(36).slice(2,8));
+localStorage.setItem("bf_cid",MYID);
+const nid=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return "n"+h.toString(36);};
+D.news.forEach(n=>n.id=nid(n.t));
+let LIKES={}, ldb=null;
+function likeN(id){return LIKES[id]?Object.keys(LIKES[id]).length:0;}
+function initLikes(){
+  if(LDEMO){try{LIKES=JSON.parse(localStorage.getItem("bf_likes")||"{}");}catch(e){LIKES={};}
+    renderNews();renderPicks();return;}
+  firebase.initializeApp(FIREBASE_CONFIG);ldb=firebase.database();
+  ldb.ref("blikes").on("value",s=>{LIKES=s.val()||{};renderNews();renderPicks();});
+}
+function toggleLike(id){
+  if(LDEMO){
+    LIKES[id]=LIKES[id]||{};
+    if(LIKES[id][MYID])delete LIKES[id][MYID];else LIKES[id][MYID]=1;
+    localStorage.setItem("bf_likes",JSON.stringify(LIKES));
+    renderNews();renderPicks();return;
+  }
+  const r=ldb.ref("blikes/"+id+"/"+MYID);
+  LIKES[id]&&LIKES[id][MYID]?r.remove():r.set(1);
+}
+function likeBtn(n){
+  const on=LIKES[n.id]&&LIKES[n.id][MYID];
+  return `<button class="likebtn ${on?"on":""}" onclick="event.preventDefault();event.stopPropagation();toggleLike('${n.id}')">👍 관심 ${likeN(n.id)}</button>`;
+}
+
+/* ── 인사이트 픽 ── */
+function renderPicks(){
+  const ps=D.picks||[];
+  if(!ps.length)return;
+  document.getElementById("picksec").style.display="block";
+  document.getElementById("plist2").innerHTML=ps.map((n,i)=>{
+    n.id=n.id||nid(n.t);
+    return `<div class="pick"><div class="pno">${String(i+1).padStart(2,"0")}</div>
+      <div><a href="${esc(n.link)}" target="_blank" rel="noopener"><div class="nt">${esc(n.t)}</div></a>
+      <div class="nm">${esc(n.src)} · ${esc(n.ts)}</div>
+      <div class="pkws">${(n.kws||[]).map(k=>`<span class="pkw">#${esc(k)}</span>`).join("")}</div>
+      ${likeBtn(n)}</div></div>`;
+  }).join("");
+}
+
+/* ── 뉴스 목록 (최신순/관심순) ── */
+let shown=0, NSORT="time";
+function nlist(){
+  return NSORT==="like"
+    ?[...D.news].sort((a,b)=>likeN(b.id)-likeN(a.id)||(a.ts<b.ts?1:-1))
+    :D.news;
+}
+function toggleNsort(){
+  NSORT=NSORT==="time"?"like":"time";
+  document.getElementById("sortbtn").classList.toggle("on",NSORT==="like");
+  document.getElementById("sortbtn").textContent=NSORT==="like"?"최신순으로":"관심순";
+  renderNews();
+}
+function renderNews(){shown=0;document.getElementById("nlist").innerHTML="";moreNews();}
+function moreNews(){
+  const box=document.getElementById("nlist"), arr=nlist();
+  const old=document.getElementById("nmore");if(old)old.remove();
+  const end=Math.min(shown+15,arr.length);
+  let html="";
+  for(let i=shown;i<end;i++){
+    const n=arr[i];
+    html+=`<a class="ncard" href="${esc(n.link)}" target="_blank" rel="noopener">
+      <div class="nt">${esc(n.t)}</div>
+      <div class="nm">${esc(n.src)} · ${esc(n.ts)}</div>
+      ${likeBtn(n)}</a>`;
+  }
+  box.insertAdjacentHTML("beforeend",html);
+  shown=end;
+  if(end<arr.length)box.insertAdjacentHTML("beforeend",
+    `<button class="morebtn" id="nmore" onclick="moreNews()">뉴스 더 보기 (${arr.length-end}건)</button>`);
+}
+document.getElementById("newsn").textContent="최근 3일 · "+D.news.length+"건";
+initLikes();
+
+/* 레그워치 */
+(function(){
+  const rw=D.regwatch||{};
+  const fss=rw.fss||[];
+  if(fss.length){
+    document.getElementById("regsec").style.display="block";
+    document.getElementById("fsslist").innerHTML=fss.map(r=>`<tr>
+      <td style="font-weight:700">${esc(r.org)}</td>
+      <td style="color:var(--gray2);font-size:11.5px;white-space:nowrap">${esc(r.d).replaceAll("-",".")}.</td>
+      <td>${r.aml?'<span class="amlbdg">자금세탁방지실</span>':`<span class="deptb">${esc(r.dept)}</span>`}</td>
+      <td style="text-align:right">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:12px">PDF</a>`:""}</td>
+    </tr>`).join("");
+    const fsc=rw.fsc||[];
+    if(fsc.length){
+      document.getElementById("fscbox").innerHTML='<div class="sech" style="margin-top:18px"><div class="sect" style="font-size:16px">금융위 — 자금세탁 관련 의결·공시</div></div>'+
+        fsc.map(x=>`<a class="ncard" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="nt">${esc(x.t)}</div></a>`).join("");
+    }
+  }
+})();
+
+/* 리서치 */
+(function(){
+  const ps=D.papers||[];
+  if(!ps.length)return;
+  document.getElementById("papersec").style.display="block";
+  document.getElementById("paperlist").innerHTML=ps.map(p=>`<a class="ncard" href="${esc(p.url)}" target="_blank" rel="noopener">
+    <div class="nt" style="font-size:13.5px">${esc(p.t)}</div>
+    <div class="nm">arXiv · ${esc(p.d).replaceAll("-",".")}.</div></a>`).join("");
+})();
+
+/* 아카이브 */
+(function(){
+  const h=D.history||[];
+  if(!h.length)return;
+  document.getElementById("archsec").style.display="block";
+  document.getElementById("alist").innerHTML=h.map((a,i)=>`<div class="acard">
+    <div class="atop" onclick="document.getElementById('ab-${i}').classList.toggle('on')">
+      <div class="adate">${a.date.replaceAll("-",".")}.</div>
+      <div class="atags">${(a.top||[]).map(esc).join(" · ")}</div>
+    </div>
+    <div class="abody" id="ab-${i}">${(a.paras||[]).map(p=>`<p style="margin-bottom:7px">${esc(p)}</p>`).join("")}</div>
+  </div>`).join("");
+})();
+</script>
+</body>
+</html>

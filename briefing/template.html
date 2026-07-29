@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데일리 AML 브리핑 — AML 인사이트</title>
+<meta name="description" content="매일 아침 자동 발행되는 AML 실무 브리핑 — 뉴스 키워드 트렌드, 제재 리스트 변동, STR 테마점검 제안.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5/index.css");
+
+:root{
+  --blue:#101114; --blue-dark:#6C4DFF; --blue-tint:#D8FF3D;
+  --ink:#0A0B0D; --gray:#5B616E; --gray2:#8A919E;
+  --line:#EAECEF; --soft:#F5F6F9; --paper:#FFFFFF;
+  --red:#E5484D; --red-tint:#FEEDEE;
+  --green:#0A8754; --green-tint:#E8F7F0;
+  --amber:#B45309; --amber-tint:#FFF3E3;
+  --ofac:#6C4DFF; --ofac-t:#EFEBFF; --un:#0E7C86; --un-t:#E4F5F6; --eu:#B45309; --eu-t:#FFF3E3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter Variable','Pretendard Variable',Pretendard,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.topbar{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:30}
+.tbwrap{max-width:880px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:#D8FF3D;border:2px solid #101114}
+.toplabel{font-size:12px;font-weight:600;color:var(--gray);background:var(--soft);border-radius:999px;padding:5px 12px}
+
+.hero{max-width:880px;margin:0 auto;padding:32px 20px 8px}
+.hdate{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+h1{font-family:'Paperlogy',sans-serif;font-size:clamp(28px,7vw,42px);font-weight:800;letter-spacing:-.035em;line-height:1.14;margin-top:4px}
+.hsub{font-size:14px;color:var(--gray);margin-top:8px}
+
+main{max-width:880px;margin:0 auto;padding:16px 20px 70px}
+.sec{margin-top:26px}
+.sech{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:11px}
+.sect{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.secn{font-size:12px;color:var(--gray2)}
+
+/* 브리핑 */
+.brief{background:#101114;border-radius:22px;padding:24px 24px 22px;color:#fff}
+.brief .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;background:#D8FF3D;color:#101114;border-radius:999px;padding:5px 13px}
+.brief p{font-size:14.5px;line-height:1.8;margin-top:13px;color:#E6E7ED}
+.brief p b{color:#fff}
+.brief .gen{font-size:11px;color:#8A8FA0;margin-top:14px}
+
+/* 키워드 트렌드 */
+.kcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px}
+.krow{display:flex;align-items:center;gap:10px;padding:6px 0}
+.kname{width:86px;flex:none;font-size:13px;font-weight:700}
+.kbarw{flex:1;height:10px;background:var(--soft);border-radius:999px;overflow:hidden}
+.kbar{height:100%;background:#B7E600;border-radius:999px}
+.kn{width:64px;flex:none;text-align:right;font-size:12px;color:var(--gray);font-variant-numeric:tabular-nums}
+.kn .up{color:var(--green);font-weight:700}
+.kn .dn{color:var(--gray2)}
+
+/* 제재 변동 */
+.scard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px}
+.schips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:12px;color:var(--gray)}
+.chip b{color:var(--ink);font-variant-numeric:tabular-nums}
+.chip.add{background:var(--red-tint);border-color:transparent;color:#C0353A;font-weight:700}
+.chip.rem{background:var(--green-tint);border-color:transparent;color:var(--green);font-weight:700}
+.snote{font-size:13px;color:var(--gray);margin-top:11px;line-height:1.7}
+.slist{margin-top:11px;border-top:1px solid var(--line)}
+.srow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.srow:last-child{border-bottom:none}
+.bdg{font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px;flex:none}
+.b-ofac{background:var(--ofac-t);color:var(--ofac)}.b-un{background:var(--un-t);color:var(--un)}.b-eu{background:var(--eu-t);color:var(--eu)}
+.b-add{background:var(--red-tint);color:#C0353A}.b-rem{background:var(--green-tint);color:var(--green)}
+.sname{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sprog{font-size:11px;color:var(--gray2);flex:none;max-width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 뉴스 */
+.ncard{display:block;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 17px;margin-bottom:8px;transition:border-color .15s,box-shadow .15s}
+.ncard:hover{border-color:#D7DAE0;box-shadow:0 4px 14px rgba(10,11,13,.05)}
+.nt{font-size:14px;font-weight:700;letter-spacing:-.01em;line-height:1.5}
+.nm{font-size:11.5px;color:var(--gray2);margin-top:5px}
+.morebtn{display:block;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:13px;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px}
+.morebtn:hover{background:var(--soft)}
+
+/* 레그워치 */
+(function(){
+  const rw=D.regwatch||{};
+  const fss=rw.fss||[];
+  if(fss.length){
+    document.getElementById("regsec").style.display="block";
+    document.getElementById("fsslist").innerHTML=fss.map(r=>`<tr>
+      <td style="font-weight:700">${esc(r.org)}</td>
+      <td style="color:var(--gray2);font-size:11.5px;white-space:nowrap">${esc(r.d).replaceAll("-",".")}.</td>
+      <td>${r.aml?'<span class="amlbdg">자금세탁방지실</span>':`<span class="deptb">${esc(r.dept)}</span>`}</td>
+      <td style="text-align:right">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:12px">PDF</a>`:""}</td>
+    </tr>`).join("");
+    const fsc=rw.fsc||[];
+    if(fsc.length){
+      document.getElementById("fscbox").innerHTML='<div class="sech" style="margin-top:18px"><div class="sect" style="font-size:16px">금융위 — 자금세탁 관련 의결·공시</div></div>'+
+        fsc.map(x=>`<a class="ncard" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="nt">${esc(x.t)}</div></a>`).join("");
+    }
+  }
+})();
+
+/* 리서치 */
+(function(){
+  const ps=D.papers||[];
+  if(!ps.length)return;
+  document.getElementById("papersec").style.display="block";
+  document.getElementById("paperlist").innerHTML=ps.map(p=>`<a class="ncard" href="${esc(p.url)}" target="_blank" rel="noopener">
+    <div class="nt" style="font-size:13.5px">${esc(p.t)}</div>
+    <div class="nm">arXiv · ${esc(p.d).replaceAll("-",".")}.</div></a>`).join("");
+})();
+
+/* 아카이브 */
+.acard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 17px;margin-bottom:8px}
+.atop{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.adate{font-size:13.5px;font-weight:800}
+.atags{font-size:11.5px;color:var(--gray2)}
+.abody{display:none;margin-top:10px;font-size:13px;color:var(--gray);line-height:1.75;border-top:1px solid var(--line);padding-top:10px}
+.abody.on{display:block}
+
+.pick{display:grid;grid-template-columns:44px 1fr;gap:14px;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:15px 17px;margin-bottom:8px;align-items:start}
+.pno{font-family:'Paperlogy',sans-serif;font-weight:800;font-size:26px;line-height:1;color:#B7E600}
+.pkws{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pkw{font-size:10.5px;font-weight:700;background:var(--blue-tint);color:#101114;border-radius:999px;padding:2.5px 9px}
+.sortbtn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--gray);cursor:pointer}
+.sortbtn.on{background:var(--blue-tint);color:#101114;border-color:var(--ink)}
+.tcard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.btable{border-collapse:collapse;font-size:13px}
+.btable td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:middle}
+.btable tr:first-child td{border-top:none}
+.amlbdg{font-size:10px;font-weight:800;background:var(--blue-tint);color:#101114;border-radius:999px;padding:2.5px 9px;white-space:nowrap}
+.deptb{font-size:10px;font-weight:700;background:var(--soft);color:var(--gray);border-radius:999px;padding:2.5px 9px;white-space:nowrap}
+.likebtn{border:none;background:var(--soft);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--gray);cursor:pointer;margin-top:9px}
+.likebtn.on{background:var(--blue-tint);color:#101114}
+footer{border-top:1px solid var(--line);padding:24px 20px 32px;font-size:12px;color:var(--gray);line-height:1.75}
+.fwrap{max-width:880px;margin:0 auto}
+footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tbwrap">
+    <div class="logo"><span class="dot"></span>AML 인사이트</div>
+    <div class="toplabel">Daily Briefing</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hdate" id="hdate"></div>
+  <h1>데일리 <span style="background:#D8FF3D;padding:0 .1em;border-radius:.12em">AML 브리핑</span></h1>
+  <div class="hsub">매일 아침 자동 발행 — 뉴스 키워드 트렌드 · 제재 리스트 변동 · STR 테마점검 제안</div>
+</div>
+
+<main>
+  <div class="brief" id="brief"></div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">키워드 트렌드</div><div class="secn">최근 3일 보도 기준 · STR 테마점검 재료</div></div>
+    <div class="kcard" id="kcard"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">제재 리스트 변동</div><div class="secn">OFAC · UN · EU 일일 추적</div></div>
+    <div class="scard" id="scard"></div>
+  </div>
+
+  <div class="sec" id="picksec" style="display:none">
+    <div class="sech"><div class="sect">인사이트 픽</div><div class="secn">AML 직결 키워드 가중 분석 상위 3</div></div>
+    <div id="plist2"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sech"><div class="sect">수집 뉴스</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="sortbtn" id="sortbtn" onclick="toggleNsort()">관심순</button>
+        <div class="secn" id="newsn"></div>
+      </div></div>
+    <div id="nlist"></div>
+  </div>
+
+  <div class="sec" id="regsec" style="display:none">
+    <div class="sech"><div class="sect">레그워치 — 자금세탁 제재공시</div><div class="secn">금감원 자금세탁방지실 조사 건</div></div>
+    <div class="tcard"><table class="btable" style="width:100%"><tbody id="fsslist"></tbody></table></div>
+    <div id="fscbox"></div>
+  </div>
+
+  <div class="sec" id="papersec" style="display:none">
+    <div class="sech"><div class="sect">리서치 — 최신 논문</div><div class="secn">arXiv · AML/FRAML</div></div>
+    <div id="paperlist"></div>
+  </div>
+
+  <div class="sec" id="archsec" style="display:none">
+    <div class="sech"><div class="sect">지난 브리핑</div><div class="secn">최근 14일</div></div>
+    <div id="alist"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="fwrap">
+    <b>안내</b> · 본 브리핑은 공개 뉴스와 제재 리스트 원천 데이터를 자동 수집·요약한 참고 자료입니다. 기사 내용의 사실 확인은 원문 링크를, 제재 대상 판단은 각 기관 원천 리스트와 사내 WLF 절차를 기준으로 하세요.
+    <div style="margin-top:8px">© AML 인사이트 · 자동 발행 시각: <span id="gen"></span></div>
+  </div>
+</footer>
+
+<script>
+/*__DATA__*/
+
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const D=DATA;
+const WD=["일","월","화","수","목","금","토"];
+(function(){
+  const[y,m,d]=D.today.split("-").map(Number);
+  const wd=WD[new Date(Date.UTC(y,m-1,d)).getUTCDay()];
+  document.getElementById("hdate").textContent=`${y}년 ${m}월 ${d}일 (${wd})`;
+  document.getElementById("gen").textContent=D.generated+" KST";
+})();
+
+/* 브리핑 */
+document.getElementById("brief").innerHTML=
+  `<span class="tag">${D.briefing.mode==="ai"?"AI BRIEFING":"TODAY'S BRIEFING"}</span>`+
+  D.briefing.paras.map(p=>`<p>${esc(p)}</p>`).join("")+
+  `<div class="gen">자동 생성 · ${esc(D.generated)} KST</div>`;
+
+/* 키워드 트렌드 */
+(function(){
+  const ks=D.keywords||[];
+  if(!ks.length){document.getElementById("kcard").innerHTML='<div style="color:var(--gray2);font-size:13px">오늘 집계된 키워드가 없습니다.</div>';return;}
+  const max=ks[0].n;
+  const hasPrev=(D.history&&D.history.length>0)||ks.some(k=>(k.prev||0)>0);
+  document.getElementById("kcard").innerHTML=ks.map(k=>{
+    const d=k.n-(k.prev||0);
+    const delta=hasPrev?(d>0?`<span class="up">▲${d}</span>`:(d<0?`<span class="dn">▼${-d}</span>`:`<span class="dn">—</span>`)):"";
+    return `<div class="krow"><div class="kname">${esc(k.k)}</div>
+      <div class="kbarw"><div class="kbar" style="width:${Math.max(6,k.n/max*100)}%"></div></div>
+      <div class="kn"><b style="color:var(--ink)">${k.n}</b>건 ${delta}</div></div>`;
+  }).join("");
+})();
+
+/* 제재 변동 */
+(function(){
+  const s=D.sanctions, el=document.getElementById("scard");
+  let html=`<div class="schips">
+    <span class="chip add">신규 <b>${s.addedN??s.added.length}</b>건</span>
+    <span class="chip rem">해제 <b>${s.removedN??s.removed.length}</b>건</span>
+    <span class="chip">OFAC <b>${(s.counts.OFAC||0).toLocaleString()}</b></span>
+    <span class="chip">UN <b>${(s.counts.UN||0).toLocaleString()}</b></span>
+    <span class="chip">EU <b>${(s.counts.EU||0).toLocaleString()}</b></span></div>`;
+  if(s.first){
+    html+=`<div class="snote">오늘 기준 스냅샷을 생성했습니다. 내일부터 신규 지정·해제 내역이 이 자리에 표시됩니다.</div>`;
+  }else if(!s.added.length&&!s.removed.length){
+    html+=`<div class="snote">오늘은 3개 리스트 모두 변동이 없습니다.</div>`;
+  }else{
+    const cls={OFAC:"b-ofac",UN:"b-un",EU:"b-eu"};
+    html+=`<div class="slist">`+
+      s.added.slice(0,40).map(a=>`<div class="srow"><span class="bdg b-add">신규</span><span class="bdg ${cls[a.s]}">${a.s}</span><span class="sname">${esc(a.name)}</span><span class="sprog">${esc(a.prog)}</span></div>`).join("")+
+      s.removed.slice(0,20).map(a=>`<div class="srow"><span class="bdg b-rem">해제</span><span class="bdg ${cls[a.s]}">${a.s}</span><span class="sname">${esc(a.name)}</span><span class="sprog">${esc(a.prog)}</span></div>`).join("")+
+      `</div><div class="snote">상세 식별정보 확인은 제재 통합 체커에서 이름으로 조회하세요.</div>`;
+  }
+  el.innerHTML=html;
+})();
+
+/* ── 좋아요 (Firebase 선택 / 미설정 시 브라우저 저장) ──
+   Firebase 사용 시 아래 설정 교체. 규칙 예: {"rules":{"blikes":{".read":true,".write":true}}} */
+const FIREBASE_CONFIG={apiKey:"YOUR_API_KEY",databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com"};
+const LDEMO=FIREBASE_CONFIG.apiKey==="YOUR_API_KEY";
+let MYID=localStorage.getItem("bf_cid")||("C-"+Math.random().toString(36).slice(2,8));
+localStorage.setItem("bf_cid",MYID);
+const nid=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return "n"+h.toString(36);};
+D.news.forEach(n=>n.id=nid(n.t));
+let LIKES={}, ldb=null;
+function likeN(id){return LIKES[id]?Object.keys(LIKES[id]).length:0;}
+function initLikes(){
+  if(LDEMO){try{LIKES=JSON.parse(localStorage.getItem("bf_likes")||"{}");}catch(e){LIKES={};}
+    renderNews();renderPicks();return;}
+  firebase.initializeApp(FIREBASE_CONFIG);ldb=firebase.database();
+  ldb.ref("blikes").on("value",s=>{LIKES=s.val()||{};renderNews();renderPicks();});
+}
+function toggleLike(id){
+  if(LDEMO){
+    LIKES[id]=LIKES[id]||{};
+    if(LIKES[id][MYID])delete LIKES[id][MYID];else LIKES[id][MYID]=1;
+    localStorage.setItem("bf_likes",JSON.stringify(LIKES));
+    renderNews();renderPicks();return;
+  }
+  const r=ldb.ref("blikes/"+id+"/"+MYID);
+  LIKES[id]&&LIKES[id][MYID]?r.remove():r.set(1);
+}
+function likeBtn(n){
+  const on=LIKES[n.id]&&LIKES[n.id][MYID];
+  return `<button class="likebtn ${on?"on":""}" onclick="event.preventDefault();event.stopPropagation();toggleLike('${n.id}')">👍 관심 ${likeN(n.id)}</button>`;
+}
+
+/* ── 인사이트 픽 ── */
+function renderPicks(){
+  const ps=D.picks||[];
+  if(!ps.length)return;
+  document.getElementById("picksec").style.display="block";
+  document.getElementById("plist2").innerHTML=ps.map((n,i)=>{
+    n.id=n.id||nid(n.t);
+    return `<div class="pick"><div class="pno">${String(i+1).padStart(2,"0")}</div>
+      <div><a href="${esc(n.link)}" target="_blank" rel="noopener"><div class="nt">${esc(n.t)}</div></a>
+      <div class="nm">${esc(n.src)} · ${esc(n.ts)}</div>
+      <div class="pkws">${(n.kws||[]).map(k=>`<span class="pkw">#${esc(k)}</span>`).join("")}</div>
+      ${likeBtn(n)}</div></div>`;
+  }).join("");
+}
+
+/* ── 뉴스 목록 (최신순/관심순) ── */
+let shown=0, NSORT="time";
+function nlist(){
+  return NSORT==="like"
+    ?[...D.news].sort((a,b)=>likeN(b.id)-likeN(a.id)||(a.ts<b.ts?1:-1))
+    :D.news;
+}
+function toggleNsort(){
+  NSORT=NSORT==="time"?"like":"time";
+  document.getElementById("sortbtn").classList.toggle("on",NSORT==="like");
+  document.getElementById("sortbtn").textContent=NSORT==="like"?"최신순으로":"관심순";
+  renderNews();
+}
+function renderNews(){shown=0;document.getElementById("nlist").innerHTML="";moreNews();}
+function moreNews(){
+  const box=document.getElementById("nlist"), arr=nlist();
+  const old=document.getElementById("nmore");if(old)old.remove();
+  const end=Math.min(shown+15,arr.length);
+  let html="";
+  for(let i=shown;i<end;i++){
+    const n=arr[i];
+    html+=`<a class="ncard" href="${esc(n.link)}" target="_blank" rel="noopener">
+      <div class="nt">${esc(n.t)}</div>
+      <div class="nm">${esc(n.src)} · ${esc(n.ts)}</div>
+      ${likeBtn(n)}</a>`;
+  }
+  box.insertAdjacentHTML("beforeend",html);
+  shown=end;
+  if(end<arr.length)box.insertAdjacentHTML("beforeend",
+    `<button class="morebtn" id="nmore" onclick="moreNews()">뉴스 더 보기 (${arr.length-end}건)</button>`);
+}
+document.getElementById("newsn").textContent="최근 3일 · "+D.news.length+"건";
+initLikes();
+
+/* 레그워치 */
+(function(){
+  const rw=D.regwatch||{};
+  const fss=rw.fss||[];
+  if(fss.length){
+    document.getElementById("regsec").style.display="block";
+    document.getElementById("fsslist").innerHTML=fss.map(r=>`<tr>
+      <td style="font-weight:700">${esc(r.org)}</td>
+      <td style="color:var(--gray2);font-size:11.5px;white-space:nowrap">${esc(r.d).replaceAll("-",".")}.</td>
+      <td>${r.aml?'<span class="amlbdg">자금세탁방지실</span>':`<span class="deptb">${esc(r.dept)}</span>`}</td>
+      <td style="text-align:right">${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;font-size:12px">PDF</a>`:""}</td>
+    </tr>`).join("");
+    const fsc=rw.fsc||[];
+    if(fsc.length){
+      document.getElementById("fscbox").innerHTML='<div class="sech" style="margin-top:18px"><div class="sect" style="font-size:16px">금융위 — 자금세탁 관련 의결·공시</div></div>'+
+        fsc.map(x=>`<a class="ncard" href="${esc(x.url)}" target="_blank" rel="noopener"><div class="nt">${esc(x.t)}</div></a>`).join("");
+    }
+  }
+})();
+
+/* 리서치 */
+(function(){
+  const ps=D.papers||[];
+  if(!ps.length)return;
+  document.getElementById("papersec").style.display="block";
+  document.getElementById("paperlist").innerHTML=ps.map(p=>`<a class="ncard" href="${esc(p.url)}" target="_blank" rel="noopener">
+    <div class="nt" style="font-size:13.5px">${esc(p.t)}</div>
+    <div class="nm">arXiv · ${esc(p.d).replaceAll("-",".")}.</div></a>`).join("");
+})();
+
+/* 아카이브 */
+(function(){
+  const h=D.history||[];
+  if(!h.length)return;
+  document.getElementById("archsec").style.display="block";
+  document.getElementById("alist").innerHTML=h.map((a,i)=>`<div class="acard">
+    <div class="atop" onclick="document.getElementById('ab-${i}').classList.toggle('on')">
+      <div class="adate">${a.date.replaceAll("-",".")}.</div>
+      <div class="atags">${(a.top||[]).map(esc).join(" · ")}</div>
+    </div>
+    <div class="abody" id="ab-${i}">${(a.paras||[]).map(p=>`<p style="margin-bottom:7px">${esc(p)}</p>`).join("")}</div>
+  </div>`).join("");
+})();
+</script>
+</body>
+</html>

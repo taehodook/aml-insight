@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자금세탁 수법 인텔리전스 — AML 인사이트</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="수법 인텔리전스 — AML 인사이트">
+<meta property="og:description" content="지금 도는 자금세탁 수법과 STR 점검 포인트. 매일 자동 갱신.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/typology/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/700.css");
+:root{--bg:#FFF;--tx:#101114;--sub:#5E626E;--dim:#9CA0AB;--line:#101114;--hair:#E6E6EA;--soft:#F7F8F4;
+--lime:#D8FF3D;--lime-deep:#B7E600;--violet:#6C4DFF;--r3:#E03150;--r3b:#FDEAEE;--r2:#C77B0A;--r2b:#FCF3E2;
+--mono:'JetBrains Mono',monospace;--disp:'Paperlogy',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,sans-serif;background:var(--bg);color:var(--tx);line-height:1.7}
+a{color:var(--violet);text-decoration:none}
+::selection{background:var(--lime)}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+.top{border-bottom:2.5px solid var(--line)}.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.bn{font-family:var(--disp);font-weight:800;font-size:18px}.bn i{font-style:normal;background:var(--lime);padding:0 4px;border-radius:3px}
+.toplabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--sub)}
+.hero{padding:42px 0 26px;border-bottom:2.5px solid var(--line)}
+.kick{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--sub)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(30px,7vw,48px);line-height:1.1;letter-spacing:-.03em;margin-top:12px}
+h1 .hl{background:var(--lime);padding:0 .1em;border-radius:.12em}
+.hsub{font-size:14px;color:var(--sub);margin-top:13px;max-width:620px;line-height:1.85}
+.stat{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap}
+.stbox .n{font-family:var(--mono);font-size:26px;font-weight:700}.stbox .l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim)}
+main{padding:30px 0 70px}
+.insight{border:2.5px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:26px;background:var(--soft)}
+.insh{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--violet);font-weight:700;margin-bottom:11px}
+.insrow{font-size:13.5px;margin:8px 0;line-height:1.65}.insrow b{color:var(--tx)}
+.secttl{font-family:var(--disp);font-weight:800;font-size:20px;margin:8px 0 4px}
+.secsub{font-size:12.5px;color:var(--sub);margin-bottom:18px}
+.m{border:2px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.mh{display:flex;align-items:center;gap:14px;padding:15px 17px;cursor:pointer}
+.mh:hover{background:var(--soft)}
+.mno{font-family:var(--disp);font-weight:800;font-size:20px;width:30px;text-align:center;color:var(--dim)}
+.mno.top{color:var(--violet)}
+.mmid{flex:1;min-width:0}
+.mname{font-family:var(--disp);font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sev{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px}
+.sev3{background:var(--r3b);color:var(--r3)}.sev2{background:var(--r2b);color:var(--r2)}
+.mmeta{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:4px}
+.mmeta b{color:var(--violet)}.auth{color:var(--r3)!important}
+.mscore{text-align:right}.mscore .s{font-family:var(--mono);font-weight:700;font-size:24px;line-height:1}.mscore .l{font-family:var(--mono);font-size:9px;color:var(--dim)}
+.mbar{height:5px;background:var(--soft)}.mbar i{display:block;height:100%}
+.mbody{display:none;padding:0 17px 16px;border-top:1px solid var(--hair)}.m.open .mbody{display:block}
+.why{font-size:13px;color:var(--tx);background:#FFF8E6;border-left:3px solid var(--r2);border-radius:0 8px 8px 0;padding:11px 13px;margin:13px 0;line-height:1.6}
+.bt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);margin:13px 0 8px}
+.strlist{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
+.stritem{display:flex;gap:9px;font-size:13px;background:#F3F0FF;border-radius:8px;padding:9px 12px;line-height:1.5}
+.stritem::before{content:"✓";color:var(--violet);font-weight:800;flex:none}
+.nlist{display:flex;flex-direction:column;gap:1px;margin-top:5px}
+.nitem{display:flex;gap:9px;padding:7px 3px;border-bottom:1px solid var(--hair);align-items:baseline}
+.nitem:last-child{border:none}
+.nlang{font-family:var(--mono);font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;flex:none;margin-top:2px}
+.nlang.KR{background:#E7F0FF;color:#2456C7}.nlang.EN{background:#F0E7FF;color:#6C2BC7}
+.ntitle{font-size:12.5px;line-height:1.5;color:var(--tx)}.ntitle:hover{color:var(--violet);text-decoration:underline}
+.nsrc{font-family:var(--mono);font-size:9.5px;color:var(--dim)}
+.sqld{margin:14px 0;border:1px solid var(--hair);border-radius:10px;overflow:hidden;background:#0D0F13}
+.sqld summary{cursor:pointer;padding:10px 14px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--lime);list-style:none;display:flex;align-items:center;gap:10px}
+.sqld summary::-webkit-details-marker{display:none}
+.sqlhint{font-weight:400;font-size:10px;color:var(--dim)}
+.sqlwrap{position:relative;border-top:1px solid #1E222B}
+.sqlpre{margin:0;padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.75;color:#C8E6A0;overflow-x:auto;white-space:pre}
+.sqlcopy{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:10px;font-weight:700;background:var(--lime);color:#101114;border:none;border-radius:6px;padding:5px 10px;cursor:pointer}
+.sqlnote{padding:8px 14px;font-size:10px;color:var(--dim);border-top:1px solid #1E222B}
+footer{border-top:2.5px solid var(--line);padding:20px 0 40px}
+.fnote{font-size:11px;color:var(--dim);line-height:1.85;max-width:720px}.fnote b{color:var(--tx)}
+</style></head>
+<body>
+<div class="top"><div class="wrap">
+  <a class="bn" href="../">AML 인사이트<i>.</i></a><span class="toplabel">TYPOLOGY INTELLIGENCE</span>
+</div></div>
+<header class="hero"><div class="wrap">
+  <div class="kick">MONEY LAUNDERING TYPOLOGY · STR RESPONSE</div>
+  <h1>지금 도는 <span class="hl">세탁 수법</span></h1>
+  <div class="hsub">국내외 뉴스·수사 사례에서 자금세탁 <b>수법(typology)</b>을 추출하고, 각 수법에 바로 쓸 수 있는 <b>STR 점검 포인트</b>를 매핑했습니다. "어떤 업종이 위험한가"가 아니라 "<b>어떤 방식으로 세탁되는가, 그래서 무엇을 봐야 하는가</b>"에 답합니다.</div>
+  <div class="stat" id="stat"></div>
+</div></header>
+<main class="wrap">
+  <div id="insight"></div>
+  <div class="secttl">🎯 수법 순위 · STR 대응</div>
+  <div class="secsub">점수 = 보도 빈도 + 수법 심각도 + 당국 적발(검거·기소) 가중. 카드를 누르면 STR 점검 포인트와 근거 사례가 펼쳐집니다.</div>
+  <div id="list"></div>
+</main>
+<footer><div class="wrap"><div class="fnote">
+  <b>방법론</b> 국내외 자금세탁 관련 뉴스를 수집해 수법 키워드로 분류하고, 보도량·심각도·당국 적발 여부를 결합해 점수화합니다. STR 점검 포인트는 각 수법의 전형적 거래 징후로, 일반적 참고용입니다. <b>면책</b> 실제 의심거래 판단과 보고는 내부통제 절차와 규정을 따르세요. 업종 단위 위험 순위는 <a href="../business-risk/">업종 위험 인텔리전스</a>, 제재 대상자 조회는 <a href="../checker/">제재 체커</a>를 이용하세요.<br><br>© 2026 AML 인사이트 · 무단 복제·재배포 금지.
+</div></div></footer>
+<script>
+let D=null;
+fetch("./methods.json?"+Date.now()).then(r=>r.json()).then(d=>{D=d;boot();})
+  .catch(()=>{document.getElementById("list").innerHTML='<div style="text-align:center;color:#9CA0AB;padding:50px">데이터를 불러오지 못했습니다.</div>';});
+function boot(){
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function sc(s){const h=Math.round(120-(s/100)*120);return "hsl("+h+" 80% 45%)";}
+document.getElementById("stat").innerHTML=
+  '<div class="stbox"><div class="n">'+D.total_news+'</div><div class="l">수집 기사</div></div>'+
+  '<div class="stbox"><div class="n">'+D.methods.filter(m=>m.count>0).length+'</div><div class="l">탐지 수법</div></div>'+
+  '<div class="stbox"><div class="n">'+D.methods.reduce((a,m)=>a+m.auth,0)+'</div><div class="l">당국 적발 사례</div></div>'+
+  '<div class="stbox"><div class="n">'+(D.today||"")+'</div><div class="l">기준일</div></div>';
+
+// 인사이트
+const topM=D.methods[0];
+const emerging=D.methods.filter(m=>m.count>0&&m.count<=8).sort((a,b)=>b.sev-a.sev)[0];
+const mostBusted=[...D.methods].sort((a,b)=>b.auth-a.auth)[0];
+let ins='<div class="insh">INSIGHT · 이번 동향에서 읽을 것</div>';
+if(topM)ins+='<div class="insrow">🎯 가장 활발한 수법은 <b>'+esc(topM.name)+'</b> — 보도 '+topM.count+'건, 당국 적발 '+topM.auth+'건. 관련 STR 룰의 가동·임계값을 우선 점검하세요.</div>';
+if(mostBusted&&mostBusted.auth>0)ins+='<div class="insrow">🚔 <b>당국이 가장 많이 적발</b>한 수법은 <b>'+esc(mostBusted.name)+'</b> ('+mostBusted.auth+'건 검거·기소) — 실제 단속이 집중되는 영역입니다.</div>';
+if(emerging)ins+='<div class="insrow">🌱 <b>주목할 신흥 수법</b>: <b>'+esc(emerging.name)+'</b> — 보도량은 적지만(<b>'+emerging.count+'건</b>) 심각도가 높습니다. 초기 단계에서 룰을 선제 정비할 기회입니다.</div>';
+document.getElementById("insight").innerHTML=ins;
+
+// 수법 카드
+document.getElementById("list").innerHTML=D.methods.filter(m=>m.count>0).map((m,i)=>{
+  const strs=(m.str||[]).map(s=>'<div class="stritem">'+esc(s)+'</div>').join("");
+  const hits=(m.hits||[]).map(h=>'<div class="nitem"><span class="nlang '+h.lang+'">'+h.lang+'</span><div><a class="ntitle" href="'+esc(h.link)+'" target="_blank" rel="noopener">'+esc(h.t)+'</a><div class="nsrc">'+esc(h.src||"")+'</div></div></div>').join("");
+  return '<div class="m"><div class="mh" onclick="this.parentNode.classList.toggle(\'open\')">'+
+    '<div class="mno '+(i<3?'top':'')+'">'+(i+1)+'</div>'+
+    '<div class="mmid"><div class="mname">'+esc(m.name)+' <span class="sev sev'+m.sev+'">'+(m.sev==3?'심각':'주의')+'</span></div>'+
+    '<div class="mmeta">보도 <b>'+m.count+'건</b> · <span class="auth">당국 적발 '+m.auth+'건</span></div></div>'+
+    '<div class="mscore"><div class="s" style="color:'+sc(m.score)+'">'+m.score+'</div><div class="l">SCORE</div></div></div>'+
+    '<div class="mbar"><i style="width:'+m.score+'%;background:'+sc(m.score)+'"></i></div>'+
+    '<div class="mbody"><div class="why"><b>수법</b> '+esc(m.why)+'</div>'+
+    '<div class="bt">✅ STR 점검 포인트 — 이런 거래를 보면 의심</div><div class="strlist">'+strs+'</div>'+
+    (m.sql?'<details class="sqld"><summary>⌨ SQL 테마룰 템플릿 <span class="sqlhint">클릭해서 펼치기 · 복사</span></summary>'+
+      '<div class="sqlwrap"><button class="sqlcopy" onclick="copySql(this)">📋 복사</button>'+
+      '<pre class="sqlpre">'+esc(m.sql)+'</pre></div>'+
+      '<div class="sqlnote">범용 ANSI SQL 초안입니다. 테이블·컬럼명(t_txn 등)과 :파라미터를 사내 스키마에 맞게 치환 후 사용하세요.</div></details>':'')+
+    '<div class="bt">📰 근거 사례 '+(m.hits?m.hits.length:0)+'건</div><div class="nlist">'+hits+'</div>'+
+    '</div></div>';
+}).join("");
+const f=document.querySelector(".m"); if(f)f.classList.add("open");
+window.copySql=function(btn){
+  const sql=btn.parentNode.querySelector('.sqlpre').innerText;
+  navigator.clipboard.writeText(sql).then(()=>{btn.textContent='✅ 복사됨';setTimeout(()=>btn.textContent='📋 복사',1500);});
+};
+}
+</script></body></html>

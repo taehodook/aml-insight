@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>규제 캘린더 — AML 인사이트</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="컴플라이언스 캘린더 — AML 인사이트">
+<meta property="og:description" content="AML 보고·교육·평가 일정 캘린더.">
+<meta property="og:image" content="https://amlinsight-test1.netlify.app/og.png">
+<meta property="og:url" content="https://amlinsight-test1.netlify.app/calendar/">
+<meta property="og:site_name" content="AML 인사이트">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="특금법·감독규정 개정과 행정지도 시행일을 D-Day로 추적합니다. AML 인사이트 제공.">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/700.css");
+:root{
+  --bg:#FFFFFF; --tx:#101114; --sub:#5E626E; --dim:#9CA0AB; --line:#101114; --hair:#E6E6EA;
+  --lime:#D8FF3D; --lime-deep:#B7E600; --violet:#6C4DFF; --warn:#D43A3F;
+  --mono:'JetBrains Mono',monospace; --disp:'Paperlogy',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard Variable',Pretendard,sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+::selection{background:var(--lime)}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+.top{border-bottom:2.5px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.bn{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.02em}
+.bn i{font-style:normal;background:var(--lime);padding:0 4px;border-radius:3px}
+.toplabel{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--sub)}
+.hero{padding:48px 0 38px;border-bottom:2.5px solid var(--line)}
+.kick{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--sub)}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(34px,9vw,56px);line-height:1.1;letter-spacing:-.03em;margin-top:14px}
+h1 .hl{background:var(--lime);padding:0 .1em;border-radius:.12em}
+.hsub{font-size:14px;color:var(--sub);margin-top:14px;max-width:560px;line-height:1.85}
+main{padding-bottom:70px}
+.sec{margin-top:46px}
+.sech{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2.5px solid var(--line);padding-bottom:12px}
+.sect{font-family:var(--disp);font-weight:800;font-size:clamp(20px,4.8vw,26px);letter-spacing:-.02em}
+.secm{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim)}
+.ev{display:grid;grid-template-columns:118px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--hair);align-items:start}
+.dday{font-family:var(--disp);font-weight:800;font-size:clamp(22px,5.4vw,30px);letter-spacing:-.02em;line-height:1.1}
+.dday.urgent{background:var(--lime);display:inline-block;padding:0 .12em;border-radius:.12em}
+.dday.today{background:var(--warn);color:#fff;display:inline-block;padding:0 .14em;border-radius:.12em}
+.ddate{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);margin-top:6px}
+.et{font-weight:800;font-size:16.5px;letter-spacing:-.01em;font-family:var(--disp)}
+.ecat{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;border:1.5px solid var(--line);padding:2.5px 8px;border-radius:999px;margin-left:9px;vertical-align:2px;color:var(--sub)}
+.ed{font-size:13px;color:var(--sub);margin-top:7px;line-height:1.8;max-width:560px}
+.ed b{color:var(--tx)}
+.esrc{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--dim);margin-top:8px}
+.ev.past{opacity:.42}
+.ev.past .dday{color:var(--dim)}
+.cats{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.cbtn{font-family:var(--mono);font-size:10px;letter-spacing:.1em;border:1.5px solid var(--hair);background:none;color:var(--sub);border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:700;transition:all .15s}
+.cbtn.on{background:var(--lime);border-color:var(--line);color:var(--tx)}
+.spon{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;background:var(--lime);border:1.5px solid var(--line);padding:2.5px 8px;border-radius:999px;margin-left:8px;vertical-align:2px;font-weight:700}
+.ev.sp{background:linear-gradient(90deg,rgba(216,255,61,.18),transparent 55%);border-left:3px solid var(--lime-deep);padding-left:14px}
+.evimg{width:100%;max-width:430px;border-radius:12px;border:1.5px solid var(--hair);margin-top:10px;display:block}
+.evlink{display:inline-block;margin-top:10px;font-family:var(--disp);font-weight:800;font-size:13px;background:var(--tx);color:var(--bg);padding:9px 18px;border-radius:999px}
+.evlink:hover{background:var(--violet);color:#fff}
+.ainp{width:100%;border:1.5px solid var(--hair);border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;background:#fff}
+.ainp:focus{outline:none;border-color:var(--line)}
+.abtn{font-family:var(--disp);font-weight:800;font-size:14px;background:var(--tx);color:var(--bg);border:none;border-radius:999px;padding:13px;cursor:pointer}
+.abtn.sub{background:#fff;color:var(--tx);border:1.5px solid var(--line);font-size:12px;padding:10px 16px}
+.arow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--hair);font-size:13px}
+.adel{background:none;border:none;color:#D43A3F;font-weight:800;font-size:12px;cursor:pointer}
+@media(max-width:540px){.ev{grid-template-columns:1fr;gap:8px}}
+.howto{margin-top:46px;border:2.5px solid var(--line);padding:18px 20px}
+.howto .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--sub)}
+.howto p{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.9}
+.howto code{font-family:var(--mono);font-size:11px;background:#F2F2EE;padding:2px 6px;border-radius:4px;color:var(--tx)}
+footer{border-top:2.5px solid var(--line);padding:20px 0 36px}
+.fgrid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--dim)}
+.fnote{margin-top:12px;font-size:11.5px;color:var(--dim);line-height:1.85;max-width:640px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="bn" href="../">AML 인사이트<i>.</i></a>
+    <span class="toplabel">REG CALENDAR</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">COMPLIANCE COUNTDOWN</div>
+    <h1>시행일은<br><span class="hl">갑자기</span> 오지 않는다</h1>
+    <div class="hsub">특금법·감독규정 개정, 행정지도 시행일을 D-Day로 추적합니다. 준비 기간을 디데이로 환산하면 우선순위가 분명해집니다.</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="sec">
+    <div class="sech"><div class="sect">다가오는 일정</div><div class="secm" id="cnt"></div></div>
+    <div class="cats" id="cats">
+      <button class="cbtn on" data-c="all">전체</button>
+      <button class="cbtn" data-c="입법·규제">입법·규제</button>
+      <button class="cbtn" data-c="FATF·국제">FATF·국제</button>
+      <button class="cbtn" data-c="행사·교육">행사·교육</button>
+    </div>
+    <div id="upcoming"></div>
+  </div>
+  <div class="sec" id="pastsec" style="display:none">
+    <div class="sech"><div class="sect">지난 일정</div><div class="secm">ARCHIVE</div></div>
+    <div id="past"></div>
+  </div>
+
+  <div class="sec" id="adminsec" style="display:none">
+    <div class="sech"><div class="sect">관리자 — 일정·스폰서 등재</div><div class="secm">ADMIN</div></div>
+    <div class="howto" style="margin-top:18px">
+      <div style="display:grid;gap:9px">
+        <input class="ainp" id="a_t" placeholder="제목 (예: 2026 AML 컴플라이언스 컨퍼런스)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <input class="ainp" id="a_d" type="date">
+          <select class="ainp" id="a_c"><option>행사·교육</option><option>입법·규제</option><option>FATF·국제</option></select>
+        </div>
+        <textarea class="ainp" id="a_desc" style="min-height:70px" placeholder="설명 (간단한 소개, 대상, 장소 등)"></textarea>
+        <input class="ainp" id="a_src" placeholder="주최·출처 (예: ○○협회)">
+        <input class="ainp" id="a_url" placeholder="신청·상세 링크 URL (선택)">
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <input class="ainp" id="a_img" placeholder="이미지 URL (선택)" style="flex:1;min-width:160px">
+          <label class="abtn sub" id="upwrap" style="display:none">이미지 업로드<input type="file" id="a_file" accept="image/*" style="display:none"></label>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700">
+          <input type="checkbox" id="a_sp" checked style="width:17px;height:17px;accent-color:#B7E600"> 스폰서 등재 (라임 하이라이트 + 이미지 노출)
+        </label>
+        <button class="abtn" onclick="adminSave()">등재하기</button>
+        <div id="a_msg" style="font-size:12px;color:var(--sub)"></div>
+      </div>
+      <div id="a_list" style="margin-top:16px"></div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <div class="l">일정 추가 방법</div>
+    <p>운영자는 <code>EVENTS</code> 배열에 한 줄 추가: <code>{d:"YYYY-MM-DD", t:"제목", cat:"분류", desc:"설명", src:"출처"}</code> — 일자 미정이면 <code>approx:"2026년 10월"</code>, 스폰서 등재면 <code>sponsored:true</code>를 더하세요.<br><br>
+    <b style="background:var(--lime);padding:0 4px;border-radius:3px">행사 주최측이신가요?</b> 컨퍼런스·세미나·교육 일정을 스폰서로 등재하면 라임 하이라이트와 함께 상시 노출됩니다. 등재 문의는 사이트 게시판으로.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid"><span>© 2026 AML INSIGHT</span><span>REG CALENDAR</span></div>
+    <div class="fnote">본 캘린더는 실무 참고용 일정 정리이며, 법령·행정지도의 정확한 내용과 시행일은 반드시 국가법령정보센터와 금융위원회·금융감독원 공시 원문으로 확인하세요.</div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+/* ════════════════════════════════════════
+   운영 설정 — 스폰서 등재를 폰에서 직접 하려면:
+   1) FIREBASE_CONFIG 입력 (Spark 무료) — 규칙: {"rules":{"calendar":{".read":true,".write":true}}}
+   2) (이미지 업로드) CLOUDINARY cloud명·unsigned preset 입력 — 미입력 시 이미지 URL 직접 붙여넣기
+   3) ADMIN_PW 변경 후 배포 → 주소 뒤에 ?admin=1 붙여 접속
+   Firebase 미설정 시 관리자 저장은 이 브라우저에만 보입니다(미리보기용).
+════════════════════════════════════════ */
+const FIREBASE_CONFIG={apiKey:"YOUR_API_KEY",databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com"};
+const CLOUDINARY={cloud:"YOUR_CLOUD",preset:"YOUR_UNSIGNED_PRESET"};
+const ADMIN_PW="aml-blacklight-2026"; /* 반드시 변경하세요 */
+
+/* ════════════════════════════════════════
+   일정 데이터 — 여기에 직접 추가/수정하세요.
+   d: YYYY-MM-DD (시행일·기한)
+════════════════════════════════════════ */
+const EVENTS=[
+ {d:"2026-07-01", t:"가상계좌 일회성 금융거래 고객확인 시행", cat:"입법·규제",
+  desc:"금감원 가상계좌 재판매 관련 행정지도에 따라 PG·금융회사의 <b>일회성 금융거래 고객확인(CDD)</b> 체계가 가동되는 날. 계좌번호 기반 관리, 동일인 합산 점검이 핵심.",
+  src:"금융감독원 행정지도"},
+ {d:"2026-09-01", t:"정기국회 개회 — 디지털자산기본법(2단계) 심사 분수령", cat:"입법·규제",
+  desc:"국회법상 매년 9월 1일 정기국회 집회. <b>디지털자산기본법(가상자산 2단계 입법)</b> 등 AML 직결 법안의 심사가 본격화되는 시기 — 사업자 분류·발행·상장·공시 규율이 걸려 있습니다.",
+  src:"국회법 제4조 · 국회 정무위"},
+ 
+ {d:"2027-01-01", t:"가상자산 소득 과세 시행 (현행 법령 기준)", cat:"입법·규제",
+  desc:"세 차례 유예 끝에 현행 세법상 2027.1.1. 시행 예정. CARF(가상자산 정보 자동교환) 이행과 맞물려 <b>거래소·VASP의 거래정보 인프라</b> 부담이 커집니다. 재유예 입법 동향 주시 필요.",
+  src:"소득세법 부칙 · CARF"},
+ 
+ 
+ {d:"2026-08-31", t:"[스폰서 슬롯] AML 행사·교육을 여기에 알리세요", cat:"행사·교육", sponsored:true,
+  desc:"컨퍼런스·세미나·자격교육 일정을 D-Day로 등재해 드립니다. 실무자·의사결정자가 매일 확인하는 캘린더에 <b>주최측 등재(스폰서)</b>로 노출하세요.",
+  src:"등재 문의 — 사이트 게시판"}
+];
+
+const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+let CAT="all";
+/* ── Firebase 일정 병합 ── */
+const FDEMO=FIREBASE_CONFIG.apiKey==="YOUR_API_KEY";
+let FB_EVENTS={}, db=null;
+function allEvents(){return [...EVENTS, ...Object.entries(FB_EVENTS).map(([id,e])=>({...e,_id:id}))];}
+function initFb(){
+  if(FDEMO){
+    try{FB_EVENTS=JSON.parse(localStorage.getItem("cal_events")||"{}");}catch(e){FB_EVENTS={};}
+    render();adminList();return;
+  }
+  firebase.initializeApp(FIREBASE_CONFIG);db=firebase.database();
+  db.ref("calendar/events").on("value",s=>{FB_EVENTS=s.val()||{};render();adminList();});
+}
+function dot(s){return s.replaceAll("-",".")+".";}
+function render(){
+  const up=[],past=[];
+  allEvents().filter(e=>CAT==="all"||e.cat===CAT)
+    .map(e=>({...e,dt:new Date(e.d+"T00:00:00+09:00")}))
+    .sort((a,b)=>a.dt-b.dt)
+    .forEach(e=>{
+      const diff=Math.round((e.dt-today)/86400000);
+      (diff>=0?up:past).push({...e,diff});
+    });
+  const card=e=>{
+    const dd=(e.approx?"~":"")+(e.diff===0?"D-DAY":(e.diff>0?"D-"+e.diff:"D+"+(-e.diff)));
+    const cls=e.diff===0?"today":(e.diff>0&&e.diff<=30?"urgent":"");
+    return `<div class="ev ${e.diff<0?"past":""} ${e.sponsored?"sp":""}">
+      <div><div class="dday ${cls}">${dd}</div><div class="ddate">${e.approx?esc(e.approx):dot(e.d)}</div></div>
+      <div><span class="et">${esc(e.t)}</span><span class="ecat">${esc(e.cat)}</span>${e.sponsored?'<span class="spon">SPONSORED</span>':""}
+        <div class="ed">${e.desc}</div>
+        ${e.img?`<img class="evimg" src="${esc(e.img)}" alt="" loading="lazy">`:""}
+        ${e.url?`<a class="evlink" href="${esc(e.url)}" target="_blank" rel="noopener">자세히 보기 →</a>`:""}
+        <div class="esrc">${esc(e.src)}</div></div>
+    </div>`;
+  };
+  document.getElementById("upcoming").innerHTML=up.map(card).join("")||'<div style="padding:30px 0;color:var(--dim);font-size:13px">해당 분류의 예정 일정이 없습니다.</div>';
+  document.getElementById("cnt").textContent=up.length+" UPCOMING";
+  const ps=document.getElementById("pastsec");
+  if(past.length){ps.style.display="block";document.getElementById("past").innerHTML=past.reverse().map(card).join("");}
+  else ps.style.display="none";
+}
+document.querySelectorAll(".cbtn").forEach(b=>b.onclick=()=>{
+  CAT=b.dataset.c;
+  document.querySelectorAll(".cbtn").forEach(x=>x.classList.toggle("on",x===b));
+  render();
+});
+
+/* ── 관리자 모드 (?admin=1) ── */
+let ADMIN=false;
+function adminInit(){
+  if(new URLSearchParams(location.search).get("admin")!=="1")return;
+  const pw=prompt("관리자 비밀번호");
+  if(pw!==ADMIN_PW){alert("비밀번호가 다릅니다.");return;}
+  ADMIN=true;
+  document.getElementById("adminsec").style.display="block";
+  if(CLOUDINARY.cloud!=="YOUR_CLOUD")document.getElementById("upwrap").style.display="inline-block";
+  document.getElementById("a_file").addEventListener("change",cloudUpload);
+  adminList();
+}
+async function cloudUpload(ev){
+  const f=ev.target.files[0]; if(!f)return;
+  const msg=document.getElementById("a_msg"); msg.textContent="이미지 업로드 중...";
+  const fd=new FormData(); fd.append("file",f); fd.append("upload_preset",CLOUDINARY.preset);
+  try{
+    const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloud}/image/upload`,{method:"POST",body:fd});
+    const d=await r.json();
+    document.getElementById("a_img").value=d.secure_url||"";
+    msg.textContent=d.secure_url?"이미지 업로드 완료":"업로드 실패";
+  }catch(e){msg.textContent="업로드 실패: "+e;}
+}
+function adminSave(){
+  const t=document.getElementById("a_t").value.trim();
+  const d=document.getElementById("a_d").value;
+  const msg=document.getElementById("a_msg");
+  if(t.length<4||!d){msg.textContent="제목(4자 이상)과 날짜는 필수입니다.";return;}
+  const ev={d,t:t.slice(0,80),cat:document.getElementById("a_c").value,
+    desc:esc(document.getElementById("a_desc").value.trim().slice(0,400)),
+    src:document.getElementById("a_src").value.trim().slice(0,60),
+    url:document.getElementById("a_url").value.trim().slice(0,300),
+    img:document.getElementById("a_img").value.trim().slice(0,300),
+    sponsored:document.getElementById("a_sp").checked?true:false, ts:Date.now()};
+  if(FDEMO){
+    FB_EVENTS["d"+Date.now()]=ev;
+    localStorage.setItem("cal_events",JSON.stringify(FB_EVENTS));
+    render();adminList();
+    msg.textContent="등재 완료 (데모 — 이 브라우저에만 보임. Firebase 설정 시 모두에게 공개)";
+  }else{
+    db.ref("calendar/events").push(ev);
+    msg.textContent="등재 완료 — 모든 방문자에게 즉시 반영됩니다.";
+  }
+  for(const id of["a_t","a_desc","a_src","a_url","a_img"])document.getElementById(id).value="";
+}
+function adminDel(id){
+  if(!confirm("이 일정을 삭제할까요?"))return;
+  if(FDEMO){delete FB_EVENTS[id];localStorage.setItem("cal_events",JSON.stringify(FB_EVENTS));render();adminList();}
+  else db.ref("calendar/events/"+id).remove();
+}
+function adminList(){
+  if(!ADMIN)return;
+  const box=document.getElementById("a_list");
+  const es=Object.entries(FB_EVENTS).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+  box.innerHTML=es.length?('<div style="font-weight:800;font-size:13px;margin-bottom:4px">등재된 일정 '+es.length+'건</div>'+
+    es.map(([id,e])=>`<div class="arow"><span>${e.sponsored?"⭐ ":""}${esc(e.t)} <span style="color:var(--dim)">· ${esc(e.d)}</span></span>
+    <button class="adel" onclick="adminDel('${id}')">삭제</button></div>`).join("")):"";
+}
+adminInit();
+initFb();
+</script>
+</body>
+</html>
