@@ -1,0 +1,36 @@
+name: data-update
+# AML 인사이트 첫 화면 데이터: 금융위 제한대상자 고시(WLF), AML 규정·판례(규정 탭)
+on:
+  schedule:
+    - cron: "20 22 * * 0-4"   # 평일 07:20 KST
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      LAW_OC: ${{ secrets.LAW_OC || 'xogh1004' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: 금융거래등제한대상자 고시 확인
+        run: python3 scripts/kofiu_update.py
+        continue-on-error: true
+      - name: AML 규정·판례 갱신
+        run: scripts/lex_update.sh
+        continue-on-error: true
+      - name: Commit & push
+        run: |
+          git config user.name "data-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/wlf data/lex
+          git diff --cached --quiet && { echo "변경 없음"; exit 0; }
+          git commit -m "data: $(TZ=Asia/Seoul date +'%Y-%m-%d') 규정·제한대상자 갱신"
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1
