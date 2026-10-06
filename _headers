@@ -1,3 +1,9 @@
+/sw.js
+  Cache-Control: no-cache
+/pwa.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
 /data/*
   Cache-Control: no-cache
 /sanctions.json
