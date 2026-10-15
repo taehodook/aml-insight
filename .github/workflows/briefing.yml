@@ -19,6 +19,10 @@ jobs:
         run: |
           python3 collect.py
           python3 build.py
+      - name: Fill today's articles if Claude missed them (weekdays)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 scripts/daily_fallback.py || true
       - name: Collect money flow
         working-directory: flow
         run: |
@@ -53,6 +57,6 @@ jobs:
         run: |
           git config user.name "briefing-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add briefing/data.json briefing/sanctions_snapshot.json briefing/index.html flow/flow_data.json flow/index.html business-risk/ra_news.json typology/methods.json checker/index.html checker/data.json checker/fbi.json 2>/dev/null || git add briefing flow business-risk typology
+          git add briefing/data.json briefing/sanctions_snapshot.json briefing/index.html flow/flow_data.json flow/index.html business-risk/ra_news.json typology/methods.json checker/index.html checker/data.json checker/fbi.json data/daily 2>/dev/null || git add briefing flow business-risk typology data/daily
           git diff --cached --quiet || git commit -m "briefing: $(date +'%Y-%m-%d')"
           git push
