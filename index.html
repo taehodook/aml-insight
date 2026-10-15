@@ -108,6 +108,8 @@ button,input,select{font:inherit;color:inherit}
 .card-h span{font-family:var(--m);font-size:11.5px;color:var(--muted)}
 .body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:start;padding-bottom:72px}
 .stack{display:grid;gap:24px;min-width:0}
+.body.eq{align-items:stretch}.body.eq>.card{display:flex;flex-direction:column}.body.eq>.stack{grid-auto-rows:auto;align-content:stretch}
+@media (min-width:961px){.pz-body>.stack:last-child,#p-score .body>.cert{position:sticky;top:84px}}
 
 /* 오늘 */
 .story{padding:28px 30px 26px}
@@ -140,8 +142,14 @@ button,input,select{font:inherit;color:inherit}
 .tally span{font-size:12px;color:var(--muted)}
 .tally b{font-size:26px;letter-spacing:-.03em;line-height:1.1}
 .tally small{font-size:12px;color:var(--ink2)}
-.arts{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
-.arts-side{display:grid;gap:20px;min-width:0}
+.arts{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.arts-main{display:grid;gap:20px;min-width:0}
+.arts-side .links{grid-template-columns:minmax(0,1fr)}.arts-side .links a+a{border-left:0;border-top:1px solid var(--line)}
+.arts-side{display:grid;gap:16px;min-width:0;position:sticky;top:84px}
+.arts-main .art{padding:30px 34px 10px}
+.arts-main .art h2{font-size:clamp(21px,2vw,25px);line-height:1.4}
+.arts-main .art.lead h2{font-size:clamp(23px,2.4vw,29px)}
+.arts-main .art .sum{font-size:16.5px}
 .art{padding:26px 26px 8px}
 .art.lead{padding:30px 32px 10px}
 .kick{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:10px}
@@ -171,8 +179,8 @@ button,input,select{font:inherit;color:inherit}
 .yn button[aria-pressed="true"]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 0 0 1px var(--line2)}
 .yn button[data-v="y"][aria-pressed="true"]{background:var(--ink);color:var(--card);box-shadow:none}
 .disc{font-size:12.5px;color:var(--muted);padding-block:18px 64px}
-@media (max-width:960px){.arts{grid-template-columns:minmax(0,1fr)}.day-h{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:36px 20px}.tally{justify-items:start;justify-self:start}}
-@media (max-width:560px){.art,.art.lead{padding:22px 18px 6px}.art.lead .sum{font-size:16px}}
+@media (max-width:960px){.arts{grid-template-columns:minmax(0,1fr)}.arts-side{position:static}.day-h{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:36px 20px}.tally{justify-items:start;justify-self:start}}
+@media (max-width:560px){.art,.art.lead,.arts-main .art{padding:22px 18px 6px}.art.lead .sum{font-size:16px}}
 
 
 /* 퍼즐 */
@@ -655,6 +663,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
   </div>
 
   <div class="arts">
+    <div class="arts-main">
     <article class="card art lead" data-art="a1">
       <p class="kick"><span>국내</span><span>외환</span><span class="mono">금융계 · 10.01</span></p>
       <h2><a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1FV2MycjZIS3c5UldYT0pfTmZCTk9jMGNLUDBJUjBxNUQ0RFc4dWpIVzM0OTl5MjRiZTNHaUh1WGs4QkNkVExkcUc3a1dObm9oM2VXckFUVHhKd1hZeHdPeUlqWFZrWEXSAWtBVV95cUxPRFFoNUJCY1ZLWGNqbHZ3aXNnQkZMWlRFWUxEN3RfNUtTeE5adXFTSHJVd1VPSnRiTVgtZHhRMjZwWHJMOTd3M2VVR0lZQkp3TGN1R0FlNW42SVdoZ3RPRENac0JWSnU5bU9ZYw?oc=5" target="_blank" rel="noopener">불법 외환거래 20조 돌파…가상자산 낀 '환치기' 수법도 등장<span aria-hidden="true"> ↗</span></a></h2>
@@ -669,7 +678,6 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
       </ol>
     </article>
 
-    <div class="arts-side">
       <article class="card art" data-art="a2">
         <p class="kick"><span>국내</span><span>가상자산</span><span class="mono">이데일리 · 10.02</span></p>
         <h2><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxOQ3dLSjZVYXJMaWVZSlZPYUFQRy1lZU9tMkcwUEhMYUMtOXFhY0NELW9fZjF1RlBRLVdYVl9pbFZnZFFlNmdrbWU0U2RsRUl6Q3pFY2ZYRGJOQmx0dHY1YlBRNDYteHZkbGMxLWt1N2Q2RFF5bGJ2dVNuVXp5cjRMNg?oc=5" target="_blank" rel="noopener">4년여 만에 KOK코인 자금 움직였다…"자금세탁 경고등"<span aria-hidden="true"> ↗</span></a></h2>
@@ -686,6 +694,9 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
           <li data-c="a3-1"><span class="no">1</span><div><p class="lv">점검 권장</p><p class="ins">해킹 피해금은 곧바로 세탁 경로로 빠져요. 사고 관련 계좌·지갑 주소를 요주의 목록에 얼마나 빨리 반영하는지 절차를 확인해 보세요.</p></div><div class="yn" role="group" aria-label="우리 회사 해당 여부"><button type="button" data-v="y">해당</button><button type="button" data-v="n">해당 없음</button></div></li>
         </ol>
       </article>
+    </div>
+
+    <div class="arts-side">
       <a class="card lg-nudge" href="#lounge" data-go="lounge"><small>오늘의 실무 투표</small><b id="lgNudgeQ"></b><span class="mono" id="lgNudgeN">1초 투표 →</span></a>
       <div class="card myscrap"><div class="card-h"><h3>내 스크랩</h3><span id="scN"></span></div><ol class="sc-list" id="scList"></ol></div>
       <a class="card pz-nudge" href="#puzzle" data-go="puzzle"><span><b>오늘의 스도쿠</b><small id="nudgeTxt">아직 안 풀었어요 · 보통 5~10분</small></span><span class="mono">풀기 →</span></a>
@@ -850,6 +861,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
     </div>
   </div>
   <div class="body pz-body">
+    <div class="stack">
     <div class="card lg-main">
       <div class="lg-q"><p>오늘의 질문</p><h2 id="lgQ"></h2></div>
       <div class="lg-sel"><label for="lgSector">내 업권</label><select id="lgSector"><option value="">고르면 업권별 결과도 보여요</option><option>은행</option><option>증권</option><option>보험</option><option>저축은행</option><option>상호금융</option><option>카드</option><option>전자금융·PG</option><option>가상자산</option><option>소액해외송금</option><option>카지노</option><option>대부업</option><option>기타</option></select></div>
@@ -868,9 +880,6 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
         <ol class="lg-list" id="lgList"></ol>
       </div>
     </div>
-    <div class="stack">
-      <div class="card"><div class="card-h"><h3>오늘 기사, 실무자 체크</h3><span>우리 회사 해당 비율</span></div><ol class="lg-chk" id="lgChk"></ol></div>
-      <div class="card"><div class="card-h"><h3>많이 스크랩한 인사이트</h3><span>회원 스크랩 순</span></div><ol class="lg-top" id="lgTop"></ol></div>
       <div class="card"><div class="card-h"><h3>지난 투표</h3><span>날마다 쌓이는 실무 현황</span></div><ol class="lg-notes" id="lgPast"></ol></div>
       <div class="card how"><div class="card-h"><h3>라운지 약속</h3></div><ul>
         <li>투표는 이름 없이 업권만 집계해요. 하루에 한 번, 고치지 않아요.</li>
@@ -878,6 +887,10 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
         <li>투표 결과와 의견은 AML 인사이트 블로그·리포트에 인용될 수 있어요.</li>
         <li>신고가 3건 쌓인 의견은 자동으로 가려져요.</li>
       </ul></div>
+    </div>
+    <div class="stack">
+      <div class="card"><div class="card-h"><h3>오늘 기사, 실무자 체크</h3><span>우리 회사 해당 비율</span></div><ol class="lg-chk" id="lgChk"></ol></div>
+      <div class="card"><div class="card-h"><h3>많이 스크랩한 인사이트</h3><span>회원 스크랩 순</span></div><ol class="lg-top" id="lgTop"></ol></div>
       <div class="card" id="lgAdmin" hidden><div class="card-h"><h3>운영자 도구</h3><span>나에게만 보여요</span></div><div class="lg-adm"><p id="lgAdminTxt"></p><button class="btn line" type="button" id="lgExport">투표·의견 CSV로 내려받기</button></div></div>
     </div>
   </div>
@@ -925,7 +938,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
       <p class="mcap" style="margin-top:14px">OFAC·UN·EU에 더해 금융위원회가 지정·고시한 금융거래등제한대상자(<span id="kfNote">고시 제2026-2호, 2026.1.14. 발령 기준 1,066명</span>)도 함께 찾아요. 철자가 조금 달라도 찾을 수 있게 이름 일치율 85% 이상을 모두 보여 드려요. 입력한 이름은 이 화면 밖으로 나가지 않아요.</p>
     </div>
   </div>
-  <div class="body">
+  <div class="body eq">
     <div class="card" id="resCard">
       <div class="res-h"><p id="resSum">이름을 입력하면 결과가 여기에 나와요.</p><button class="btn sm line" type="button" id="capBtn" disabled>결과 캡처</button></div>
       <div class="legend"><span class="bd hi">높음 95% 이상</span><span>바로 확인</span><span class="bd mid">검토 90~94%</span><span>생년월일·국적으로 대조</span><span class="bd lo">낮음 85~89%</span><span>참고</span></div>
@@ -1040,7 +1053,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
       <div class="mbar" id="m3bar"></div>
     </div>
   </div>
-  <div class="body">
+  <div class="body eq">
     <div class="card">
       <div class="card-h"><h3>캘린더</h3><div class="chips" id="calChips" role="group" aria-label="일정 구분"></div></div>
       <ul class="ev" id="calList"></ul>
@@ -2274,9 +2287,9 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
     var a=document.createElement("article");a.className="card art"+(i===0?" lead":"");a.setAttribute("data-art","a"+(i+1));
     a.innerHTML='<p class="kick">'+(it.tags||[]).slice(0,3).map(function(t){return "<span>"+esc(t)+"</span>"}).join("")+'<span class="mono">'+esc(it.src||"")+'</span></p><h2><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(it.title||"")+'<span aria-hidden="true"> ↗</span></a></h2><div class="sum">'+sum+'</div><ol class="checks">'+checks+'</ol>';return a}
   function renderArts(D){if(!D||!D.items||!D.items.length||!D.date)return;if(D.date===DAILY.date&&DAILY.rendered)return;
-    var wrap=document.querySelector("#p-today .arts"),side=wrap.querySelector(".arts-side");
+    var wrap=document.querySelector("#p-today .arts-main");
     [].forEach.call(wrap.querySelectorAll(".art"),function(a){a.remove()});
-    D.items.slice(0,5).forEach(function(it,i){var a=mkArt(it,i);if(i===0)wrap.insertBefore(a,side);else side.insertBefore(a,side.children[i-1])});
+    D.items.slice(0,5).forEach(function(it,i){wrap.appendChild(mkArt(it,i))});
     DAILY={date:D.date,n:D.items.length,rendered:true};
     $("tdEye").innerHTML='<span class="dot" aria-hidden="true"></span><b>TODAY</b>'+ymdLabel(D.date)+' · 평일 아침 발행';$("tdCnt").textContent=D.items.length;
     ck="ai_judge_"+D.date;J=LS.get(ck)||{};if(SC)SC.day=D.date;
