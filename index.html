@@ -238,6 +238,13 @@ button,input,select{font:inherit;color:inherit}
 
 
 .chips.gsw{display:inline-flex;margin-top:18px}
+.hero.solo{grid-template-columns:minmax(0,1fr);padding-bottom:20px}
+.hero.solo .inst{display:none}
+.body.pz-stress{display:block;padding-bottom:56px}
+.pz-stress iframe{display:block;width:100%;height:900px;border:0;background:transparent}
+.pz-stress-out{margin-top:10px;text-align:right;font-size:13px}
+.pz-stress-out a{color:var(--muted);text-decoration:none}
+.pz-stress-out a:hover{color:var(--ink)}
 .gsw .chip{padding:7px 16px;font-size:14px}
 .ms-meta{display:flex;align-items:baseline;gap:8px}
 .ms-meta small{font-size:12px;color:var(--muted);margin-right:10px}
@@ -699,7 +706,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
     <div class="arts-side">
       <a class="card lg-nudge" href="#lounge" data-go="lounge"><small>오늘의 실무 투표</small><b id="lgNudgeQ"></b><span class="mono" id="lgNudgeN">1초 투표 →</span></a>
       <div class="card myscrap"><div class="card-h"><h3>내 스크랩</h3><span id="scN"></span></div><ol class="sc-list" id="scList"></ol></div>
-      <a class="card pz-nudge" href="#puzzle" data-go="puzzle"><span><b>오늘의 스도쿠</b><small id="nudgeTxt">아직 안 풀었어요 · 보통 5~10분</small></span><span class="mono">풀기 →</span></a>
+      <a class="card pz-nudge" href="#puzzle" data-go="puzzle" data-game="s"><span><b>오늘의 스도쿠</b><small id="nudgeTxt">아직 안 풀었어요 · 보통 5~10분</small></span><span class="mono">풀기 →</span></a>
       <div class="card links">
         <a href="https://www.youtube.com/results?search_query=AML+%EC%9D%B8%EC%82%AC%EC%9D%B4%ED%8A%B8" target="_blank" rel="noopener">오늘 이슈 10분 강의<span>YouTube ↗</span></a>
         <a href="#today">블로그에서 자세히<span>Blog ↗</span></a>
@@ -712,10 +719,10 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
 
 <!-- 퍼즐 -->
 <section class="panel" id="p-puzzle" role="tabpanel" aria-label="오늘의 퍼즐" hidden>
-  <div class="hero">
+  <div class="hero" id="pzHero">
     <div>
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><b>DAILY PUZZLE</b><span id="pzDate"></span> · 자정에 새 문제</p>
-      <h1>오늘의 <span class="mk" id="gName">스도쿠</span></h1>
+      <p class="eyebrow" id="pzEye"><span class="dot" aria-hidden="true"></span><b>DAILY PUZZLE</b><span id="pzDate"></span> · 자정에 새 문제</p><p class="eyebrow" id="stEye" hidden><span class="dot" aria-hidden="true"></span><b>STRESS ROOM</b>쉬어가기 · 순위 없이 마음껏</p>
+      <h1><span id="gPre">오늘의 </span><span class="mk" id="gName">스도쿠</span></h1>
       <p class="lede" id="pzLede">매일 모두가 같은 문제를 풀어요. 오늘 안에 풀면 기록이 순위에 올라가고, 다 풀면 오늘의 AML 용어 하나를 알려 드려요.</p>
       <div class="chips gsw" id="gameSw" role="group" aria-label="게임 고르기"></div>
     </div>
@@ -840,6 +847,10 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
       </div>
       <div class="card how"><div class="card-h"><h3>하는 방법</h3></div><ul id="acHow"></ul></div>
     </div>
+  </div>
+  <div class="body pz-stress" id="g-stress" hidden>
+    <iframe id="stressFrame" title="AML 스트레스 격파실" allow="autoplay"></iframe>
+    <p class="pz-stress-out"><a href="stress/" target="_blank" rel="noopener">새 창에서 크게 열기 →</a></p>
   </div>
 </section>
 
@@ -1192,11 +1203,11 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
     if(k==="admin")loadAdmin();
     if(k==="today"&&DAILY){document.querySelector('.seg a[data-go="today"]').classList.remove("new");LS.set("ai_seen_day",DAILY.date)}
     if(typeof visitTab==="function")visitTab(k);
-    if(typeof pzPause==="function"){if(k==="puzzle")pzResume();else pzPause()}
+    if(typeof pzPause==="function"){if(k==="puzzle")pzResume();else{pzPause();stressFrame(false)}}
     if(push){try{history.replaceState(null,"","#"+k)}catch(e){}window.scrollTo(0,0)}
   }
   document.addEventListener("click",function(e){
-    var a=e.target.closest&&e.target.closest("[data-go]");if(a){e.preventDefault();go(a.getAttribute("data-go"),true);return}
+    var a=e.target.closest&&e.target.closest("[data-go]");if(a){e.preventDefault();var gm=a.getAttribute("data-game");if(gm&&typeof pickGame==="function")pickGame(gm);go(a.getAttribute("data-go"),true);return}
     var s=e.target.closest&&e.target.closest("[data-scroll]");if(s){e.preventDefault();$(s.getAttribute("data-scroll")).scrollIntoView({behavior:"smooth",block:"center"});return}
     var c=e.target.closest&&e.target.closest('a[href="#h-cert"]');if(c){e.preventDefault();$("cert").scrollIntoView({behavior:"smooth",block:"center"})}
   });
@@ -1633,13 +1644,15 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
   loadLevel("n");initLB();
   /* ---------- 게임 전환 ---------- */
   var GAME="s";
-  function pzResume(){if(GAME==="s")run();else if(GAME==="m")msRun()}
+  function stressFrame(on){var f=$("stressFrame");if(!f)return;var want=on?"stress/?embed=1":"";if(on){if(!f.getAttribute("src"))f.setAttribute("src",want)}else if(f.getAttribute("src")){f.removeAttribute("src");try{f.contentWindow.location.replace("about:blank")}catch(e){}}}
+  window.addEventListener("message",function(e){if(e.origin!==location.origin||!e.data||e.data.type!=="aml-stress-h")return;var h=+e.data.h;if(h>200&&h<6000)$("stressFrame").style.height=h+"px"});
+  function pzResume(){if(GAME==="x")stressFrame(true);else if(GAME==="s")run();else if(GAME==="m")msRun()}
   function pzPause(){pause();msPause();if(typeof acPause==="function")acPause()}
-  function setGame(g){pzPause();GAME=g;$("g-sudoku").hidden=g!=="s";$("g-mines").hidden=g!=="m";$("g-arcade").hidden="dckf".indexOf(g)<0;
-    $("gName").textContent={s:"스도쿠",m:"대포통장 찾기",d:"자금 피하기",c:"흐름 끊기",k:"결재 팡팡",f:"자금세탁 방어전"}[g];
-    $("pzLede").textContent={s:"매일 모두가 같은 문제를 풀어요. 오늘 안에 풀면 기록이 순위에 올라가고, 다 풀면 오늘의 AML 용어 하나를 알려 드려요.",m:"계좌 사이에 숨은 대포통장을 찾아 STR 표시를 하세요. 매일 모두가 같은 판을 풀고, 첫 판 기록만 순위에 올라가요.",d:"AML맨을 움직여 쏟아지는 대포통장과 환치기를 피하세요. 몇 판이든 할 수 있고, 오늘 최고 점수가 순위에 올라가요.",c:"날아오르는 거래 중 수상한 것만 그어서 팡팡 끊으세요. 정상 거래를 끊으면 감점이에요.",k:"거래 한 줄을 보고 순간 판단해요. 정상이면 화면 왼쪽, 의심되면 오른쪽을 누르면 팡 터지면서 바로 정답이 나와요. 연속으로 맞히면 피버.",f:"좌우로 움직이며 숫자 게이트를 골라 요원 부대를 키우고, 몰려오는 자금세탁 악당과 총책을 막아내세요. 오늘 최고 점수가 순위에 올라가요."}[g];
+  function setGame(g){pzPause();GAME=g;$("g-sudoku").hidden=g!=="s";$("g-mines").hidden=g!=="m";$("g-arcade").hidden="dckf".indexOf(g)<0;$("g-stress").hidden=g!=="x";$("pzHero").classList.toggle("solo",g==="x");$("pzEye").hidden=g==="x";$("gPre").hidden=g==="x";$("stEye").hidden=g!=="x";stressFrame(g==="x"&&!$("p-puzzle").hidden);
+    $("gName").textContent={x:"스트레스 격파실",s:"스도쿠",m:"대포통장 찾기",d:"자금 피하기",c:"흐름 끊기",k:"결재 팡팡",f:"자금세탁 방어전"}[g];
+    $("pzLede").textContent={x:"AML 용어가 지겹고 사람이 지칠 때, 한 판만 부수고 가세요. 용어 격파, 칸막이 두더지, 퇴근길 달리기, 금융범죄 저격 중에 골라요.",s:"매일 모두가 같은 문제를 풀어요. 오늘 안에 풀면 기록이 순위에 올라가고, 다 풀면 오늘의 AML 용어 하나를 알려 드려요.",m:"계좌 사이에 숨은 대포통장을 찾아 STR 표시를 하세요. 매일 모두가 같은 판을 풀고, 첫 판 기록만 순위에 올라가요.",d:"AML맨을 움직여 쏟아지는 대포통장과 환치기를 피하세요. 몇 판이든 할 수 있고, 오늘 최고 점수가 순위에 올라가요.",c:"날아오르는 거래 중 수상한 것만 그어서 팡팡 끊으세요. 정상 거래를 끊으면 감점이에요.",k:"거래 한 줄을 보고 순간 판단해요. 정상이면 화면 왼쪽, 의심되면 오른쪽을 누르면 팡 터지면서 바로 정답이 나와요. 연속으로 맞히면 피버.",f:"좌우로 움직이며 숫자 게이트를 골라 요원 부대를 키우고, 몰려오는 자금세탁 악당과 총책을 막아내세요. 오늘 최고 점수가 순위에 올라가요."}[g];
     var arc="dckf".indexOf(g)>-1;$("stL1").textContent=arc?"오늘 내 최고":"내 기록";$("stL2").textContent="오늘 1위";$("stL3").textContent=arc?"오늘 판 수":"연속 완료";
-    if(g==="s"){drawStats();drawRank();$("pzLvLab").textContent=LVN[pz.lv]}else if(g==="m"){msStats();drawMsRank()}else{acSetup(g)}
+    if(g==="s"){drawStats();drawRank();$("pzLvLab").textContent=LVN[pz.lv]}else if(g==="m"){msStats();drawMsRank()}else if(g!=="x"){acSetup(g)}
     if(!$("p-puzzle").hidden)pzResume()}
 
   /* ---------- 오늘의 지뢰찾기 ---------- */
@@ -1727,7 +1740,8 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
   $("msFlag").onclick=function(){ms.flag=!ms.flag;this.setAttribute("aria-pressed",ms.flag);this.textContent=ms.flag?"STR 표시 켬":"STR 표시 끔"};
   $("msPractice").onclick=function(){msPause();$("msPractice").hidden=true;ms.practice=true;ms.B=msGen(pz.day,ms.lv,"|p"+Date.now());ms.st={s:"play",e:0,rev:{},fl:{}};flood(ms.B.start);$("msCover").hidden=true;$("mfield").classList.remove("blur");$("mfield").innerHTML="";$("msMsg").textContent="연습 판이에요. 새로 섞은 판이라 순위에는 올라가지 않아요.";msDraw();msRun()};
   chips($("msLv"),["보통","어려움"],"보통",function(t){msLoad(t==="보통"?"n":"h");$("mfield").innerHTML="";msDraw();if(ms.st.s==="play")msRun()});
-  chips($("gameSw"),["스도쿠","대포통장 찾기","자금 피하기","흐름 끊기","결재 팡팡","방어전"],"스도쿠",function(t){setGame({"스도쿠":"s","대포통장 찾기":"m","자금 피하기":"d","흐름 끊기":"c","결재 팡팡":"k","방어전":"f"}[t])});
+  chips($("gameSw"),["스트레스 격파실","스도쿠","대포통장 찾기","자금 피하기","흐름 끊기","결재 팡팡","방어전"],"스트레스 격파실",function(t){setGame({"스트레스 격파실":"x","스도쿠":"s","대포통장 찾기":"m","자금 피하기":"d","흐름 끊기":"c","결재 팡팡":"k","방어전":"f"}[t])});
+  function pickGame(g){var n={x:"스트레스 격파실",s:"스도쿠",m:"대포통장 찾기",d:"자금 피하기",c:"흐름 끊기",k:"결재 팡팡",f:"방어전"}[g];if(!n)return;[].forEach.call($("gameSw").children,function(b){b.setAttribute("aria-pressed",b.textContent===n)});setGame(g)}
   msLoad("n");
   /* ---------- 아케이드: 자금 피하기 · 흐름 끊기 · 결재 폭탄 · 자금세탁 방어전 ---------- */
   /* 키워드 풀: [용어, 쉬운 설명]. 오늘의 키워드 5개는 날짜로 자동으로 뽑혀서 매일 바뀌어요 */
@@ -2499,6 +2513,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
   function lxOpen(){var M=LX.meta;if(M&&M.latest)LS.set("ai_seen_lex",M.latest);document.querySelector('.seg a[data-go="law"]').classList.remove("new");lxLoad()}
   setTimeout(lxMeta,1200);
   if(pz.done&&!pz.practice)showTerm("pzTerm",0);if(ms.st&&ms.st.s==="won"&&!ms.practice)showTerm("msTerm",1);
+  try{setGame("x")}catch(e){}
   go((location.hash||"#today").slice(1),false);
 })();
 </script>
