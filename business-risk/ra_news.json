@@ -1,9 +1,9 @@
 {
-  "generated": "2026-10-24T09:54:05.837467+09:00",
-  "today": "2026-10-24",
-  "total_news": 463,
-  "kr": 261,
-  "en": 202,
+  "generated": "2026-10-25T09:27:12.769394+09:00",
+  "today": "2026-10-25",
+  "total_news": 555,
+  "kr": 298,
+  "en": 257,
   "ranking": [
     {
       "name": "가상자산사업자",
@@ -13,15 +13,15 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 66,
+      "news_count": 114,
       "struct": 70,
       "hits": [
         {
           "t": "\"자금세탁 사전 차단\" … 케이뱅크, 스테이블코인 시대 대비 인프라 구축 - 뉴데일리",
           "src": "뉴데일리",
-          "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNX2lydnIzMW4wNkFMQ3N4SVB2a1lVWEdpOC1Qa25IUklZb2ZPVWFDeERzSmg1X0RuekVuUWJTTGt6enBHYTBpaVhaMDhfQ200VUVCdzdEU0duOXNWY1JNVDR5Sk9PY0NBeFhQTmNLMk5KM2toMDdIN0RLMGp3X2tBaNIBgAFBVV95cUxNX2lydnIzMW4wNkFMQ3N4SVB2a1lVWEdpOC1Qa25IUklZb2ZPVWFDeERzSmg1X0RuekVuUWJTTGt6enBHYTBpaVhaMDhfQ200VUVCdzdEU0duOXNWY1JNVDR5Sk9PY0NBeFhQTmNLMk5KM2toMDdIN0RLMGp3X2tBaA?oc=5",
+          "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5LODdFX0Vfb1BYZlNjR19DX1B3VUVjV0ctanF6MS1mTDR4elVIczhGNFpfZmt1VGdGZC1TaThLc21NNmU5Z2h3R0lXYUw2ZlU5c2hYZS1GZnNNUEFWa1lGdEZGT25oc2llNDhEZ2ozR3laMUVPZmlkXzdtSdIBgAFBVV95cUxNX2lydnIzMW4wNkFMQ3N4SVB2a1lVWEdpOC1Qa25IUklZb2ZPVWFDeERzSmg1X0RuekVuUWJTTGt6enBHYTBpaVhaMDhfQ200VUVCdzdEU0duOXNWY1JNVDR5Sk9PY0NBeFhQTmNLMk5KM2toMDdIN0RLMGp3X2tBaA?oc=5",
           "lang": "KR",
-          "pub": "Wed, 21 Oct 2026 04:52:48 GMT"
+          "pub": "Wed, 21 Oct 2026 04:52:00 GMT"
         },
         {
           "t": "케이뱅크, 가상자산 자금세탁방지 강화⋯거래 분석 솔루션 도입 - 이투데이",
@@ -31,27 +31,6 @@
           "pub": "Wed, 21 Oct 2026 01:53:00 GMT"
         },
         {
-          "t": "케이뱅크, 가상자산 자금세탁방지 강 - 이투데이",
-          "src": "이투데이",
-          "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9xOGlIS1Zvb3FSSGdrTkEtWnA3bVBJeno2WnJHZXEzS2ItbGZONlQtb0phdTNmSlh3bENSTGRyYVVDd1RiNDd3bWlvTHAzdFJlazRnWDhDQ1JxVXFqS3lOLVJqMVBielBF?oc=5",
-          "lang": "KR",
-          "pub": "Wed, 21 Oct 2026 17:41:44 GMT"
-        },
-        {
-          "t": "[국감] \"장부 오류도 못 잡는데 자금세탁 막겠나\"…가상자산거래소 감독 부실 질타 - 핀포인트뉴스",
-          "src": "핀포인트뉴스",
-          "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8xZlNTaU0tV1Y1LXRadU5aUnhiUEF5amt1aFV0cE5HQ2I5d1VqTE9Oc3ZSVGZQUTBGUGRpaGhEdzBEbkxlUTZDNHZpUkNuSEkwVFUzc0t5OHh4MHFlV1I0aHpQNjJ0WHdYaHlYSk0wOHE4OWM?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 19 Oct 2026 06:16:09 GMT"
-        },
-        {
-          "t": "통장 돈 코인으로 보냈을 뿐인데… 자금세탁 공범 될까 - 로톡",
-          "src": "로톡",
-          "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5oUG5IVnRGZDJZWjBaNlZfejVkWUZPUElZaEVsWlFCWFVfUXdQcElybFZ2WXp0ekVKN2VIYmRWdXFGLVF6aGU5TWIyU3AxRXc?oc=5",
-          "lang": "KR",
-          "pub": "Fri, 09 Oct 2026 22:05:51 GMT"
-        },
-        {
           "t": "은행권, '코인 자금세탁' 막는다…AI로 의심거래까지 추적 - 전자신문",
           "src": "전자신문",
           "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9qcTltS3pfTmgxSzNWZmU5YVJxSXFGTEFHRTBUWDJHYUdHSWtXcWVPWVJhRy1udnctOV9rSUZsZ2t2cTNRdUdteUNEcDBqQQ?oc=5",
@@ -59,18 +38,18 @@
           "pub": "Sun, 30 Aug 2026 07:00:00 GMT"
         },
         {
-          "t": "'발행 주체 누구' 집중된 스테이블코인, '자금세탁 방지' 중요 과제로 - 뉴스1",
-          "src": "뉴스1",
-          "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFAxMUlMYzZndmNHTWMxcC00cmpWdnUwX0lTUnlXWXZIbTEyQjRLOUxHVnlmemUyVFVKX3hFcUs0YnZYN2QzN0JDWVRhUTJsOFFlQTUxck1jcEFyOGlxWTBESHZfS3ZTUQ?oc=5",
+          "t": "모네로(XMR) 4.42% 급락…자금세탁 의혹·레버리지 경고 겹쳤다 - 코인리더스",
+          "src": "코인리더스",
+          "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1RLUE4OUMweTlJX0x2SmdIVXJBNUJPQWFDclBTZTRja0hPeUlqdG9JbDFNdWJYcFhvVXhxSlV5Ui1fV3lFU3k4X3FR?oc=5",
           "lang": "KR",
-          "pub": "Tue, 29 Sep 2026 07:00:00 GMT"
+          "pub": "Wed, 21 Oct 2026 06:02:20 GMT"
         },
         {
-          "t": "[단독]4년여 만에 KOK코인 자금 움직였다…“자금세탁 경고등” - 이데일리",
-          "src": "이데일리",
-          "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOQ3dLSjZVYXJMaWVZSlZPYUFQRy1lZU9tMkcwUEhMYUMtOXFhY0NELW9fZjF1RlBRLVdYVl9pbFZnZFFlNmdrbWU0U2RsRUl6Q3pFY2ZYRGJOQmx0dHY1YlBRNDYteHZkbGMxLWt1N2Q2RFF5bGJ2dVNuVXp5cjRMNg?oc=5",
+          "t": "케이뱅크, 가상자산 자금세탁방지 강 - 이투데이",
+          "src": "이투데이",
+          "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9xOGlIS1Zvb3FSSGdrTkEtWnA3bVBJeno2WnJHZXEzS2ItbGZONlQtb0phdTNmSlh3bENSTGRyYVVDd1RiNDd3bWlvTHAzdFJlazRnWDhDQ1JxVXFqS3lOLVJqMVBielBF?oc=5",
           "lang": "KR",
-          "pub": "Fri, 02 Oct 2026 07:00:00 GMT"
+          "pub": "Wed, 21 Oct 2026 17:41:44 GMT"
         },
         {
           "t": "미 재무부 \"'이란 자금세탁' 가상화폐 거래소들 제재\" - MBC 뉴스",
@@ -80,18 +59,39 @@
           "pub": "Sat, 08 Aug 2026 07:00:00 GMT"
         },
         {
-          "t": "'발행 주체 누구' 집중된 스테이블코인, '자금세탁 방지' 중요 과제로 - 데일리머니",
-          "src": "데일리머니",
-          "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE4yMkVVLVVMajVLVlVCMEg5X1NKTHFJRDhjV3NTTHE3YXBnVENLdUdJQXJxNVJtUmNzMGNjak83VlJmVk9takVfcjZJY2tLbmg5QmNMakZMNXdWbDhsT213YzFaa2dxbGpLRjUzUllZdVlNQdIBdkFVX3lxTE1NSHJ1alc2aXRvd1hIYk53OE51M0ZrQWxaakJ4ZWlRMVd4MS1UMVRkV1UwMjl5a2hWSnBvTWdGcFlYQWdJdDg2Mkg5Q0paTlRJSXktRFhhQkh4UE5tQkZGalFPaGFtc21DdVR6Ylgtd2JfY2NTZ2c?oc=5",
-          "lang": "KR",
-          "pub": "Tue, 29 Sep 2026 07:00:00 GMT"
-        },
-        {
           "t": "中, 비트코인 자금세탁 등 불법거래 탐지 AI 개발…\"정확도 90%\" - 연합뉴스",
           "src": "연합뉴스",
           "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9yZXJUb3YxQ0dBcXpGVjczX2t6Tl9lUTQ1Um9NZXJ6UjVJc1JPT0VPRFZ5Y2xOLUtoUU9CRHhjMmdoZGhkUUZfcXUtMm9kOUVNdl92N0FMM0hyNHfSAWBBVV95cUxPX09HWHBucEhob05BejRZQ3FtdEJaRGZaNTZkUHRRenZPRlJYcTdjemlHV3I1YlBBcTVFZWZuYk5fekNsWVVkNnFsTzg1dktWVlM3Wkw4UVFOU1Y4RXVEbDQ?oc=5",
           "lang": "KR",
           "pub": "Sun, 02 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "t": "그림자 추적: 트랜잭션 의미 분석을 통한 암호화폐 자금 세탁의 자동 추적 및 분석 - alphaXiv",
+          "src": "alphaXiv",
+          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5JZkJhNFlHckJmZUw0VEh6UnoxNU5UTlVuQjVnUVkyT2tkaldaQV9XeWlMT21qYTd1T2JWUHJhNWRwMmlPREV5STVsQS1nekJhU21vSg?oc=5",
+          "lang": "KR",
+          "pub": "Sun, 04 Oct 2026 07:19:30 GMT"
+        },
+        {
+          "t": "美재무부 \"'이란 자금세탁' 가상화폐 거래소들 제재\" - 연합뉴스",
+          "src": "연합뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE41QVdqMG14eWpKcDRtVVhhNk04NzVaTV9IanBaVXVhSkQxc29aM0ZKMTlRLWQ0YnZNcWRNNm9FZXF0LXVwUlpNOFlrV08wNk82X2JJU1I0WlcxVkHSAWBBVV95cUxPaDRwaGJMdHQ3Nk0wNVlyOUtBRTR2bnRLY2xndWQ2MmdGZUU5d2tzRURhSmVnZDVheTkyaWxmSlMwRDBnRlVNV3R4RUo2TG80MjBfOFNFUWNXZU1Ha0xNaXE?oc=5",
+          "lang": "KR",
+          "pub": "Sat, 08 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "t": "[국감] \"장부 오류도 못 잡는데 자금세탁 막겠나\"…가상자산거래소 감독 부실 질타 - 핀포인트뉴스",
+          "src": "핀포인트뉴스",
+          "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8xZlNTaU0tV1Y1LXRadU5aUnhiUEF5amt1aFV0cE5HQ2I5d1VqTE9Oc3ZSVGZQUTBGUGRpaGhEdzBEbkxlUTZDNHZpUkNuSEkwVFUzc0t5OHh4MHFlV1I0aHpQNjJ0WHdYaHlYSk0wOHE4OWM?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 19 Oct 2026 06:16:09 GMT"
+        },
+        {
+          "t": "금융위, 가상자산 자금세탁 추적 강화…분석 솔루션에 19억원 증액 - 블루밍비트",
+          "src": "블루밍비트",
+          "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5MTVVIREcxbTI3dHU5NTlROS1rcUxUX1hZcDRQVnJ0S2txOHNWc2tVX1lQeHhtYnRFOVZqUkNZU3BxbFNLXzNhbW1RSnVfU0o4?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 07 Sep 2026 07:00:00 GMT"
         },
         {
           "t": "양부남 “KOK 코인 사기 주범 4명 해외 도피…범죄수익 환수 17.3%” - 한국금융경제신문",
@@ -112,9 +112,16 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 39,
+      "news_count": 43,
       "struct": 70,
       "hits": [
+        {
+          "t": "불법 도박사이트 자금 270억 세탁한 일당 8명 검찰 송치 - KBC광주방송",
+          "src": "KBC광주방송",
+          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9EVk5tUjZld1dENXV5elQ4OXBJMmJpQW9XbmZIYVBnWkU1N2Y5RmJuUzdSX05xalV6NWxqb08zVHRQVU5IOVdFRnBkYkh4OVJTeDRMNlNicUp5a0wxZGdGYg?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 12 Oct 2026 07:00:00 GMT"
+        },
         {
           "t": "공기업 카지노 계좌가 ‘범죄 자금 세탁’ 통로로…8년째 방치 - KBS 뉴스",
           "src": "KBS 뉴스",
@@ -127,21 +134,7 @@
           "src": "연합뉴스",
           "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5mZGQwVHJ3Ym5hbERsdkEyeXRza2FWSFpKSC00TXY3NFJWNmQzSmI5bzJkaDB6aFpjWFVxUEJ0UG42TW5BcDI2eXgzMGNIcjNOejExNzR3clpuQjjSAWBBVV95cUxOeWtNcmFzaUdoZGZqZFlQQmJUV3pENkw5TGtDQ2dqa0UxMFhKN0NjOXFWc2lYMEJ3TE0zUkwwX0EtRUJHTlVvSGtVM0d6V0ZXS1B1ajVCdVBib3lBeHJRV08?oc=5",
           "lang": "KR",
-          "pub": "Thu, 15 Oct 2026 02:00:00 GMT"
-        },
-        {
-          "t": "자금 세탁용 대포계좌로 도박사이트서 수십억 뜯은 일당…은행원도 연루 - BBS불교방송",
-          "src": "BBS불교방송",
-          "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBtdlZFNDZQMDZlV2taaFNWWktDTUhoclNKSDBUZl9JSDBjWGRiVHE2Wm1FTURiYnZ2S05zU1RlaGg1ZE4xa2E5X2JSeGFwMUtrQ3hvNmxmcUNFNE9hSXp4UXNjbm85UlZXTGJV?oc=5",
-          "lang": "KR",
-          "pub": "Tue, 13 Oct 2026 08:00:00 GMT"
-        },
-        {
-          "t": "불법 도박사이트 자금 270억 세탁한 일당 8명 검찰 송치 - KBC광주방송",
-          "src": "KBC광주방송",
-          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9EVk5tUjZld1dENXV5elQ4OXBJMmJpQW9XbmZIYVBnWkU1N2Y5RmJuUzdSX05xalV6NWxqb08zVHRQVU5IOVdFRnBkYkh4OVJTeDRMNlNicUp5a0wxZGdGYg?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 12 Oct 2026 07:00:00 GMT"
+          "pub": "Thu, 15 Oct 2026 07:00:00 GMT"
         },
         {
           "t": "불법도박사이트 자금 270억 원 세탁해준 조직 구속 - KBS 뉴스",
@@ -151,18 +144,25 @@
           "pub": "Mon, 12 Oct 2026 05:04:00 GMT"
         },
         {
-          "t": "불법 도박 사이트 자금 270억 세탁한 일당 8명 구속 송치 - KBC광주방송",
-          "src": "KBC광주방송",
-          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE44RzMwNmdySEVsYnRYU0ppYlluLWZwM1Y4NHdBXy11cXN3ZzJtejlybHFqempzVHk1dHFIeWdKUXBBTHNmejNuSDhMLVVFd25ETENXSlpoMW5jWV84LXVfeQ?oc=5",
+          "t": "자금 세탁용 대포계좌로 도박사이트서 수십억 뜯은 일당…은행원도 연루 - BBS불교방송",
+          "src": "BBS불교방송",
+          "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBtdlZFNDZQMDZlV2taaFNWWktDTUhoclNKSDBUZl9JSDBjWGRiVHE2Wm1FTURiYnZ2S05zU1RlaGg1ZE4xa2E5X2JSeGFwMUtrQ3hvNmxmcUNFNE9hSXp4UXNjbm85UlZXTGJV?oc=5",
           "lang": "KR",
-          "pub": "Tue, 13 Oct 2026 07:00:00 GMT"
+          "pub": "Tue, 13 Oct 2026 08:00:00 GMT"
+        },
+        {
+          "t": "제주도, 외국인카지노 3곳 자금세탁방지 전문검사 실시 - 헤드라인제주",
+          "src": "헤드라인제주",
+          "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5aX1YtMkRRRlF6U1ZUV0lGbVBnSWZ5ZUlMNnloa01oTVM0dmJkQUR5eUdreGs4ZlA4dFowbkQwRVRBaXdXZ3g0dnF6VDhlTGtMN3FfbXJpRkw4UERKV043ODFNQ3p4YnZOMzF5TkgxQWpndXM?oc=5",
+          "lang": "KR",
+          "pub": "Wed, 05 Aug 2026 07:00:00 GMT"
         },
         {
           "t": "투자사기로 잃은 돈, 카지노 거쳐 해외로…카지노 활용 자금세탁 조직 검거 - LG헬로비전",
           "src": "LG헬로비전",
           "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE5GV0tjTEY5TUxmNDNoMEpiY3hlQ1lBMy1jWm5kV0JsUDNzaVZscThDbUphY29ybGVVcFQtem5zaXFZTlVwbmdNLXZOY1lrMlFvcC0yUmFESlZaTlg4MzBPS3lXZ3c3MVQxZmJ3UURfcUxid9IBdkFVX3lxTE83YU8zajRSSXViQUZkTm1uSEx6dEtUUENmaFUtc01WVEZQTUl5RC1MX2tOVm9wSzRpcWtQT3U4YkcxYmdhbHc2N01IZlJWVnc4eXk1MXdzeVY5MXNNdHpoZTZlUDFKRmhPQ0E2YnVqb0hEMkJZX1E?oc=5",
           "lang": "KR",
-          "pub": "Thu, 15 Oct 2026 07:31:55 GMT"
+          "pub": "Thu, 15 Oct 2026 07:00:00 GMT"
         },
         {
           "t": "카지노서 투자사기 피해금 287억원 자금세탁…일당 54명 검거 - BBS뉴스",
@@ -170,6 +170,13 @@
           "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5ockxLcWxBeGZCSVV4ZXR1M19Ec0NydnZ4dlhmTk5xSGRxOVFkR0g5LTB1QzB3aVhiZEdaZ3EzZEpzaVZuNXBybm8tRk12RXFBeEk2V00teHNOeDVFUUFHVXVoVGtrNjNMY1Q0?oc=5",
           "lang": "KR",
           "pub": "Thu, 15 Oct 2026 05:56:18 GMT"
+        },
+        {
+          "t": "마약·도박 등 범죄 자금 추적 강화… 변호사·회계사도 자금세탁방지 의무 - 조선비즈 - Chosunbiz",
+          "src": "Chosunbiz",
+          "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOUUhGN2c3RmFubWQwbklMZVNsZkdEZjhwMjVudVJucFpaUHFaVEV6LVFfVHpHMnRoNTZZWHhtc3VzQmp3YUFpUWNiaDFYM0NMaDFaRW9EcUZQUnp2ZWlYZGQ5eXNCcFM5eFBHM0lPenFIalJMWGhJZy1wSGhHRmRwTNIBlAFBVV95cUxQdDJ3VUJtU0htMnVMeUFRd2s4amZObHBJbC14bjJpYm9WNnFMUXl6UlhpdDBlaVFkSEZlS0NHZ1g4Ung0cVFCeDdRYUUybjlhTXYxQzEzbzFTeTc1dk9ELWtpSFplSmJ5TXl2cDQwMkZ4ZXo1QjVXYTY2ZGVlRHVKWm9DanZzRXlCSTY2ZEZXWFBzVmR1?oc=5",
+          "lang": "KR",
+          "pub": "Wed, 16 Sep 2026 07:00:00 GMT"
         },
         {
           "t": "카지노서 투자사기 피해금 287억원 자금세탁…일당 54명 검거 - 채널A",
@@ -186,22 +193,15 @@
           "pub": "Thu, 15 Oct 2026 02:00:00 GMT"
         },
         {
-          "t": "투자사기 피해금 287억 원 카지노서 자금 세탁한 일당 54명 송치 - 뉴스1",
-          "src": "뉴스1",
-          "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5yUlRsMHprY2dvTzhfSjUzX3VQTlRvMnFjcHdaWkYwU1ZQWnM3N0NVTjZCdHBsWkV1T2h0a0ZGZ1ZrTWFDRl9SWElWendDM0djN3dzQks3UW1pU2hYSFpJ?oc=5",
+          "t": "불법 도박 사이트 자금 270억 세탁한 일당 8명 구속 송치 - KBC광주방송",
+          "src": "KBC광주방송",
+          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE44RzMwNmdySEVsYnRYU0ppYlluLWZwM1Y4NHdBXy11cXN3ZzJtejlybHFqempzVHk1dHFIeWdKUXBBTHNmejNuSDhMLVVFd25ETENXSlpoMW5jWV84LXVfeQ?oc=5",
           "lang": "KR",
-          "pub": "Thu, 15 Oct 2026 02:17:24 GMT"
-        },
-        {
-          "t": "불법 도박자금 270억 원 세탁한 20대 조직원 8명 구속 송치 - 노컷뉴스",
-          "src": "노컷뉴스",
-          "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5aSHdaUXQ1SnBraVRYV1A0XzVMTnMwbkdfVXpZdU9mNmtqaW1xOE93YXJ4MkoxNDVSNlFDRkRiS3Zkc3VGSHB0dFI4N0YtSmgyRnc?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 12 Oct 2026 07:00:00 GMT"
+          "pub": "Tue, 13 Oct 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 18,
-      "total": 88
+      "news_score": 11,
+      "total": 81
     },
     {
       "name": "환전·송금(MSB)",
@@ -211,7 +211,7 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 6,
+      "news_count": 8,
       "struct": 70,
       "hits": [
         {
@@ -229,6 +229,20 @@
           "pub": "Wed, 30 Sep 2026 05:15:42 GMT"
         },
         {
+          "t": "[2026국감] 간편송금 거친 보이스피싱 피해금, 계좌 지급정지 3.5배로 - 스트레이트뉴스",
+          "src": "스트레이트뉴스",
+          "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFB5NjUtQ0NsZzdiOElJTW1jZGJJeC1kLWdURVplUWxya3pqNmoxZXR4X1BaOWdXVEJGNWpMX216TkFkNlI0c3ZzV1hucmd2TXNmZGxMNTN2RDljdTViWkVTMkIxeDlLbFhRMEFaUmF6VkNuT0XSAXdBVV95cUxPS2JPaGI1NGZieUM0Wnp5SlBZYVUzQ0VfTmU4b1B4NEVwSVZxU2QxaXNfLV9uNlB2cXl5d2VuTUE0ZGxKX3VCdVd4dzFaaTNqNlhmSHZ5ZE0wMWx1YWc0UU5jMmtBR1dvSW91bVFLTWlJUzZKbkgycw?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 12 Oct 2026 22:06:08 GMT"
+        },
+        {
+          "t": "5대銀 상반기 간편송금 피싱 지급정지 3천건…작년比 250% 급증 - 연합뉴스",
+          "src": "연합뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFA0UUE1YnhJcjY4YlBpaWMzQXRJbTJQVjY3X3dsWF9CbjhEbGJhbnE2M3VxWmZtdkhQczBFbnctbkJPaVp0WkxyY2hnZ2pRa0Q5VTUtUUtzUk1OaXM?oc=5",
+          "lang": "KR",
+          "pub": "Tue, 13 Oct 2026 07:00:00 GMT"
+        },
+        {
           "t": "중국·필리핀·베트남·캄보디아 송금 37만여 건…사기 지급정지 계좌 7.5배 증가 - 월드장애인사랑뉴스",
           "src": "월드장애인사랑뉴스",
           "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9zQnlyRVhENVhWcC1mT2xsb2FZT1ZaUms5Uy1saUZMMkNjdFoteFJZUXJZRVhOWFhWbXdLY2pQRWxDOEFKUlJOYjktbDF1VkQxMGpWSGUzN3JPNjlENjlwdzM3UHk0b0Mwb3ZNWWdNNA?oc=5",
@@ -236,29 +250,29 @@
           "pub": "Thu, 22 Oct 2026 10:08:33 GMT"
         },
         {
-          "t": "계좌 제공 대가로 매주 20만 원…보이스피싱 송금책 징역형 집유 - 연합뉴스TV",
-          "src": "연합뉴스TV",
-          "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBfMEZ1S0lLS1o5dWZDMkROV3piLU5SbUtzNksyRFNGZ3dLeHRSTEE3bHpPa25kYUhyUGVLa0xUdkFQWXNHb3kxLUNEcUxQNFRSSm52b05xUGw1bUJIamJTa2tCSlNmdGM?oc=5",
+          "t": "계좌 막아도 돈은 사라졌다…보이스피싱 '송금 전 차단' 촉구 - www.ebn.co.kr",
+          "src": "www.ebn.co.kr",
+          "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5PY253d0lxbHluWnFEZWhLT3BsQlUzeFl6dm1LRUdBeGprNXFyc0NKUTAzdXlQX3hOdEFMR0ZLSDZOUW1Hb2hXVkNBZUNZZEItd1U5LTJjSW5xT2VWSzlsY1FTUDEzZEI3?oc=5",
           "lang": "KR",
-          "pub": "Fri, 26 Dec 2025 08:00:00 GMT"
+          "pub": "Tue, 06 Oct 2026 07:00:00 GMT"
         },
         {
-          "t": "부정계좌 등록 몰랐던 보이스피싱 수거책, 은행서 송금하려다 덜미 - 연합뉴스TV",
-          "src": "연합뉴스TV",
-          "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFB4ZXBQSDMxTlhJTHMyb2V4NGRxdExlTWFldlZEa2RYRDRibHhCWUFjdXZCSUdxNV9GZ0tSMTdCRVhranhUUE1jbWxQUzZFRGFqUzVWVnd6UUNpajBKblpKNzFkWkNJSUE?oc=5",
+          "t": "도박사이트 환전 계좌 동결 협박…23억 갈취한 '사슬팀' 일당 검거 - 뉴스1",
+          "src": "뉴스1",
+          "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE4tQ0hVUWtQZXRqaF9haUd2WTlmaEpmd1J4OUZVb1I0NlNyZVI2UzZfSldvUjVDNTRJaHNWblN0b29TcW1lRUFSVmR6eXBGZ2NPdWFfWTd3YUFVR2tISHh3?oc=5",
           "lang": "KR",
-          "pub": "Fri, 16 May 2025 07:00:00 GMT"
+          "pub": "Wed, 14 Oct 2026 07:00:00 GMT"
         },
         {
-          "t": "보이스피싱으로 제3자 명의 대포통장 계좌에 송금된 피해금을 그 제3자가 인출하여 소비한 경우 횡령죄가 성립할까? - 대한민국 법원",
-          "src": "대한민국 법원",
-          "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQaUxBUnF5MDlxOTZFSTQ5WjRDQzRSVWpHSV8zLW9qVWMyUmttYUNyRllZd3VjczQxX1hVMUF3OTZLbEtueFJtRDFuYkJQdmswc2VEcjNIS0xEdlFYd2c5MnZXaEFCRXlpdThRVm1lQ2x5ME54bjJlZk1aTXlTbUJmM1BUWnNGTUk?oc=5",
-          "lang": "KR",
-          "pub": "Thu, 26 Jul 2018 07:00:00 GMT"
+          "t": "Australia Has Kicked 45 Crypto and Money Transfer Firms Off Its Registers - Yahoo Finance",
+          "src": "Yahoo Finance",
+          "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPZHRxdkR2R0VfOWRmOTZUb09fQ3dXdzZQU2dITXNfUmUydWJtS0FDZk43b3F5RVYxX2VFNXlKc1pOUXVUYjNWS2dIS2hfOHd2Q3lZaGJUMVBwcXM5a3Atc3owd09MSDBORTRTYzZ1cGVUbkF1cGQ1cVFvRGRnclNXWUFrd0RDMGRaTnI2YldQY2p3b1p3NFpJekR2QmNjQQ?oc=5",
+          "lang": "EN",
+          "pub": "Tue, 08 Sep 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 3,
-      "total": 73
+      "news_score": 2,
+      "total": 72
     },
     {
       "name": "부동산",
@@ -278,18 +292,18 @@
           "pub": "Wed, 07 Oct 2026 07:00:00 GMT"
         },
         {
-          "t": "Real estate agents flag new earnest money scam warning - HousingWire",
-          "src": "HousingWire",
-          "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9YT1VXMGJFQ19NSXZwT2Z6NUR6WjBoYm1FRkRUc3ptRHN3QWJhQlVjNnRzcHZ2YmJnNlg5cUVwMm9zT2hQam5KejBuWENVcEFKV0ZSaGZaSXl2R3hlLXdOREM5NHphb19vcUViUjVEMG1fUQ?oc=5",
+          "t": "Real estate influencer Cesar Pina pleads guilty to fraud, money laundering and bribery - Paterson Times",
+          "src": "Paterson Times",
+          "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNT2Q3NVZ5U3RBblZmeXNLdDJBeWdtVFlNX18wYVJHUUdLOUNQTl92bXFpUnlrRk5sdllGMU5CS2E1dEE5Zmtpc3ZKSkNxR2hINTRVd3I1b0VEZkRVUnB0eTNzWVpteHYyNHJfbElreG8wVHpPZFN3eDMwMVpUc1pIY1BxeVNiRklxQzd4c0tsbWlvVF9RdnllMG4tdXQ0dF9qOVZoZncxYVBzTFUtSU1aQ1pydDhaOENqT2ZuWUxWMkQ?oc=5",
           "lang": "EN",
-          "pub": "Wed, 21 Oct 2026 16:10:54 GMT"
+          "pub": "Sat, 24 Oct 2026 13:15:01 GMT"
         },
         {
-          "t": "'Flipping NJ' Real Estate Influencer Cesar Pina Pleads Guilty To Laundering Drug Funds, Bribing Pol: Feds - Patch",
-          "src": "Patch",
-          "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQYVJDTnpLY0M3UE5kaC0zVmVjRHR2bVBhSG9hc0k5TWFEMzJQZVU3WTZ6NGRQOHFwR3dnbXZRdmZBRFp6TGxfSkpRMUt6Y3ZLeXdJMEstY2plTUdBZ3QzTTdoZ2JtempvYVpEMHRqZWpzSGhIRFludHJGZlpvck5wUlRBYXJxLTBsaWo0ejRWdHpoUHQ1MVMtSTVrWFFvYmFDVlVZT0J5ZzhUbGpQTk5ra2NfNmxnV3VTaFHSAeQBQVVfeXFMUFM0cERaNy10TjducHpudWRGWFVyN3lHaExZWFFPUl9zRXJNb2NvZHhuemRrWEl4NG1BUnpaNFljMFB2Y3FBa01oaFl6TTN5V29PUFUtNFVIeVJjb09IWXZ2LUdvYl9YSEl0UmF0cFpDMF9aZmY0eER3WlNUdjZCNnVuUVFab0FqX2h6NWNoUFBjRGh6Ym0wbmxMMHFhNUx2bWZ5eDVwalF6SXZyQ05UcWYwNEJWaDlTeXc4aDY1UmRFOW9pSGNqUDBSV1MzQ3g0RGFPczNqMzBhb2xlMnNkZHMxdTF6?oc=5",
+          "t": "Mexico expands anti‑money laundering oversight with tighter controls on crypto, casinos and real estate - EL PAÍS English",
+          "src": "EL PAÍS English",
+          "link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOVk56NFVOSUM4Qm8tZ0hGemp2UE5mMmZ4SVZQQjZkT2dhRFdkWlV1aGJ6dnl0ZDRpWHg3VW9TNmNyNUI4X1R3SDJnaElNZzRHaWdJMHA5X1N2MDVpQy1tVEJwcFJkZ1llREpZUkNRY3FUcVd0WThyZ3dIQ2lmRUdrYllZNUM3VDVGNGlRQ2RpMk9ybmxTcVcwektrYmYtYW8tUFZBbTlZNGgtUThrcEF3MTllZjZXRk93TG1ZUmJmRDlqR21Rb1o4anRfY0lyVnVnTDJUX1NPMTI0UmN1ZUpxUTUwODFDaG84V3RZaDI5Sk1RcUtEVGRHUtIBjAJBVV95cUxOT0pOVTNMREtRWldwNlNzMG9PbHN1UzdiVUlCS3hqcmQtUXdSR2JEWDRnQjhCTV91a2lEcTFiS3BVdXo2TGpfUVkyYmdKSHo4eEpyV0k0R3R6YlVSai0yWHA0UEdwSlpNVmotd3VzNTIwdWF2MjB6NUFrQnFRcGY4U1JLOXI4RmhOQzQ2THpfM2k2QWhCVERKSWxWS3Mta3FmRnl3RjQ3VUV3Sk9fdHhyV01zY2I4MXd0OW0tOVN3LUwwLVBLNlNORWMzRldxaDUwTjFqWVJzdmg3WUNYcnk2ZXRMN1JLQWI0VXF3ZS1WMThXaGNfdEU5LTV4SW5PNmxRWktjakZDcnVTbGlT?oc=5",
           "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 09:02:38 GMT"
+          "pub": "Thu, 13 Aug 2026 07:00:00 GMT"
         }
       ],
       "news_score": 1,
@@ -302,9 +316,16 @@
         "FATF",
         "특금법"
       ],
-      "news_count": 1,
+      "news_count": 2,
       "struct": 65,
       "hits": [
+        {
+          "t": "LuxTrust scams: Police arrest two suspected money mules - RTL Today",
+          "src": "RTL Today",
+          "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQQ3NuU1l0Znl1OVhkZmpBdDAtYXBZZ1RyZGxZVnUxdUVTa3owTE1jdkFkWFpkM2NKSDdPckw0bDRFZndyZlk5MXRiMTF3Z0YwYXBQTUdXdlQzdTRLZGdZY2FvakVINlh4MnBqY0RIcnBhX0V3NjJYckpoNl9uU1JxRHN4Sm9Edks4WDhsZGpTNA?oc=5",
+          "lang": "EN",
+          "pub": "Sat, 24 Oct 2026 14:09:57 GMT"
+        },
         {
           "t": "Trust companies turn away crypto-rich on money-laundering fears - Financial Times",
           "src": "Financial Times",
@@ -313,8 +334,8 @@
           "pub": "Wed, 09 Sep 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 0,
-      "total": 65
+      "news_score": 1,
+      "total": 66
     },
     {
       "name": "귀금속·보석",
@@ -323,9 +344,17 @@
         "FATF",
         "FinCEN"
       ],
-      "news_count": 0,
+      "news_count": 1,
       "struct": 65,
-      "hits": [],
+      "hits": [
+        {
+          "t": "Larry Fink now calls Bitcoin ‘digital gold’ after once calling it ‘an index of money laundering’ - Yahoo Finance",
+          "src": "Yahoo Finance",
+          "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOU2JzRmtMSDFwa0FNWGYyd0lxVzNUZEtCQms3Xy1TWHJPNXVEdFJvRjhsbzhZZ3VEZ29TemxrRjI5eHlaOFEwZU1EMzVIelpWTkNVdzVIcUZnM0VaRGhrU0NrUENMZnVNQmd6N2JjVUptX25ZcC1neGlrSjJRUmpqajlsM1FkbTIxZm1hOWIwVTRQaXNTS0t3Rw?oc=5",
+          "lang": "EN",
+          "pub": "Fri, 04 Sep 2026 07:00:00 GMT"
+        }
+      ],
       "news_score": 0,
       "total": 65
     },
@@ -336,7 +365,7 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 14,
+      "news_count": 15,
       "struct": 45,
       "hits": [
         {
@@ -345,6 +374,13 @@
           "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNVjNqTXhBQUNnVEdDZHBnMk9LeDYxOGVJZ0Z6NWJsUXNKY1ZQbjJNOURacFNpN2lsY2hLbHg5V3BQV0ZmYWhSNF93LU9vMkdQQW9qWW9ETUpiRlRta3pVd000M3dmSTdHZjl0R25NSzZHQjJzSllRTlA5TGpkbl9PTmxPUGVicWZTYUZxR0xyYUtnTU9pUnfSAZgBQVVfeXFMTTBndG1nOEx5WWlSN3JsWFp3dVo1QlI0TFNOWnZiZjNrb3lpN1lsUU03S0hFcHp2YXFEY0xZSmZFMENRa0F4bUN5dGJ6aWQ2eEFfUzBQdVhJcmhGMjZvVENpdkxmTnNlcGxWR3Utb2FCZkpQV3lSNXRtQWdqdzkwdUZDUGNzUWxnSVFac2xsRk5oVG4tV284NWQ?oc=5",
           "lang": "KR",
           "pub": "Wed, 07 Oct 2026 07:00:00 GMT"
+        },
+        {
+          "t": "범죄 자금 세탁도 ‘외주’…934억원 세탁 ‘유령 상품권 업체’ 일당 7명 구속 - 서울신문",
+          "src": "서울신문",
+          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBxenlnd19HNEZjbHlaRmdXZjJNeDduaEE1dDJLWlI1NXZlZDdxbWlKVFJTZWR5UVdSSXh2TndtLWVZd2xyY05zdk4yT29OYXF0bTVwaHNQRExSMXE5cHlNZENjektTMF94Y1JWTUt0Yw?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
         },
         {
           "t": "내용이 긴 규칙 페이지를 탐색하는 도박 수익 추징 읽기 안내 - Calgary Roughnecks",
@@ -368,13 +404,6 @@
           "pub": "Thu, 20 Aug 2026 07:00:00 GMT"
         },
         {
-          "t": "9백억 원대 범죄수익 ‘돈세탁’한 유령 상품권업체... 총책 등 일당 7명 구속 - JTBC",
-          "src": "JTBC",
-          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9ISWliSlRNSWhnQlVjTXRCRjhnbGVPM1d5NXB2U2V4R3djY24yN05sODRoVGhtOHNob1d3ZjlwWU1QcUYxUG1mUU5qeGdpZ1laWWRhQQ?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
-        },
-        {
           "t": "유령 상품권 업체 설립 후 범죄수익 세탁해온 일당 검거 - 기호일보",
           "src": "기호일보",
           "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5EY1AtNndabVVURUFVdWtoaE9VQW9LVTFadWlRYndjWWVtcHRCQ1NqQlhPYVZoNFZ3OWpER2xUSmdoS2VSQ2RJa2k0TnE5cUQ1cUJ1bUhLU1JKM3FnNWRKY3plZ01heVQzUVVOWHJsTQ?oc=5",
@@ -382,9 +411,23 @@
           "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
         },
         {
+          "t": "9백억 원대 범죄수익 ‘돈세탁’한 유령 상품권업체... 총책 등 일당 7명 구속 - JTBC",
+          "src": "JTBC",
+          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9ISWliSlRNSWhnQlVjTXRCRjhnbGVPM1d5NXB2U2V4R3djY24yN05sODRoVGhtOHNob1d3ZjlwWU1QcUYxUG1mUU5qeGdpZ1laWWRhQQ?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
+        },
+        {
           "t": "유령 상품권 업체 세워 범죄수익 934억 세탁…7명 구속 송치 - 시사저널",
           "src": "시사저널",
           "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFAyZU9xV3E4WDNzamdKdGoxUUZ0X0F0dEVNX3ZGdWplMEx1bE9kT1lYSlJWeEJwZ1RGWUpkME84YnQ3d1hwTXZwNUNYOFpfYXVjMVRfSW1UaEt4UHdmUm1tOWFPdTZGUlM5M2sySk81UdIBc0FVX3lxTE9WRWltSHBxTk9zRUtQMzFqV2RnY1V0dmJPZ3BwN3ctSGQ1dUM3aE16Qjk1SmM2djVXMWh6d25CM09pRHRneGNQNU90TC1BN3hjQ0FLZXdUSE1QME9Ld3lOYUNqb3czU0Y3X1dhWm5ScXV6WXc?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "t": "유령 상품권 업체 세워 ‘범죄수익 900억 세탁’ 해줘…7명 송치 - 한겨레",
+          "src": "한겨레",
+          "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBLYXNtWmFYcVNzdE9iaGhXNGQwZWpLN1JWY0g0b0NaUENIWnVOT3c5SktnNmw3amVfbFNDQ3JfU3VHTzNsZUN0ZURzVGw3OEl6ZHF5b2JEYmgyanpQbHVpV1pKYw?oc=5",
           "lang": "KR",
           "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
         },
@@ -403,29 +446,15 @@
           "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
         },
         {
-          "t": "유령 상품권 업체 세워 ‘범죄수익 900억 세탁’ 해줘…7명 송치 - 한겨레",
-          "src": "한겨레",
-          "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBLYXNtWmFYcVNzdE9iaGhXNGQwZWpLN1JWY0g0b0NaUENIWnVOT3c5SktnNmw3amVfbFNDQ3JfU3VHTzNsZUN0ZURzVGw3OEl6ZHF5b2JEYmgyanpQbHVpV1pKYw?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
-        },
-        {
           "t": "허위 상품권 업체 차려 415억 범죄수익 세탁…조폭 등 22명 검거 - 동아일보",
           "src": "동아일보",
           "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE81cWllaGN3LXhxenlOazcxU3BLZVBVaTkydDdzUTJWM3FPUzkwUTIwTHNSczZ1NkNuWjdBUWlfWVZFZ2U2eWZMZHRSZFgxak5zNmdsQk5Rc3R1LU9mSlkzdXNNaXBDUHB4RUtRUThUNmZSNEN4RUHSAWZBVV95cUxNcTEzQ0IyYXM3QzBIeExJQTNaYzdibEw3a09FUmE0N2RlQmNOSXR2RlZkVzQxZXJhSFRTN1Nqc3R2NkEzZXhkajc1MjNYVFlNbHprSVVpTHBNdnlaYXlWNDQxelAyamc?oc=5",
           "lang": "KR",
           "pub": "Tue, 30 Jun 2026 07:00:00 GMT"
-        },
-        {
-          "t": "범죄수익→상품권→가상자산…경찰, 피싱조직 돈 ‘35억’ 세탁한 일당 검거 - 시사저널",
-          "src": "시사저널",
-          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBZc0NWc2NmbkpzQ2k5UUdEN015WTlQWjJZWHdpTkdrZTNZT0kwZ0pRdkFnNHpBRE1yNjF1V3o2OXlTTTNzWDRpbTNTeHFieUh1Ry12YkJhdjdmamFkVkxiOW90TzBGdVRROHpSRjRXSdIBc0FVX3lxTE5tRkh4bjQ1ejBSMGxzak1NdS1CUHJyU1lJMnNfZmZqT2o4aWJVd2dSeXJHZ1pvUWVELU5HdGw0U1RURWRfRm5HSTBZRE9QV1I2LWNMSEdHMDd3U0FuU0hJTDRmNjd2TFlmZUFNelZWYzhycW8?oc=5",
-          "lang": "KR",
-          "pub": "Thu, 18 Jun 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 6,
-      "total": 51
+      "news_score": 4,
+      "total": 49
     },
     {
       "name": "미술품·골동품",
@@ -434,36 +463,15 @@
         "FATF",
         "FinCEN"
       ],
-      "news_count": 6,
+      "news_count": 12,
       "struct": 45,
       "hits": [
         {
-          "t": "Leader of FARC Dissident Group Extradited to South Florida to Face Federal Cocaine Trafficking and Money Laundering Charges - Department of Justice (.gov)",
+          "t": "Homeland Security Task Force Arrests Alvaro Pulido Vargas to Face Charges in Multibillion-Dollar Venezuelan Money Laundering and Bribery Schemes - Department of Justice (.gov)",
           "src": "Department of Justice (.gov)",
-          "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPUHFidzdYZThXekw0UHlfT2xNbkZ5U0VwTjl6NFV3bUkzR1Z1aTU0eG1WQ1pnQ1UyLUZUTUNVSm5XXy12a1MtTlhmOWJzVnBlNS16VkZERkRqaVdoYzdyeTJ3bTdUY0NnYkw5eVUyeVBGc3Y2VU92WGlKSFl6cDV3UmJoUDhMaG16Z05pZXdKOGtzV3NfN25ZOHF3d2ZrcW1BLU9YdFl2ODFhejctOElfUGVpZXBIVkF4Sk1UdWgxbw?oc=5",
+          "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNRDNZdWo4ZUxaU3pyUzlYRUZlcW9IZVMyc2J2TjFZSk02cnVZMkwxUkFabVI3SDFQUU1ubjRmNlJ0MklTanByNlRKWEdXajJLZDBzT3JGMHI0V3ppc0ZZUFJ4OVlheHdSNUdTZ0dnUWM4RER4TjFkSk1rUFpHTldyYkxIUGxYOTBzNmdzcUxTbUlWZzY4R0JQbzI0VjE5QmpBdEpYUUF3RXNNaW5XdzBkMjktb19OSDJOdlowQnJB?oc=5",
           "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 19:47:46 GMT"
-        },
-        {
-          "t": "CT grand jury accuses father, daughter of using business to launder money. The scheme had international reach. - Hartford Courant",
-          "src": "Hartford Courant",
-          "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOc3hXMXVHQTFRRUhCYXlBYm9ZQ2VWYUxRR21LYjdBUU1iNG00UnJOMGNJTmhNTHlQYkpWemRtQjUzd3lCLTBJRUJQbXR4dmlwWFNNOEZTVVlEM0NXeEgtVlowSWZNYjRwU0NtbWtqRHZBUUh4UVBHdlJEY1hZdDEwN3h3OFhkUFNHVTMwMWt5OFFVd215NVc2WlF2NHNmUlBvQ05URHdMcy1hWWl1b1gxR3otb0h1TklVZzZvY245ZDE?oc=5",
-          "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 09:49:22 GMT"
-        },
-        {
-          "t": "DJ Envy's Former Business Partner, Cesar Pina, Pleads Guilty in Fraud Case - Complex",
-          "src": "Complex",
-          "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNa2REc0g3ZmtHMF84X0FDQUVaYzhVY18zR0pLd2Zyb3ozV09WTXR1VEhCaE5jdWRIY2I3azFwbFZyalBOQ1ljV3pKd1BGVFJBZ0EwWGtVdEhXWDVpNjRDWnIxeU1CRTQwVFl5TXliZzM2UW90VXVhRmsxbTBBVE94Um85eUpjSlhZaEtFbXBPUG9Gb0U?oc=5",
-          "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 21:48:39 GMT"
-        },
-        {
-          "t": "82-year-old Democrat state senator charged in marijuana scheme - Heartlander News",
-          "src": "Heartlander News",
-          "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPbUlCSnplN01qQWxJdWRHSks0ZEx6eEhPYXVGWVFhc2JFT1JOVHkweGhKVEd0eUlsWDhUdjBoS0tUOElhR2puQ1hWcGV0Q1FXRU1heXc0ZFFuS2FRTTlTT0NUQUFRWHlMZXUwaTA4YlVrMXBfLVVadXJZMU83MWU4Zm03ajFiMnVzM3hnS0t4VWQyYy1EVVE?oc=5",
-          "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 20:48:45 GMT"
+          "pub": "Sun, 11 Oct 2026 07:00:00 GMT"
         },
         {
           "t": "Massachusetts Mayor Charged with Pandemic Loan Fraud and Money Laundering - Department of Justice (.gov)",
@@ -473,11 +481,74 @@
           "pub": "Fri, 14 Aug 2026 07:00:00 GMT"
         },
         {
+          "t": "82-year-old Democrat state senator charged in marijuana scheme - Heartlander News",
+          "src": "Heartlander News",
+          "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPbUlCSnplN01qQWxJdWRHSks0ZEx6eEhPYXVGWVFhc2JFT1JOVHkweGhKVEd0eUlsWDhUdjBoS0tUOElhR2puQ1hWcGV0Q1FXRU1heXc0ZFFuS2FRTTlTT0NUQUFRWHlMZXUwaTA4YlVrMXBfLVVadXJZMU83MWU4Zm03ajFiMnVzM3hnS0t4VWQyYy1EVVE?oc=5",
+          "lang": "EN",
+          "pub": "Fri, 23 Oct 2026 20:49:40 GMT"
+        },
+        {
+          "t": "Chief Financial Officer Blaise Ingoglia Announces Arrests of Life Insurance Agent and Her Husband After a Nearly $382,000 Insurance Fraud Scheme - The Florida Department of Financial Services",
+          "src": "The Florida Department of Financial Services",
+          "link": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxOSVpIQ0RDMW9kNHZiX195ejZzeEo1MklkTzhNUlpjTFhPUWxqZ2ZfZUs5MktWcUVwQ3RzRkJnV0dqbk5TUk0wNlNucjgwN3VCRmR5YUQ5bGZoUllqdkNXN25XVHlXa18yclJ2RGFBMjdTdmY3LVNrQ0h5VENOVlF1Qm9VRU5NcHhoOFh4b1lYWlNvTi1JTTlma1J0ZWVyMnk5UXlSUXdHUFNCT2tSaTRTWTVyeVJLSlN4UDVWOVBXaFRJU1ZuWmhiZGdMTGsxMjZoM3Q2Q19ROFcwV1VFNnFra3lnSHRmbEZZaEdoUmo2RTFUU3YtM1VDOVVQTG9CSTkzT2RlSjhsTmZxSXpVYUpDWVBubjVyNFg4dnZXQncxX0lNUDdMQlZySm00aFktek9wbHdfNXNCNUF0TGN2amI3c3RMVQ?oc=5",
+          "lang": "EN",
+          "pub": "Thu, 20 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Federal agents in New Mexico seize $2M in cryptocurrency as part of money laundering investigation - Santa Fe New Mexican",
+          "src": "Santa Fe New Mexican",
+          "link": "https://news.google.com/rss/articles/CBMiowJBVV95cUxObHNSZXJxMWlWRVpmVDJ3OHZhaW1mcHJxQzg0LUU3QkJHMzFLSlA2M2xabHV6Z0YyLUtFVUZJX1p3SmNuX0ppSTIydXNiVEtxRUZXN0t3SGlidnotVlZQSjhNQlRKVEN6SmhuLUZIbWtleV9Zb3NrQTRUanlhQmNxTlBzb1FZcUxFTmtydFdKOHcwSDhFWHhHaDh0bmxzSUd0MVYtWE5FVFpvUnhYam1ERTZmT2xpdVc2eFN3emdpVzVvaTdXYTVTOWVvM3ZUV2QzNTBHQ2M4eGdCeVlXa0YtUlRxbnRKRjFmNFAwSmJGa19QdkhUY0lfcXp0MHlTM2Yyd2tWa3JiNFU3REEta29wLUtSV2o4UlZ4UjR0Ti02dzVvejQ?oc=5",
+          "lang": "EN",
+          "pub": "Tue, 01 Sep 2026 07:00:00 GMT"
+        },
+        {
           "t": "Italy moves to arrest 30 people tied to alleged mafia underground bank using crypto - Quartz",
           "src": "Quartz",
           "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQZXl0bEhuRDhVd1FTekpuVTBueUZHYlhDTlpOYXkzOEp1QUo1cENRYUpOdEZWM19PMGZLZndVekZ2eHN5Snh6NXdxTXgxdkVBQkNBMnZwWGs0VmNIR2xVMFlaY2g0cGN0cmV2N0gwQ2hDR2ZiQm5hQlY3Wlp5YzZFZHN3?oc=5",
           "lang": "EN",
           "pub": "Wed, 21 Oct 2026 12:33:42 GMT"
+        },
+        {
+          "t": "Salazar, Casten Introduce Bipartisan Bill to Protect Seniors from Financial Fraud and Crypto ATM Scams - House.gov",
+          "src": "House.gov",
+          "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQaXRyYVRuSE81M0RwNFZrWkhkYW5OX093cU9XX3R1SUppdDlKYW5jUnh5djdadkNqbGY0RGRPQWt1V3cxQW1XcXpra2w3ZElIN3dZM1o4b3RhS2FpYW40THN4emNadXZaRzhFWEtvVjB5NEJtT2dVaG8tOERhek5iNGQwY29SV2piV05FU2dSUV9aTW5OVkxnUTRxcXY5cFhCOVQ4MllnZEdHODNoQ1NqR3A2RndvbTB0ZkloUnNoZw?oc=5",
+          "lang": "EN",
+          "pub": "Thu, 11 Jun 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Drug Cartels Are Shifting Their Money Laundering to Crypto. Cops Can’t Keep Up - Bloomberg.com",
+          "src": "Bloomberg.com",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNck8xMGRfRWVfcGFZZlgyUlB1Y05SUTFVYlNXd3NvRFF3cGI4ZS1CNkxDdGRkT3dtMUNZelRyX1dURFJNWk5kZzh0SUYxOVprdjBET1lTb01MeDRhbWF6REpUUTg5Yk9TT1hPR2pUQ08xZFowLTlKQXhsQmsybjRpYXlvQk5SXzdmRHBpbVVvNHZOU1haNHJpQTZwNWxoTW5sTmFjSXlzSndXNkE1V3lPajQxZGFJclE?oc=5",
+          "lang": "EN",
+          "pub": "Wed, 11 Feb 2026 08:00:00 GMT"
+        },
+        {
+          "t": "Cambodia-US operation uncovers money laundering link to Sinaloa Cartel - AP News",
+          "src": "AP News",
+          "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOWE84a2pwN1BfT1ZhRFpHckF6U0VENWNOYWpRQVFobkExcjctLXZMektkZUxJNlN2R0U0YjQzY19SUDFFaUxLSU9jU2Y5emE4ejdjMGtZTDNzUWQ0Q2ZWUUkwOVByd0VOYng1OElfczB1dHo1SWdPNWVvVWc0UU1EWWMyQ1J3bkNUT19tRWZFRVEwX3Z3QlpxbC1kcGRBV19tUU9mc2plb1ZWaXRKVS15Rk1sN2xWbW1XYUZ3?oc=5",
+          "lang": "EN",
+          "pub": "Sat, 22 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Party's over for scammers who went on spending spree after $240M bitcoin theft - NBC4 Washington",
+          "src": "NBC4 Washington",
+          "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxObkl3U2tzcm80T2oxdXJ3ZXVUY3NDTDZoa3BIR1dOb2p0TkxQc3BTN0R2WDgtaGRjTmhjaDlMUGFqNGxnU2w1c29NaDAxZ0pUZjZKWWxEN2NHWk1PdGhVdkNjWkppMlJiOURyVmtralRJV3pWdWFJOTgwenFjaUNZWFBXQ1ZkVEI4TzhSUkdrcy1xNERfd3JxeGdaU3g5aWhqUlYwMFRzT0pldlhvRTJkRllQS2pRVk1OMnZsNlM0bVh5cjgtZVd1eFp30gHSAUFVX3lxTFB1cHFsNk4ySi1BeU4wSUVoVVZvY3V2TE81Y0t0SnBIV2dMcEV1SXBySG8yS2FhLWpNazdwTm5nb3F6SDktNTNOX3BFWHdvYjg1OEdHNC16ZHdfbHBPUGQ1UlNjaWgyZkpycGhoVW56SDhyZllsMUtVai10TFZxdklIM1dBT2wzcjFOMzVOMUlkdkFHMjJQZFNIUUVGaEs0VEVyWGxKM1JNcGpXMHFfTDFyZFN1MldyWDVrYTFxRVpWNUNQMUtjc2VjNDhHQThibG1FUQ?oc=5",
+          "lang": "EN",
+          "pub": "Mon, 07 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Mexico Seizes Hidden Crypto Mine With 300 GPUs Amid Cartel Money Laundering Probe - Bitcoin Foundation",
+          "src": "Bitcoin Foundation",
+          "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQbDhHcXRCS1RIeXhkR1hDSS1MamFqM2psVndJM1JWVFh2QlNqS1V4Um1hWVUxNnA0cUFKTTFQdkp4dG5xSXRVT1BualVlSzF6OHFpNEJPUDA1cFRPWUdvYUZMTFN6amxVWUNvbWFuUExKTk5seTFwc2JSUC1VSVZTa01BVzFFT2dUXy1iMHE0N2x6M2dkQlpuNWI3TUxNY2J3TmpYMTA1U2pKNllmZUNNc1dBUnpKdndrelBqcDVRZ1FSQQ?oc=5",
+          "lang": "EN",
+          "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Europol and partners shut down ‘Cryptomixer’ - EUR 25 million in cryptocurrency seized during the operation - Europol",
+          "src": "Europol",
+          "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPXzJSQVhtMjZQSFZuQTcxNDF4NEkxSEhkbi1IWXYyNGN4eU92Um13Smc5aTRSSWdnQjE5RTVGNTV6S2pKdUpZOFZJUkdKa2Z0dW9VSTB4eGh1LVc3eEF3ZG5OY2RGdHdacjdFSjR2WFVPWGR3N1REMGthaXZzTGdaMzAzMVRHQmNlVEJrUXJ0bkJUUmpBNGhTX2pkOWRuX2M?oc=5",
+          "lang": "EN",
+          "pub": "Mon, 01 Dec 2025 08:00:00 GMT"
         }
       ],
       "news_score": 3,
@@ -489,7 +560,7 @@
       "flags": [
         "FATF"
       ],
-      "news_count": 7,
+      "news_count": 6,
       "struct": 40,
       "hits": [
         {
@@ -500,18 +571,18 @@
           "pub": "Wed, 16 Sep 2026 07:00:00 GMT"
         },
         {
+          "t": "\"계좌 풀어줘\"...간 큰 보이스피싱범, 변호사 끼고 금감원 민원 - 머니투데이 - 머니투데이",
+          "src": "머니투데이",
+          "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE94d1RWTURKQzhwNlg1VGF6eVFUd2hGWExHY084em9qTTgwYzNiY0VTUUVtS1p0M2swUS1Td3hoRUdYTXRCcTRmLVhMQ3ZacnBGcWQtc2hxNlNwZHNTMjZlRUg3d3d5TVo2dk5N0gFwQVVfeXFMT2FqblI3WldGSFdIUzlOUzFNV0hOSURlWXlybndSTDctZ19XNVpUdkl3Qy12djFEWGYwQ1pFRWdNeGx2Z0dSem1BVTdmMXNSX1d6R2ZRZW5zclAxWTJqb2hzRkIxTF9YamRuNk5MRXllUQ?oc=5",
+          "lang": "KR",
+          "pub": "Wed, 02 Sep 2026 07:00:00 GMT"
+        },
+        {
           "t": "Fishers attorney suspended after being found guilty of money laundering - The Indiana Lawyer",
           "src": "The Indiana Lawyer",
           "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOQmJaWlZEU0ZaTlo3OXV0X281ai1VQy12X1VadE5zeTZhSE9OWHJzSF80ZVgwU2pERXBFUkd3YXhmMS1Wa205T1NrQlFvYW54NGR6M1dtV282cTZfZjRTWWJOaGthRGJBMXhjbTlYUzZJQ0Qtc2g0MjZGV3VmTkI3X2s0QUpxSU0yc2FpOHhBSkMwRUJ1UGEzX19mTDFzcFNON3RXRVFLZFBvVkhINVluM1lTRQ?oc=5",
           "lang": "EN",
           "pub": "Fri, 23 Oct 2026 17:56:04 GMT"
-        },
-        {
-          "t": "Accountant’s office searched as gardaí investigate alleged money laundering at charity - The Irish Times",
-          "src": "The Irish Times",
-          "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOdTVlc3ZmcHVKVkw3YzBvd1E3elRNa2RqMjZNZXp5Q0d3VGVtUjJldDlwXy11TTRPV3dZLVdPRzZoSzFQRjBRMmxyZUp3YVFJQ0dtTkpQUHZnYS1OLXVrSWxyeWlXWUxIZlN5ci04UEY1amQxekpsVDY2Y0dMSmhrQmVzWk1mZHVBa1BLSUhDdDVYdjZaUEQ1bVc2aFR5dUZmYjc5WlB0VklieE5uS1ZWZ3dLR2l6Tm1fajhWeDg1aTc5TmVtNmJ4RXBwNm5XaU0?oc=5",
-          "lang": "EN",
-          "pub": "Fri, 23 Oct 2026 18:36:56 GMT"
         },
         {
           "t": "Georgia business owner, Florida attorney charged in $2-million Ponzi schemes, prosecutors say - CBS News",
@@ -533,17 +604,10 @@
           "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNTWpoaW9aVzBkMWlrY3RObTJWbmR3cFhRcUpmejdDOE5lZ1NicFZXemRyRXNfYkhUZkRxZmg2NmFjckVqR2thTGk4QzhJdU1DbXJoS3lHc29XRjhSUldXRDhzelBOdFYxdHF4V2V5N0lwMUQ2SEEtd2xSQ1dMVHhzRkQ0N0JIY0ZfbXF1T0FQUFVtZmRESGItUzloRDlZaER2Y2xnc2tJQmlRZWQ1TmZDSVd0WEhMOGJfek51Qw?oc=5",
           "lang": "EN",
           "pub": "Fri, 14 Aug 2026 07:00:00 GMT"
-        },
-        {
-          "t": "D.A. Bragg Announces Takedown of Global Bitcoin Money Laundering Operation - Manhattan District Attorney's Office",
-          "src": "Manhattan District Attorney's Office",
-          "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNNGVzelI0T1A3T0JSOER5UV9YT2NpOHd0b25UTVcyc0FlWHVQQmJmNXpwcm45ekZmS09BcEtvdERXWk5VMTZZaXFQZENld093aXpXVUNqMGtOSzhYUmRaWkIxdjYxMXlzcFlvZDVjaWpIQmZfSS0xVFhHUTdkc1RYbzg5QmVQRk0zTWc3eDRsVW5zY3dHUHFuSlB2cmViOUU?oc=5",
-          "lang": "EN",
-          "pub": "Thu, 24 Mar 2022 07:00:00 GMT"
         }
       ],
-      "news_score": 3,
-      "total": 43
+      "news_score": 2,
+      "total": 42
     },
     {
       "name": "무역(TBML)",
