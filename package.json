@@ -1,1 +1,1 @@
-{"private":true,"type":"module","scripts":{"test":"node --test tests/server.test.mjs && node tests/wlf-history.cjs"}}
+{"private":true,"type":"module","scripts":{"test":"node --test tests/server.test.mjs tests/pwa.test.mjs && node tests/wlf-history.cjs"}}
