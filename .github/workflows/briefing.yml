@@ -22,7 +22,7 @@ jobs:
       - name: Fill today's articles if Claude missed them (weekdays)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python3 scripts/daily_fallback.py || true
+        run: python3 scripts/daily_fallback.py
       - name: Collect money flow
         working-directory: flow
         run: |

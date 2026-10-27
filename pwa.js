@@ -172,6 +172,12 @@
     open();
   }
 
-  function start() { addButtons(); setTimeout(auto, isMobile ? 3500 : 6000) }
+  function start() {
+    addButtons();
+    // 첫 방문에서는 내용을 먼저 읽고, 다음 방문에서만 안내해요.
+    var o = load(), previous = o.lastVisit, now = Date.now();
+    o.lastVisit = now; save(o);
+    if (previous && now - previous > 30 * 60 * 1000) setTimeout(auto, 30000);
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
