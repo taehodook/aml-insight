@@ -1,7 +1,8 @@
 # 금융거래등제한대상자 명단을 법령정보 DRF API(XML)에서 받아 WLF 행 목록으로 바꿔요.
 import re,json,sys,subprocess,urllib.parse
 import os
-OC=os.environ.get("LAW_OC","xogh1004")
+OC=os.environ.get("LAW_OC", "").strip()
+if not OC: raise SystemExit("LAW_OC 비공개 설정이 없어 기존 명단을 유지해요")
 def get(u):
     for i in range(3):
         r=subprocess.run(["curl","-s","--max-time","90",u],capture_output=True)

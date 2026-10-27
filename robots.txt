@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /api/
+Disallow: /functions/
+Disallow: /migrations/
+Sitemap: https://aml.korbono.com/sitemap.xml

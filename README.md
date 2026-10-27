@@ -4,8 +4,15 @@
 > 기존 실무 도구 모음은 `/tools/`로 옮겼어요(각 도구 주소는 그대로).
 >
 > - 배포: Cloudflare Pages (빌드 없음, 저장소 루트 그대로), 주소 aml.korbono.com
-> - 데이터: `data/daily`(평일 06:52 Claude 예약 작업), `data/wlf`·`data/lex`(평일 07:20 `.github/workflows/data-update.yml`)
-> - `platform.js`: 화면이 읽는 데이터 연결(읽기 전용). 회원 기능은 지금은 이용자 브라우저에만 저장돼요.
+> - 데이터: `data/daily`(매일 브리핑 작업의 평일 기사 생성), `data/wlf`·`data/lex`(평일 07:20), `sanctions.json`(매일 07:25). 시간은 KST예요.
+> - `js/server-platform.js`: 정적 자료와 Cloudflare D1 기기 기록 연결. 카카오 로그인은 운영자 요청으로 보류했어요. 기기 간 동기화는 제공하지 않아요.
+> - WLF 조회어·결과 이력은 브라우저에만 보관해요. 프로필·스크랩·투표·의견·공용 게임 기록은 서버에 저장해요.
+> - 배포 설정과 DB는 `wrangler.jsonc`, 초기 구조는 `migrations/0001-platform.sql`에 있어요. 미리보기와 운영 DB는 분리돼 있어요.
+> - 서버 검사: `node --test tests/server.test.mjs`, 기사·명단 검사: `python -m unittest discover -s tests -v`.
+> - 일정·채용은 `data/board.json`에서 관리해요. 기존 자료를 옮겼으며 새 검증일을 임의로 넣지 않았어요.
+> - 원문 확인: `scripts/requirements-news.txt`를 설치해요. 원문 복원·추출·제목 일치 검사를 통과한 본문만 AI 요약의 근거로 쓰고 실패 시 제목 기준임을 밝혀요.
+> - 기존 Claude 예약 작업은 이 저장소에서 관리하지 않으며 임의로 중단하지 않았어요. 중복 기사 생성은 당일 문서와 `auto` 표식으로 보호해요.
+> - 예전 아티팩트용 운영 현황 화면은 웹 운영자 인증 없이 열리지 않아요. 운영 통계는 로그인한 Cloudflare 대시보드에서 확인해요.
 
 ---
 

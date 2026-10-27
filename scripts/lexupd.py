@@ -3,7 +3,8 @@
 import subprocess, re, time, urllib.parse, html, json, os, sys, glob, difflib, datetime
 
 B = "https://www.law.go.kr/DRF/"
-OCS = [os.environ.get("LAW_OC", "xogh1004"), "test"]
+OC = os.environ.get("LAW_OC", "").strip()
+if not OC: raise SystemExit("LAW_OC 비공개 설정이 없어 기존 법령을 유지해요")
 NAMES = {"fta": "특정 금융거래정보의 보고 및 이용 등에 관한 법률",
          "tf": "공중 등 협박목적 및 대량살상무기확산을 위한 자금조달행위의 금지에 관한 법률",
          "pc": "범죄수익은닉의 규제 및 처벌 등에 관한 법률",
@@ -15,7 +16,7 @@ LIM = 180000
 
 def get(path, params, need=None, tries=6):
     for t in range(tries):
-        oc = OCS[0] if t < 4 else OCS[1]
+        oc = OC
         url = B + path + "?OC=" + oc + "&" + "&".join(k + "=" + urllib.parse.quote(str(v)) for k, v in params.items())
         try:
             s = subprocess.run(["curl", "-s", "--max-time", "40", url], capture_output=True, timeout=60).stdout.decode("utf-8", "replace")
