@@ -1,0 +1,11 @@
+{
+  "name": "aml-insight",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-10-05",
+  "d1_databases": [{"binding":"AML_DB","database_name":"aml-insight-production","database_id":"0814022a-ed34-4a99-9df9-897fb22a1448"}],
+  "env": {
+    "preview": {
+      "d1_databases": [{"binding":"AML_DB","database_name":"aml-insight-preview","database_id":"59b08eda-91b7-4400-9284-34816bd14f69"}]
+    }
+  }
+}

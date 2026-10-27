@@ -137,10 +137,10 @@
   var db=null,uid=null,PROFILE=null,LOGS=[],MODE="local",logsRef=null,profRef=null;
   var SECT=["은행","증권","보험","저축은행","상호금융","카드","전자금융·PG","가상자산","소액해외송금","카지노","대부업","기타"];
   function drawAcct(){
-    var a=$("acct");$("acctMode").textContent=MODE==="cloud"?"계정 저장":"이 기기 저장";
+    var a=$("acct");$("acctMode").textContent=MODE==="cloud"?"기기 연결 · 서버 저장":"이 기기 저장";
     if(!PROFILE){
-      a.innerHTML='<p>무료로 가입하면 조회할 때마다 이력이 남고, 결과를 이미지로 캡처해 증빙으로 쓸 수 있어요.</p><ul><li>오늘 뉴스 인사이트 스크랩, 어느 기기에서나 다시 보기</li><li>최근 24시간 조회 이력 자동 보관</li><li>조회 결과 캡처(PNG) 저장</li><li>이력에서 다시 조회·다시 캡처</li></ul><button class="btn" type="button" data-join>무료 회원가입</button>';
-      $("logCard").hidden=true;$("whoIni").textContent="?";$("whoTxt").textContent="회원가입";if(typeof scrapRefresh==="function")scrapRefresh();if(typeof memberSync==="function")memberSync();
+      a.innerHTML='<p>기기 프로필을 등록하면 조회할 때마다 이력이 남고, 결과를 이미지로 캡처해 증빙으로 쓸 수 있어요.</p><ul><li>오늘 뉴스 인사이트 스크랩, 이 기기에서 다시 보기</li><li>최근 24시간 조회 이력 자동 보관</li><li>조회 결과 캡처(PNG) 저장</li><li>이력에서 다시 조회·다시 캡처</li></ul><button class="btn" type="button" data-join>기기 프로필 등록</button>';
+      $("logCard").hidden=true;$("whoIni").textContent="?";$("whoTxt").textContent="프로필 등록";if(typeof scrapRefresh==="function")scrapRefresh();if(typeof memberSync==="function")memberSync();
     }else{
       a.innerHTML='<div class="me"><b>'+esc(PROFILE.nick.slice(0,1))+'</b><div><strong>'+esc(PROFILE.nick)+'</strong><span>'+esc(PROFILE.sector)+' · '+stamp(PROFILE.joinedAt).slice(0,11)+' 가입</span></div></div><p>조회하면 오른쪽 아래 이력에 쌓이고, 24시간 뒤 자동으로 지워져요.</p><div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn sm line" type="button" id="clearLogs">이력 모두 지우기</button><button class="btn sm line" type="button" id="leave">탈퇴</button></div>';
       $("clearLogs").onclick=clearLogs;$("leave").onclick=leave;
@@ -159,20 +159,20 @@
   function localLogs(){var cut=Date.now()-DAY;LOGS=(LS.get("ai_wlf_logs")||[]).filter(function(l){return l.at>=cut});LS.set("ai_wlf_logs",LOGS)}
   function join(nick,sector,extra){
     if(!nick)return;var p=Object.assign({nick:nick,sector:sector,joinedAt:Date.now()},extra||{});
-    if(MODE==="cloud"){profRef.set(p).then(function(){PROFILE=p;drawAcct()}).catch(function(){MODE="local";LS.set("ai_wlf_profile",p);PROFILE=p;localLogs();drawAcct()})}
+    if(MODE==="cloud"){return profRef.set(p).then(function(){PROFILE=p;drawAcct();showToast("기기 프로필을 등록했어요.")}).catch(function(e){showToast(e.message||"저장하지 못했어요. 다시 시도해 주세요.")})}
     else{LS.set("ai_wlf_profile",p);PROFILE=p;localLogs();drawAcct()}
   }
-  function leave(){
+  function leave(){if(window.AML_DEVICE_MODE&&window.AMLPlatform&&MODE==="cloud"){if(confirm("이 기기의 프로필·스크랩·투표·의견을 삭제할까요? 삭제하면 복구할 수 없어요."))window.AMLPlatform.deleteAccount().catch(function(e){showToast(e.message)});return}
     if(MODE==="cloud"){clearLogs().then(function(){return profRef.delete()}).then(function(){PROFILE=null;LOGS=[];drawAcct()})}
     else{try{localStorage.removeItem("ai_wlf_profile");localStorage.removeItem("ai_wlf_logs")}catch(e){}PROFILE=null;LOGS=[];drawAcct()}
   }
   function clearLogs(){
-    if(MODE==="cloud"){var ids=LOGS.map(function(l){return l._id});return ids.reduce(function(p,id){return p.then(function(){return logsRef.doc(id).delete()})},Promise.resolve()).then(function(){LOGS=[];drawLogs()})}
+    if(MODE==="cloud"&&!window.AML_DEVICE_MODE){var ids=LOGS.map(function(l){return l._id});return ids.reduce(function(p,id){return p.then(function(){return logsRef.doc(id).delete()})},Promise.resolve()).then(function(){LOGS=[];drawLogs()})}
     LOGS=[];LS.set("ai_wlf_logs",[]);drawLogs();return Promise.resolve();
   }
   function saveLog(L){
     if(!PROFILE)return;var rec={q:L.q,at:L.at,n:L.n,counts:L.counts,dataDate:L.dataDate,top:L.top.slice(0,10)};
-    if(MODE==="cloud"){var id="l"+L.at;logsRef.doc(id).set(rec).then(function(){rec._id=id;LOGS.push(rec);drawLogs()}).catch(function(){})}
+    if(MODE==="cloud"&&!window.AML_DEVICE_MODE){var id="l"+L.at;logsRef.doc(id).set(rec).then(function(){rec._id=id;LOGS.push(rec);drawLogs()}).catch(function(){})}
     else{LOGS.push(rec);LS.set("ai_wlf_logs",LOGS);drawLogs()}
   }
   function purgeOld(){
@@ -189,13 +189,13 @@
       profRef=db.doc("data/users/"+id+"/profile");logsRef=profRef.collection("wlf_logs");
       return profRef.get().then(function(s){
         MODE="cloud";
-        if(s.exists){PROFILE=s.data();return purgeOld().then(function(){return logsRef.where("at",">=",Date.now()-DAY).orderBy("at","desc").limit(200).get()}).then(function(q){LOGS=q.docs.map(function(dc){var o=Object.assign({},dc.data());o._id=dc.id;return o})})}
+        if(s.exists){PROFILE=s.data();if(window.AML_DEVICE_MODE)return;return purgeOld().then(function(){return logsRef.where("at",">=",Date.now()-DAY).orderBy("at","desc").limit(200).get()}).then(function(q){LOGS=q.docs.map(function(dc){var o=Object.assign({},dc.data());o._id=dc.id;return o})})}
         else{PROFILE=null;LOGS=[]}
       });
     }).then(function(){drawAcct()}).catch(function(){drawAcct()});
   }
   initAccount();
-  setInterval(function(){if(PROFILE)drawLogs()},60000);
+  setInterval(function(){if(PROFILE){if(window.AML_DEVICE_MODE)localLogs();drawLogs()}},60000);
 
   /* ---------- 캡처 ---------- */
   var capBlob=null,capName="";
@@ -268,53 +268,42 @@
   drawQuiz();
 
   /* ---------- 캘린더 ---------- */
-  var EV=[
-    {s:"2026-10-26",e:"2026-10-28",t:"서울핀테크위크 2026",p:"여의도 · 서울시 주최. 금융 AI 에이전트 기조연설, 글로벌 핀테크 토론회, 핀테크 채용관. 참가 신청 10월 21일까지, 무료",k:"핀테크",u:"https://www.newspim.com/news/view/20260912000050"},
-    {s:"2026-10-26",e:"2026-10-30",t:"FATF 총회·실무그룹 회의",p:"파리. 고위험·관찰대상 국가 명단이 바뀌는 회의라 끝나면 국가위험 기준을 다시 확인해요",k:"AML",u:"https://www.fatf-gafi.org/en/calendars/events.html"},
-    {s:"2026-11-25",e:"2026-11-27",t:"코리아 핀테크 위크 2026",p:"양재 aT센터 · 금융위원회. 에이전틱 AI, 디지털자산, 사이버보안 세미나와 채용설명회",k:"핀테크",u:"https://www.fsc.go.kr/no010101/87437"},
-    {s:"2027-01-01",t:"가상자산 소득 과세 시행 예정",p:"현행 세법 기준. CARF(가상자산 정보 자동교환)와 맞물려 거래소의 거래정보 관리 부담이 커져요",k:"규제"},
-    {s:"2027-02-22",e:"2027-02-26",t:"FATF 총회·실무그룹 회의",p:"2월 총회. 국가 명단 변경 여부를 확인해요",k:"AML",u:"https://www.fatf-gafi.org/en/calendars/events.html"}
-  ];
+  var EV=[];
   var calCur="전체";
   function md(s){var x=d(s);return String(x.getMonth()+1).padStart(2,"0")+"."+String(x.getDate()).padStart(2,"0")}
   function ddn(s){return Math.round((d(s)-now)/DAY)}
   function drawCal(){
     var l=EV.filter(function(e){return d(e.e||e.s)>=now&&(calCur==="전체"||e.k===calCur)});
     $("calList").innerHTML=l.map(function(e){var n=ddn(e.s),live=n<=0;
-      return '<li><span class="w">'+md(e.s)+(e.e?'<small>~ '+md(e.e)+'</small>':'<small>'+d(e.s).getFullYear()+'</small>')+'</span><div class="what"><b>'+(e.u?'<a href="'+e.u+'" target="_blank" rel="noopener">'+e.t+'</a>':e.t)+'</b><p>'+e.k+' · '+e.p+'</p></div><span class="dd'+(live||n<=30?" hot":"")+'">'+(live?"진행 중":"D-"+n)+'</span></li>'}).join("")||'<li><div class="what"><p>이 구분에 다가오는 일정이 없어요.</p></div></li>';
+      return '<li><span class="w">'+md(e.s)+(e.e?'<small>~ '+md(e.e)+'</small>':'<small>'+d(e.s).getFullYear()+'</small>')+'</span><div class="what"><b>'+(e.u?'<a href="'+esc(e.u)+'" target="_blank" rel="noopener">'+esc(e.t)+'</a>':esc(e.t))+'</b><p>'+esc(e.k)+' · '+esc(e.p)+'</p></div><span class="dd'+(live||n<=30?" hot":"")+'">'+(live?"진행 중":"D-"+n)+'</span></li>'}).join("")||'<li><div class="what"><p>이 구분에 다가오는 일정이 없어요.</p></div></li>';
   }
   chips($("calChips"),["전체","AML","핀테크","규제"],calCur,function(t){calCur=t;drawCal()});drawCal();
 
   /* ---------- 채용 ---------- */
-  var JB=[
-    {r:"2026-10-02",dl:"2026-11-01",co:"나이스신용정보 (네이버파이낸셜)",t:"AML 고객확인(KYC) 서류검증 사원",x:"경력무관",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50098731"},
-    {r:"2026-09-30",dl:"2026-10-11",co:"파라다이스세가사미",t:"Paradise City 자금세탁방지(AML) 담당자",x:"신입",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50076820"},
-    {r:"2026-09-29",dl:null,co:"다날핀테크",t:"AML 자금세탁방지 담당자",x:"경력 3년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50071427"},
-    {r:"2026-09-28",dl:"2026-10-11",co:"다날",t:"KYC 담당자 (계약직)",x:"경력무관",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50058789"},
-    {r:"2026-09-27",dl:"2026-10-25",co:"코인원",t:"AML Manager (내부통제 기획·운영)",x:"경력 3년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49861894"},
-    {r:"2026-09-23",dl:"2026-10-23",co:"그레이브릿지 (비블록)",t:"규제대응본부 AML·컴플라이언스",x:"경력 5년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50049349"},
-    {r:"2026-09-23",dl:"2026-10-23",co:"굿씽크",t:"AML 업무 경험 Java·Spring 개발자",x:"경력 9년+",k:"개발",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50049480"},
-    {r:"2026-09-22",dl:"2026-10-22",co:"트래블월렛",t:"자금세탁방지·컴플라이언스 담당",x:"경력 5년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50040492"},
-    {r:"2026-09-21",dl:"2026-10-21",co:"비바리퍼블리카 (토스)",t:"AML Operations Manager (Global)",x:"경력 1년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/50034002"},
-    {r:"2026-09-14",dl:"2026-10-14",co:"한패스",t:"핀테크·금융 자금세탁방지 올라운더",x:"경력 3년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49982259"},
-    {r:"2026-09-13",dl:"2026-10-13",co:"이오스페이먼츠",t:"리스크 관리(RM)·자금세탁방지(AML) 경력직",x:"경력 5년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49979824"},
-    {r:"2026-09-11",dl:"2026-10-25",co:"코인원",t:"AML Manager (STR 기획·운영)",x:"경력 2년+",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49861780"},
-    {r:"2026-09-09",dl:"2026-11-08",co:"헥토월렛원",t:"백엔드 개발자 (AML 전담)",x:"경력 1년+",k:"개발",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49959916"},
-    {r:"2026-09-07",dl:"2026-10-07",co:"이나인페이 (E9pay)",t:"자금세탁방지팀 운영(OPS) 담당자",x:"신입·경력",k:"실무",u:"https://www.jobkorea.co.kr/Recruit/GI_Read/49943262"}
-  ];
+  var JB=[];
   var jobCur="전체",JOBS=JB.filter(function(j){return d(j.r)>=new Date(now.getTime()-30*DAY)&&(!j.dl||d(j.dl)>=now)});
   function drawJobs(){
     var l=JOBS.filter(function(j){return jobCur==="전체"||j.k===jobCur});
     $("jobN").textContent=JOBS.length+"건";
-    $("jobList").innerHTML=l.map(function(j){var n=j.dl?ddn(j.dl):null;return '<li><a href="'+j.u+'" target="_blank" rel="noopener"><span><span class="co">'+j.co+'</span><span class="t">'+j.t+'</span></span><span class="x">'+j.x+'</span><span class="dd'+(n!==null&&n<=7?" hot":"")+'">'+(n===null?"상시":n===0?"D-DAY":"D-"+n)+'</span></a></li>'}).join("")||'<li><a href="#board"><span class="t">최근 한 달 안에 올라온 공고가 없어요.</span></a></li>';
+    $("jobList").innerHTML=l.map(function(j){var n=j.dl?ddn(j.dl):null;return '<li><a href="'+esc(j.u)+'" target="_blank" rel="noopener"><span><span class="co">'+esc(j.co)+'</span><span class="t">'+esc(j.t)+'</span></span><span class="x">'+esc(j.x)+'</span><span class="dd'+(n!==null&&n<=7?" hot":"")+'">'+(n===null?"상시":n===0?"D-DAY":"D-"+n)+'</span></a></li>'}).join("")||'<li><a href="#board"><span class="t">최근 한 달 안에 올라온 공고가 없어요.</span></a></li>';
   }
   chips($("jobChips"),["전체","실무","개발"],jobCur,function(t){jobCur=t;drawJobs()});drawJobs();
-  var up=EV.filter(function(e){return d(e.e||e.s)>=now}).slice(0,2);
+  function boardHeader(){
+  if(M.board)M.board.stop();var up=EV.filter(function(e){return d(e.e||e.s)>=now}).slice(0,2);
   var soon=JOBS.filter(function(j){return j.dl}).sort(function(a,b){return d(a.dl)-d(b.dl)})[0];
   var w3=up.map(function(e){var n=ddn(e.s);return n<=0?"진행 중":"D-"+n}),c3=up.map(function(e){return e.t});
   w3.push(JOBS.length+"건");c3.push("최근 한 달 AML 채용 공고");
   if(soon){var sn=ddn(soon.dl);w3.push(sn===0?"D-DAY":"D-"+sn);c3.push("가장 먼저 마감되는 공고 · "+soon.co)}
   M.board=Morph("m3",w3,c3);
+  if(!$("p-board").hidden)M.board.start();}
+  boardHeader();
+  fetch("data/board.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(b){
+    function valid(x,date){return x&&typeof x.t==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(x[date])&&/^https?:\/\//.test(x.u||"")}
+    EV=(b.events||[]).filter(function(x){return valid(x,"s")});JB=(b.jobs||[]).filter(function(x){return valid(x,"r")});
+    JOBS=JB.filter(function(j){return d(j.r)>=new Date(now.getTime()-30*DAY)&&(!j.dl||d(j.dl)>=now)});drawCal();drawJobs();boardHeader();
+    var note=document.createElement("p");note.className="fine";note.textContent=b.updatedAt?"자료 갱신일 · "+b.updatedAt+" · 일정과 마감은 원문에서 확인해 주세요.":"기존 수록 자료예요. 일정과 마감은 원문에서 확인해 주세요.";$("calList").before(note);
+  }).catch(function(){var note=document.createElement("p");note.className="fine";note.textContent="일정 자료를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.";$("calList").before(note)});
+
 
   /* ---------- 메일 복사 ---------- */
   $("copy").onclick=function(){var el=$("mail"),t=$("toast");
@@ -457,7 +446,7 @@
     if(!window.claude||!window.claude.use)return;
     Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
       var db=r[0],u=r[1];if(!db||!u)return;return u.id().then(function(id){if(!id)return;LB.db=db;LB.uid=id;
-        LB.unsub=db.collection("lb").onSnapshot(function(snap){LB.docs=snap.docs.map(function(d){var o=Object.assign({},d.data());o._id=d.id;return o});LB.me=LB.docs.find(function(d){return d._id===id})||LB.me;$("rkNote").textContent="순위는 오늘 자정(한국 시간)에 새로 시작해요.";drawRank();drawMsRank();msStats();if(typeof drawAcRank==="function"){drawAcRank();acStats()}
+        LB.unsub=db.collection("lb").onSnapshot(function(snap){LB.docs=snap.docs.map(function(d){var o=Object.assign({},d.data());o._id=d.id;return o});LB.me=LB.docs.find(function(d){return d._id===id})||LB.me;$("rkNote").textContent="순위는 오늘 자정에 새로 시작해요. 이용자 기기에서 제출한 참고 기록이에요.";drawRank();drawMsRank();msStats();if(typeof drawAcRank==="function"){drawAcRank();acStats()}
           if(pz.done){var k=recKey(),mine=(LS.get("ai_pz_best")||{})[k];if(mine&&!(LB.me&&LB.me.rec&&LB.me.rec[k])&&nick())submit()}},function(){});
       })}).catch(function(){});
   }
@@ -1003,11 +992,11 @@
   function kday(d){return d.replace(/-/g,"")}
   function pollOf(ymd){var s="poll|"+ymd,a=0;for(var i=0;i<s.length;i++)a=Math.imul(a^s.charCodeAt(i),2654435761);return POLLS[(a>>>0)%POLLS.length]}
   function myVote(d){var v=TK.mine&&TK.mine.votes&&TK.mine.votes[d];if(v==null){var lv=LS.get("ai_vote_"+d);if(lv!=null)v=lv}return v==null?null:+v}
-  function pollTally(d){var c=[0,0,0,0],bySec={},n=0;TK.docs.forEach(function(doc){var v=doc.votes&&doc.votes[d];if(v==null)return;v=+v;if(v<0||v>3)return;c[v]++;n++;var s=doc.sector||"기타";(bySec[s]=bySec[s]||[0,0,0,0])[v]++});
+  function pollTally(d){if(TK.aggregate)return TK.aggregate.polls[d]||{c:[0,0,0,0],n:0,bySec:{}};var c=[0,0,0,0],bySec={},n=0;TK.docs.forEach(function(doc){var v=doc.votes&&doc.votes[d];if(v==null)return;v=+v;if(v<0||v>3)return;c[v]++;n++;var s=doc.sector||"기타";(bySec[s]=bySec[s]||[0,0,0,0])[v]++});
     if(!TK.db){var lv=myVote(d);if(lv!=null){c[lv]++;n++}}return{c:c,n:n,bySec:bySec}}
   function pct(a,b){return b?Math.round(100*a/b):0}
   function ago(ts){var s=(Date.now()-ts)/1000;if(s<60)return"방금";if(s<3600)return Math.floor(s/60)+"분 전";if(s<86400)return Math.floor(s/3600)+"시간 전";var d=new Date(ts+9*3600e3);return (d.getUTCMonth()+1)+"."+d.getUTCDate()+"."}
-  function allPosts(){var out=[],likes={},reps={};
+  function allPosts(){if(TK.publicPosts)return TK.publicPosts;var out=[],likes={},reps={};
     TK.docs.forEach(function(doc){var lk=doc.likes||{},rp=doc.rep||{};Object.keys(lk).forEach(function(g){if(lk[g])likes[g]=(likes[g]||0)+1});Object.keys(rp).forEach(function(g){if(rp[g])reps[g]=(reps[g]||0)+1})});
     TK.docs.forEach(function(doc){var ps=doc.posts||{},v=doc.votes||{};Object.keys(ps).forEach(function(pid){var p=ps[pid];if(!p||p.del)return;var gid=doc._id+"~"+pid,d=(p.k||"").replace("q-","");
       out.push({gid:gid,pid:pid,uid:doc._id,nick:doc.nick||"익명",sector:doc.sector||"",k:p.k,d:d,t:p.t||"",at:p.at||0,hid:!!p.hid||(reps[gid]||0)>=3,likes:likes[gid]||0,reps:reps[gid]||0,vote:v[d]})})});return out}
@@ -1028,19 +1017,19 @@
         +(TK.owner&&!mine?'<button type="button" class="hd" data-u="'+p.uid+'" data-p="'+p.pid+'" data-h="'+(p.hid?0:1)+'">'+(p.hid?'다시 보이기':'가리기')+(p.reps?' · 신고 '+p.reps:'')+'</button>':'')+'</div></li>'}).join("")
       :'<li class="empty">아직 덧붙인 의견이 없어요. 고른 이유를 한 줄 남겨 주면 다른 실무자에게 큰 도움이 돼요.</li>';
     /* 지난 투표 */
-    var days={};TK.docs.forEach(function(doc){Object.keys(doc.votes||{}).forEach(function(k){if(k<d)days[k]=1})});if(!TK.db)Object.keys(LS.get("ai_vote_days")||{}).forEach(function(k){if(k<d)days[k]=1});
+    var days={};if(TK.aggregate)Object.keys(TK.aggregate.polls).forEach(function(k){if(k<d)days[k]=1});TK.docs.forEach(function(doc){Object.keys(doc.votes||{}).forEach(function(k){if(k<d)days[k]=1})});if(!TK.db)Object.keys(LS.get("ai_vote_days")||{}).forEach(function(k){if(k<d)days[k]=1});
     var ks=Object.keys(days).sort().reverse();
     $("lgPast").innerHTML=ks.length?ks.slice(0,14).map(function(k){var P2=pollOf(k),T2=pollTally(k),top=T2.c.indexOf(Math.max.apply(null,T2.c)),best=posts.filter(function(p){return p.d===k&&!p.hid}).sort(function(a,b){return b.likes-a.likes})[0];
       return '<li><small class="mono">'+k.slice(4,6)+"."+k.slice(6)+'. · '+T2.n+'명</small><b>'+esc(P2[0])+'</b><p>가장 많은 답 · '+esc(P2[1][top])+' <span class="mono">'+pct(T2.c[top],T2.n)+'%</span></p>'+(best?'<p class="q">"'+esc(best.t.length>90?best.t.slice(0,90)+"…":best.t)+'" · '+esc(best.nick)+'</p>':'')+'</li>'}).join("")
       :'<li class="empty">투표가 하루씩 쌓이면 업권별 실무 현황이 여기에 모여요.</li>';
     var tot=0;TK.docs.forEach(function(doc){tot+=Object.keys(doc.votes||{}).length});var myDays=TK.mine?Object.keys(TK.mine.votes||{}).length:Object.keys(LS.get("ai_vote_days")||{}).length;
-    $("lgN1").textContent=T.n;$("lgN2").textContent=TK.db?tot:myDays;$("lgN3").textContent=myDays+"일";$("lgLive").textContent=TK.db?(TK.docs.length+"명 참여"):"이 기기만";
+    if(TK.aggregate)tot=TK.aggregate.totalVotes;$("lgN1").textContent=T.n;$("lgN2").textContent=TK.db?tot:myDays;$("lgN3").textContent=myDays+"일";$("lgLive").textContent=TK.db?((TK.aggregate?TK.aggregate.participants:TK.docs.length)+"개 기기 참여"):"이 기기만";
     $("lgNudgeN").textContent=voted?"오늘 결과 보기 →":(T.n?T.n+"명 참여 · 1초 투표 →":"1초 투표 →");
     lgAuto();
     if(TK.owner){$("lgAdmin").hidden=false;$("lgAdminTxt").textContent="오늘 "+T.n+"명 · 누적 투표 "+tot+" · 한 줄 의견 "+posts.length+"개"}
     lgFormState()}
   function lgFormState(){var can=!!(TK.db&&TK.uid&&!TK.ro);["lgText","lgNick"].forEach(function(id){$(id).disabled=!can});$("lgSend").disabled=!can;
-    $("lgNote").textContent=!TK.db?"로그인한 상태로 열면 한 줄 의견도 남길 수 있어요.":TK.ro?"이 링크 권한으로는 투표 결과를 보기만 할 수 있어요.":"회사명·고객 정보는 빼고 써 주세요. 남긴 글은 닉네임·업권과 함께 AML 인사이트 콘텐츠에 인용될 수 있어요."}
+    $("lgNote").textContent=!TK.db?"기기 연결을 마치면 한 줄 의견을 남길 수 있어요.":TK.ro?"이 링크 권한으로는 투표 결과를 보기만 할 수 있어요.":"회사명·고객 정보는 빼고 써 주세요. 남긴 글은 닉네임·업권과 함께 AML 인사이트 콘텐츠에 인용될 수 있어요."}
   function tkWrite(fn){TK.q=TK.q.then(fn).catch(function(e){if(e&&e.code==="invalid_argument"){TK.ro=true;lgFormState()}else{$("lgNote").textContent="저장하지 못했어요. 잠시 뒤 다시 해 주세요."}});return TK.q}
   function deepMerge(a,b){var o=Object.assign({},a);Object.keys(b).forEach(function(k){o[k]=b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object"?deepMerge(a[k],b[k]):b[k]});return o}
   function tkSave(patch,full){if(!TK.ready)return Promise.resolve();return tkWrite(function(){var ref=TK.db.doc("talk/"+TK.uid);if(!TK.mine||full){var base=Object.assign({nick:"",sector:"",votes:{},posts:{},likes:{},rep:{}},TK.mine||{});delete base._id;return ref.set(full||deepMerge(base,patch))}return ref.update(patch)})}
@@ -1078,7 +1067,7 @@
   function initTalk(){if(!window.claude||!window.claude.use){lgDraw();return}
     Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){var db=r[0],u=r[1];if(!db||!u){lgDraw();return}
       return Promise.all([u.id(),u.isOwner()]).then(function(x){if(!x[0]){lgDraw();return}TK.db=db;TK.uid=x[0];TK.owner=!!x[1];lgDraw();
-        db.collection("talk").onSnapshot(function(snap){TK.docs=snap.docs.map(function(dd){var o=Object.assign({},dd.data());o._id=dd.id;return o});TK.mine=TK.docs.find(function(dd){return dd._id===TK.uid})||null;TK.ready=true;
+        db.collection("talk").onSnapshot(function(snap){TK.aggregate=snap.aggregate||null;TK.publicPosts=snap.posts||null;TK.docs=snap.docs.map(function(dd){var o=Object.assign({},dd.data());o._id=dd.id;return o});TK.mine=TK.docs.find(function(dd){return dd._id===TK.uid})||null;TK.ready=true;
           if(TK.mine){if(TK.mine.nick&&!$("lgNick").value)$("lgNick").value=TK.mine.nick;if(TK.mine.sector&&!$("lgSector").value)$("lgSector").value=TK.mine.sector;
             var lv=LS.get("ai_vote_"+kday(pz.day));if(lv!=null&&!(TK.mine.votes&&TK.mine.votes[kday(pz.day)]!=null)&&!TK.ro){var o={votes:{}};o.votes[kday(pz.day)]=lv;tkSave(o)}}
           lgDraw()},function(){lgDraw()})})}).catch(function(){lgDraw()})}
@@ -1097,7 +1086,7 @@
   function scrapRefresh(){if(!SC)return;scLoad();
     [].forEach.call(document.querySelectorAll("#p-today .art"),function(art){var b=art.querySelector(".scrap");if(!b)return;var on=!!SC.list[artKey(art)];b.setAttribute("aria-pressed",on);b.textContent=on?"스크랩함":"스크랩"});
     var keys=Object.keys(SC.list).sort(function(a,b){return (SC.list[b].at||0)-(SC.list[a].at||0)});$("scN").textContent=keys.length?keys.length+"개":"";
-    $("scList").innerHTML=!PROFILE?'<li class="join-pitch"><b>무료 회원이 되면</b><span>기사 인사이트 스크랩, 어느 기기에서나 다시 보기</span><span>퍼즐·게임 순위에 내 닉네임</span><span>WLF 조회 이력 24시간 보관과 결과 캡처</span><button class="btn sm" type="button" data-join="scrap">10초 만에 가입</button></li>'
+    $("scList").innerHTML=!PROFILE?'<li class="join-pitch"><b>기기 프로필을 등록하면</b><span>기사 인사이트 스크랩, 이 기기에서 다시 보기</span><span>퍼즐·게임 순위에 내 닉네임</span><span>WLF 조회 이력 24시간 보관과 결과 캡처</span><button class="btn sm" type="button" data-join="scrap">기기 프로필 등록</button></li>'
       :keys.length?keys.slice(0,30).map(function(k){var x=SC.list[k],y=0,n=0;(x.c||[]).forEach(function(c){if(c.v==="y")y++;if(c.v==="n")n++});var d=(x.d||"").split("-");
         return '<li><a href="'+esc(x.u||"#")+'" target="_blank" rel="noopener">'+esc(x.t)+'</a><small>'+(d.length===3?d[1]+"."+d[2]+". · ":"")+(y+n?"우리 회사 해당 "+y+" · 해당 없음 "+n:"아직 판단 전")+'</small>'
           +'<details><summary>인사이트 다시 보기</summary>'+(x.s?'<p>'+esc(x.s)+'</p>':'')+'<ol>'+(x.c||[]).map(function(c){return '<li><b>'+esc(c.lv)+'</b> '+esc(c.t)+(c.v?' <em>'+(c.v==="y"?"해당":"해당 없음")+'</em>':'')+'</li>'}).join("")+'</ol></details>'
@@ -1121,12 +1110,12 @@
   function lgAuto(){
     var html="";[].forEach.call(document.querySelectorAll("#p-today .art"),function(art,ai){var k=artKey(art);
       [].forEach.call(art.querySelectorAll(".checks li"),function(li){var cid=li.getAttribute("data-c"),y=0,n=0;TK.docs.forEach(function(doc){var v=doc.jd&&doc.jd[k+"|"+cid];if(v==="y")y++;else if(v==="n")n++});
-        if(!TK.db){if(J[cid]==="y")y++;else if(J[cid]==="n")n++}
+        if(TK.aggregate){var stat=TK.aggregate.judgments[k+"|"+cid]||{};y=stat.y||0;n=stat.n||0}if(!TK.db){if(J[cid]==="y")y++;else if(J[cid]==="n")n++}
         var tot=y+n,t=((li.querySelector(".ins")||{}).textContent||"");html+='<li><small>기사 '+(ai+1)+' · '+esc((li.querySelector(".lv")||{}).textContent||"")+'</small><p>'+esc(t.length>58?t.slice(0,58)+"…":t)+'</p><div class="lg-bar"><span style="width:'+(tot?Math.round(100*y/tot):0)+'%"></span></div><span class="mono">'+(tot?"우리 회사 해당 "+Math.round(100*y/tot)+"% · "+tot+"명":"아직 판단한 사람이 없어요")+'</span></li>'})});
     $("lgChk").innerHTML=html||'<li class="empty">오늘 기사가 없어요.</li>';
     var agg={};TK.docs.forEach(function(doc){var s=doc.sc||{};Object.keys(s).forEach(function(k){if(!s[k]||!s[k].on)return;agg[k]=agg[k]||{t:s[k].t,n:0,at:0};agg[k].n++;agg[k].at=Math.max(agg[k].at,s[k].at||0)})});
     if(!TK.db&&SC)Object.keys(SC.list).forEach(function(k){agg[k]={t:SC.list[k].t,n:1,at:SC.list[k].at}});
-    var top=Object.keys(agg).sort(function(a,b){return agg[b].n-agg[a].n||agg[b].at-agg[a].at}).slice(0,6);
+    if(TK.aggregate)agg=TK.aggregate.scraps;var top=Object.keys(agg).sort(function(a,b){return agg[b].n-agg[a].n||agg[b].at-agg[a].at}).slice(0,6);
     $("lgTop").innerHTML=top.length?top.map(function(k,i){return '<li><span class="mono r">'+String(i+1).padStart(2,"0")+'</span><b>'+esc(agg[k].t)+'</b><span class="mono">'+agg[k].n+'명</span></li>'}).join(""):'<li class="empty">회원들이 스크랩한 기사가 여기 순위로 쌓여요.</li>'}
   lgDraw();
   /* ---------- 오늘 기사: 매일 아침 저장소(daily)에서 불러오기 ---------- */
@@ -1136,7 +1125,7 @@
     var sum=(it.sum||[]).map(function(p){return "<p>"+esc(p).replace(/\[\[(.+?)\]\]/g,function(_,x){n++;return '<mark data-n="'+n+'">'+x+'</mark>'})+"</p>"}).join("");
     var checks=(it.checks||[]).map(function(c,j){return '<li data-c="a'+(i+1)+'-'+(j+1)+'"><span class="no">'+(j+1)+'</span><div><p class="lv'+(c.hi?" hi":"")+'">'+esc(c.lv||(c.hi?"바로 확인":"점검 권장"))+'</p><p class="ins">'+esc(c.t)+'</p></div><div class="yn" role="group" aria-label="우리 회사 해당 여부"><button type="button" data-v="y">해당</button><button type="button" data-v="n">해당 없음</button></div></li>'}).join("");
     var a=document.createElement("article");a.className="card art"+(i===0?" lead":"");a.setAttribute("data-art","a"+(i+1));
-    a.innerHTML='<p class="kick">'+(it.tags||[]).slice(0,3).map(function(t){return "<span>"+esc(t)+"</span>"}).join("")+'<span class="mono">'+esc(it.src||"")+'</span></p><h2><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(it.title||"")+'<span aria-hidden="true"> ↗</span></a></h2><div class="sum">'+sum+'</div><ol class="checks">'+checks+'</ol>';return a}
+    a.innerHTML='<p class="kick">'+(it.tags||[]).slice(0,3).map(function(t){return "<span>"+esc(t)+"</span>"}).join("")+'<span class="mono">'+esc(it.src||"")+'</span></p><h2><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(it.title||"")+'<span aria-hidden="true"> ↗</span></a></h2><p class="fine">'+(it.summaryMode==='article-ai'?'원문 확인 후 요약 · 점검은 운영자의 검토 제안이에요.':'제목 기반 정리 · 상세 사실은 원문에서 확인해 주세요.')+'</p><div class="sum">'+sum+'</div><ol class="checks">'+checks+'</ol>';return a}
   function renderArts(D){if(!D||!D.items||!D.items.length||!D.date)return;if(D.date===DAILY.date&&DAILY.rendered)return;
     var wrap=document.querySelector("#p-today .arts-main");
     [].forEach.call(wrap.querySelectorAll(".art"),function(a){a.remove()});
@@ -1188,10 +1177,10 @@
   $("admCsv").onclick=function(){if(!ADM.data)return;var rows=[["날짜","방문자","페이지뷰"]];lastDays(90).forEach(function(d){var u=0,p=0;ADM.data.v.forEach(function(v){var c=v.d&&v.d[d];if(c){u++;p+=c}});rows.push([d,u,p])});
     var csv="﻿"+rows.map(function(r){return r.join(",")}).join("\n");window.claude.use("downloads").then(function(dl){if(dl)return dl.save({filename:"AML인사이트_방문현황_"+kstDay()+".csv",data:csv})}).catch(function(){})};
   /* ---------- 회원가입 · 약관 ---------- */
-  function openJoin(why){if(PROFILE){go("wlf",true);return}$("jmWhy").textContent=why==="scrap"?"스크랩은 회원 기능이에요. 닉네임과 업권만 넣으면 바로 가입돼요.":"닉네임과 업권만 넣으면 10초 만에 가입돼요. 이름·연락처·이메일은 받지 않아요.";
+  function openJoin(why){if(PROFILE){go("wlf",true);return}$("jmWhy").textContent=why==="scrap"?"스크랩은 회원 기능이에요. 닉네임과 업권을 등록하면 이 기기에서 사용할 수 있어요.":"닉네임과 업권만 넣으면 기기 프로필 등록돼요. 기기 식별자로 서버에 저장해요. 다른 기기와 연결하는 로그인은 준비 중이에요.";
     $("jmSec").innerHTML=SECT.map(function(s){return "<option>"+s+"</option>"}).join("");$("jmNick").value=nick()||"";$("joinModal").hidden=false;setTimeout(function(){$("jmNick").focus()},50)}
   $("jmForm").onsubmit=function(e){e.preventDefault();var n=$("jmNick").value.trim();if(!n){$("jmNick").focus();return}if(!$("jmT").checked||!$("jmP").checked){$("jmErr").textContent="필수 항목 두 가지에 동의해 주세요.";return}
-    join(n,$("jmSec").value,{agreed:{terms:"2026-10-05",privacy:"2026-10-05",at:Date.now()}});$("joinModal").hidden=true;LS.set("ai_pz_nick",n);showToast("가입했어요. 이제 기사 오른쪽 위 '스크랩'을 눌러 보세요")};
+    join(n,$("jmSec").value,{agreed:{terms:"2026-10-27",privacy:"2026-10-27",at:Date.now()}});$("joinModal").hidden=true;LS.set("ai_pz_nick",n);showToast("등록 내용을 저장하고 있어요.")};
   $("jmClose").onclick=function(){$("joinModal").hidden=true};
   function openDoc(which){$("docModal").hidden=false;[].forEach.call(document.querySelectorAll("#docTabs button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-d")===which)});$("docTerms").hidden=which!=="terms";$("docPrivacy").hidden=which!=="privacy";$("docBody").scrollTop=0}
   [].forEach.call(document.querySelectorAll("#docTabs button"),function(b){b.onclick=function(){openDoc(b.getAttribute("data-d"))}});
@@ -1204,7 +1193,7 @@
   /* ---------- 저장소 연결 ---------- */
   (function opsInit(){if(!window.claude||!window.claude.use)return;
     Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){var db=r[0],u=r[1];if(!db)return;
-      db.collection("daily").orderBy("date","desc").limit(1).onSnapshot(function(q){if(q.docs.length)renderArts(q.docs[0].data())},function(){});if(!u)return;
+      db.collection("daily").orderBy("date","desc").limit(1).onSnapshot(function(q){if(q.docs.length)renderArts(q.docs[0].data())},function(){});if(!u||window.AML_DEVICE_MODE)return;
       return Promise.all([u.id(),u.isOwner()]).then(function(x){if(!x[0])return;visitInit(db,x[0]);ADM.owner=!!x[1];$("adminLink").hidden=!ADM.owner;memberSync();if(ADM.owner&&location.hash==="#admin")go("admin",false)})}).catch(function(){})})();
   /* ---------- AML 규정: 바뀐 규정 · 규정 찾기 · 연결 보기 ---------- */
   var LX={meta:null,docs:{},arts:{},chg:[],cases:[],rev:{},crf:{},loaded:false,loading:null,hist:[],cur:null,q:"",flt:"all",open:{}};
