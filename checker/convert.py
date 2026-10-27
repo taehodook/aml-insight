@@ -109,7 +109,12 @@ def parse_eu():
     for e in entities.values():
         if not e["names"]: continue
         name, als = e["names"][0], e["names"][1:]
-        t = 0 if e["stype"] == "person" else 1
+        if e["stype"] in ("p", "person", "individual"):
+            t = 0
+        elif e["stype"] in ("e", "enterprise", "entity"):
+            t = 1
+        else:
+            raise ValueError("EU 대상 유형을 확인해 주세요: " + e["stype"])
         extra = " · ".join(x for x in [f"Ref {e['ref']}" if e["ref"] else "",
                                        f"등재 {e['listed']}" if e["listed"] else "",
                                        ("출생연도 " + ", ".join(sorted(e["years"])[:3])) if e["years"] else ""] if x)

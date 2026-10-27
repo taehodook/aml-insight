@@ -1,7 +1,7 @@
 // AML 인사이트 서비스 워커: 앱 설치를 가능하게 하고, 인터넷이 끊겼을 때 마지막으로 본 화면을 보여 줘요.
 // 항상 네트워크를 먼저 쓰고(새 기사·규정이 바로 보이게), 실패할 때만 저장해 둔 사본을 써요.
-const CACHE = 'aml-v1';
-const CORE = ['/', '/index.html', '/platform.js', '/pwa.js', '/manifest.webmanifest',
+const CACHE = 'aml-v2';
+const CORE = ['/', '/index.html', '/platform.js', '/js/app.js', '/pwa.js', '/manifest.webmanifest',
   '/icons/icon-192.png', '/fonts/P-4Regular.woff2', '/fonts/P-6SemiBold.woff2', '/fonts/P-8ExtraBold.woff2'];
 
 self.addEventListener('install', e => {
@@ -27,6 +27,6 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(r.mode === 'navigate' ? '/' : r, copy));
       }
       return res;
-    }).catch(() => caches.match(r.mode === 'navigate' ? '/' : r).then(m => m || caches.match('/')))
+    }).catch(() => caches.match(r.mode === 'navigate' ? '/' : r).then(m => m || (r.mode === 'navigate' ? caches.match('/') : new Response('Offline', {status: 503}))))
   );
 });
