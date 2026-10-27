@@ -106,17 +106,24 @@ def ai_items(items):
         "한국 금융회사 자금세탁방지(AML) 실무자를 위한 기사 요약을 만들어요. 아래 기사 제목만 보고 쓰세요.\n"
         "규칙: 제목에서 확인되는 사실만 쓰고 숫자·사실을 지어내지 않아요. 해석은 해석으로 들리게 써요.\n"
         "자연스러운 해요체, 이모지 금지, '~한다/~이다' 문어체 금지.\n"
-        "각 기사마다 sum은 문자열 1개(2~3문장), 핵심 구절 1~2곳을 [[ ]]로 감싸요.\n"
+        "각 기사마다 sum은 문자열 배열이에요. 배열 안에 2~3문장을 담은 문자열 1개를 넣고, 핵심 구절 1~2곳을 [[ ]]로 감싸요.\n"
+        "기사 본문을 읽었다고 표현하지 말고, 제목 기반 정리라는 한계를 밝혀요. 점검 문장은 일반적인 검토 제안이라고 구분해요.\n"
         "checks는 [[ ]] 개수와 똑같은 개수이고, n번째 [[ ]]와 n번째 check가 짝이에요.\n"
         "check의 t는 실무자가 '해당/해당 없음'으로 답할 수 있는 점검 문장으로, '~했는지 확인해 보세요' 또는 '~돼 있나요?'처럼 끝내요. "
         "바로 해야 할 것은 hi true, 아니면 false. 등급 예시가 필요하면 고·중·저 3등급 기준으로 써요.\n"
         '출력은 JSON 배열만: [{"sum":["..."],"checks":[{"hi":true,"t":"..."}]}, ...] (기사 순서대로 '
         f"{len(items)}개)\n\n기사:\n{lines}"
     )
+    schema = {"type": "array", "minItems": len(items), "maxItems": len(items), "items": {
+        "type": "object", "required": ["sum", "checks"], "properties": {
+            "sum": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+            "checks": {"type": "array", "minItems": 1, "items": {
+                "type": "object", "required": ["hi", "t"], "properties": {
+                    "hi": {"type": "boolean"}, "t": {"type": "string"}}}}}}}
     body = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
-                       "generationConfig": {"responseMimeType": "application/json", "temperature": 0.4}}).encode()
+                       "generationConfig": {"responseMimeType": "application/json", "responseJsonSchema": schema, "temperature": 0.4}}).encode()
     models = ([os.environ["GEMINI_MODEL"]] if os.environ.get("GEMINI_MODEL") else []) + \
-             ["gemini-3-flash", "gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.5-flash-lite"]
+             ["gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.5-flash-lite"]
     for model in models:
         try:
             req = urllib.request.Request(
@@ -126,9 +133,10 @@ def ai_items(items):
                 res = json.load(r)
             text = res["candidates"][0]["content"]["parts"][0]["text"]
             arr = json.loads(re.sub(r"^```(json)?|```$", "", text.strip()).strip())
-            if isinstance(arr, list) and len(arr) == len(items):
+            if isinstance(arr, list) and len(arr) == len(items) and all(isinstance(it, dict) and valid(it) for it in arr):
                 print(f"  AI 요약 생성 (모델: {model})")
                 return arr
+            print(f"  [모델 {model}] 응답 구조나 강조 구절·점검 짝이 맞지 않아 다음 모델로 재시도해요.", file=sys.stderr)
         except Exception as e:
             # 예외 문자열에는 API 키가 들어간 요청 URL이 포함될 수 있어요.
             print(f"  [모델 {model} 실패, 다음 시도] {type(e).__name__}", file=sys.stderr)
