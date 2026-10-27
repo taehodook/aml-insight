@@ -1,6 +1,6 @@
-@font-face{font-family:"Paperlogy";font-weight:400;font-display:swap;src:url("fonts/P-4Regular.woff2") format("woff2")}
-@font-face{font-family:"Paperlogy";font-weight:600;font-display:swap;src:url("fonts/P-6SemiBold.woff2") format("woff2")}
-@font-face{font-family:"Paperlogy";font-weight:800;font-display:swap;src:url("fonts/P-8ExtraBold.woff2") format("woff2")}
+@font-face{font-family:"Paperlogy";font-weight:400;font-display:swap;src:url("../fonts/P-4Regular.woff2") format("woff2")}
+@font-face{font-family:"Paperlogy";font-weight:600;font-display:swap;src:url("../fonts/P-6SemiBold.woff2") format("woff2")}
+@font-face{font-family:"Paperlogy";font-weight:800;font-display:swap;src:url("../fonts/P-8ExtraBold.woff2") format("woff2")}
 
 /* Layout: 가운데 정렬 1120px 단일 캔버스. 상단 가운데 알약형 메뉴, 화면마다 '큰 제목 + 오른쪽 계기판 카드' 한 줄, 그 아래 2단.
    장식은 옅은 점 격자 하나, 포인트는 형광 노랑 하나(밑줄·숫자), 나머지는 먹색 계조 */
@@ -600,3 +600,4 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:12px;c
 @media (max-width:560px){.lx-ph{display:none}.lx-pr{grid-template-columns:minmax(0,1fr)}.lx-pr p+p{border-left:0;border-top:1px dashed var(--line)}
   .lx-pr:not(.same) p::before{display:block;font-family:var(--m);font-size:10.5px;color:var(--muted);margin-bottom:2px}.lx-pr:not(.same) p:first-child::before{content:"개정 전"}.lx-pr:not(.same) p+p::before{content:"개정 후"}.lx-pr.same p:first-child{display:none}.lx-pr.same p+p{border-top:0}
   .lx-ch{grid-template-columns:auto minmax(0,1fr) 14px;row-gap:2px;padding-inline:16px}.lx-ch .mono{grid-column:1/-1}.lx-diff,.lx-hit,.lx-flt,.lx-pick,#lxArtBox{padding-inline:16px}}
+
