@@ -1,0 +1,30 @@
+name: sanctions-update
+on:
+  schedule:
+    - cron: '25 22 * * *' # 매일 07:25 KST
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: sanctions-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/sanctions_update.py
+      - name: 검증된 명단 저장
+        run: |
+          git config user.name 'data-bot'
+          git config user.email 'bot@users.noreply.github.com'
+          git add sanctions.json
+          git diff --cached --quiet && exit 0
+          git commit -m '제재명단: 공식 원천 확인 및 이름·유형 갱신'
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
