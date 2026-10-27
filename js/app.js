@@ -171,7 +171,7 @@
     LOGS=[];LS.set("ai_wlf_logs",[]);drawLogs();return Promise.resolve();
   }
   function saveLog(L){
-    if(!PROFILE)return;var rec={q:L.q,at:L.at,n:L.n,top:L.top.slice(0,10)};
+    if(!PROFILE)return;var rec={q:L.q,at:L.at,n:L.n,counts:L.counts,dataDate:L.dataDate,top:L.top.slice(0,10)};
     if(MODE==="cloud"){var id="l"+L.at;logsRef.doc(id).set(rec).then(function(){rec._id=id;LOGS.push(rec);drawLogs()}).catch(function(){})}
     else{LOGS.push(rec);LS.set("ai_wlf_logs",LOGS);drawLogs()}
   }
