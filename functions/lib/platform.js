@@ -40,7 +40,7 @@ export function sanitize(path,data,old={},now=Date.now()){
     return out;
   }
   if(path.startsWith('lb/')){
-    const out={nick:clean(data.nick,20)};
+    const out={nick:clean(data.nick,20),sector:sector(data.sector)};
     for(const name of ['rec','ms','ac'])if(object(data[name]))out[name]=Object.fromEntries(Object.entries(data[name]).slice(-100).filter(([k,v])=>k.length<80&&object(v)&&JSON.stringify(v).length<1000));
     return out;
   }

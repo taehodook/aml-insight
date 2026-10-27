@@ -1025,7 +1025,7 @@
       :'<li class="empty">투표가 하루씩 쌓이면 업권별 실무 현황이 여기에 모여요.</li>';
     var tot=0;TK.docs.forEach(function(doc){tot+=Object.keys(doc.votes||{}).length});var myDays=TK.mine?Object.keys(TK.mine.votes||{}).length:Object.keys(LS.get("ai_vote_days")||{}).length;
     if(TK.aggregate)tot=TK.aggregate.totalVotes;$("lgN1").textContent=T.n;$("lgN2").textContent=TK.db?tot:myDays;$("lgN3").textContent=myDays+"일";$("lgLive").textContent=TK.db?((TK.aggregate?TK.aggregate.participants:TK.docs.length)+"개 기기 참여"):"이 기기만";
-    $("lgNudgeN").textContent=voted?"오늘 결과 보기 →":(T.n?T.n+"명 참여 · 1초 투표 →":"1초 투표 →");
+    $("lgNudgeN").textContent=voted?"오늘 결과 보기 →":(T.n?T.n+"건 응답 · 1초 투표 →":"1초 투표 →");
     lgAuto();
     if(TK.owner){$("lgAdmin").hidden=false;$("lgAdminTxt").textContent="오늘 "+T.n+"명 · 누적 투표 "+tot+" · 한 줄 의견 "+posts.length+"개"}
     lgFormState()}
@@ -1126,7 +1126,7 @@
     var sum=(it.sum||[]).map(function(p){return "<p>"+esc(p).replace(/\[\[(.+?)\]\]/g,function(_,x){n++;return '<mark data-n="'+n+'">'+x+'</mark>'})+"</p>"}).join("");
     var checks=(it.checks||[]).map(function(c,j){return '<li data-c="a'+(i+1)+'-'+(j+1)+'"><span class="no">'+(j+1)+'</span><div><p class="lv'+(c.hi?" hi":"")+'">'+esc(c.lv||(c.hi?"바로 확인":"점검 권장"))+'</p><p class="ins">'+esc(c.t)+'</p></div><div class="yn" role="group" aria-label="우리 회사 해당 여부"><button type="button" data-v="y">해당</button><button type="button" data-v="n">해당 없음</button></div></li>'}).join("");
     var a=document.createElement("article");a.className="card art"+(i===0?" lead":"");a.setAttribute("data-art","a"+(i+1));
-    a.innerHTML='<p class="kick">'+(it.tags||[]).slice(0,3).map(function(t){return "<span>"+esc(t)+"</span>"}).join("")+'<span class="mono">'+esc(it.src||"")+'</span></p><h2><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(it.title||"")+'<span aria-hidden="true"> ↗</span></a></h2><p class="fine">'+(it.summaryMode==='article-ai'?'원문 확인 후 요약 · 점검은 운영자의 검토 제안이에요.':'제목 기반 정리 · 상세 사실은 원문에서 확인해 주세요.')+'</p><div class="sum">'+sum+'</div><ol class="checks">'+checks+'</ol>';return a}
+    a.innerHTML='<p class="kick">'+(it.tags||[]).slice(0,3).map(function(t){return "<span>"+esc(t)+"</span>"}).join("")+'<span class="mono">'+esc(it.src||"")+'</span></p><h2><a href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(it.title||"")+'<span aria-hidden="true"> ↗</span></a></h2><p class="fine">'+(it.summaryMode==='article-ai'?'원문 확인 · AI 요약 · 점검은 검토 제안이에요.':'제목 기반 정리 · 상세 사실은 원문에서 확인해 주세요.')+'</p><div class="sum">'+sum+'</div><ol class="checks">'+checks+'</ol>';return a}
   function renderArts(D){if(!D||!D.items||!D.items.length||!D.date)return;if(D.date===DAILY.date&&DAILY.rendered)return;
     var wrap=document.querySelector("#p-today .arts-main");
     [].forEach.call(wrap.querySelectorAll(".art"),function(a){a.remove()});

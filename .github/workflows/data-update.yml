@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      LAW_OC: ${{ secrets.LAW_OC || 'xogh1004' }}
+      LAW_OC: ${{ secrets.LAW_OC }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

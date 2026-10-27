@@ -8,6 +8,9 @@ on:
         description: 오늘의 자동 대체 기사를 원문 기준으로 다시 생성
         type: boolean
         default: false
+concurrency:
+  group: briefing-${{ github.ref }}
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
@@ -66,4 +69,5 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add briefing/data.json briefing/sanctions_snapshot.json briefing/index.html flow/flow_data.json flow/index.html business-risk/ra_news.json typology/methods.json checker/index.html checker/data.json checker/fbi.json data/daily 2>/dev/null || git add briefing flow business-risk typology data/daily
           git diff --cached --quiet || git commit -m "briefing: $(date +'%Y-%m-%d')"
-          git push
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1
