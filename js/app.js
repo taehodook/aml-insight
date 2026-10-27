@@ -144,6 +144,7 @@
     }else{
       a.innerHTML='<div class="me"><b>'+esc(PROFILE.nick.slice(0,1))+'</b><div><strong>'+esc(PROFILE.nick)+'</strong><span>'+esc(PROFILE.sector)+' · '+stamp(PROFILE.joinedAt).slice(0,11)+' 가입</span></div></div><p>조회하면 오른쪽 아래 이력에 쌓이고, 24시간 뒤 자동으로 지워져요.</p><div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn sm line" type="button" id="clearLogs">이력 모두 지우기</button><button class="btn sm line" type="button" id="leave">탈퇴</button></div>';
       $("clearLogs").onclick=clearLogs;$("leave").onclick=leave;
+      var legacy=LS.get("ai_scraps")||{};if(window.AML_DEVICE_MODE&&MODE==="cloud"&&Object.keys(legacy).length){var ib=document.createElement("button");ib.type="button";ib.className="btn sm line";ib.textContent="이전 브라우저 스크랩 가져오기";a.appendChild(ib);ib.onclick=function(){ib.disabled=true;var entries=Object.keys(legacy),chain=Promise.resolve();for(var offset=0;offset<entries.length;offset+=20){(function(keys){chain=chain.then(function(){return window.AMLPlatform.api("import-scraps","POST",{items:keys.map(function(k){return{id:k,data:legacy[k]}})})})})(entries.slice(offset,offset+20))}chain.then(function(){SC.loaded=false;scLoad();showToast("이전 스크랩을 가져왔어요. 원래 브라우저 사본도 남겨뒀어요.");ib.textContent="스크랩 가져오기 완료"}).catch(function(e){ib.disabled=false;showToast(e.message||"가져오지 못했어요.")})}}
       $("logCard").hidden=false;$("whoIni").textContent=PROFILE.nick.slice(0,1);$("whoTxt").textContent=PROFILE.nick;
       drawLogs();if(typeof scrapRefresh==="function")scrapRefresh();if(typeof memberSync==="function")memberSync();
     }
@@ -432,7 +433,7 @@
     $("rkN").textContent=l.length+"명 완료";
     $("pzRank").innerHTML=l.length?l.slice(0,10).map(function(x,i){return '<li'+(x.id===myId?' class="me"':'')+'><span class="r">'+String(i+1).padStart(2,"0")+'</span><span class="n">'+esc(x.nick)+(x.sector?'<small>'+esc(x.sector)+'</small>':'')+'</span><span class="t">'+fmtT(x.t)+'</span></li>'}).join("")+(function(){var mi=l.findIndex(function(x){return x.id===myId});return mi>=10?'<li class="me"><span class="r">'+String(mi+1).padStart(2,"0")+'</span><span class="n">'+esc(l[mi].nick)+'</span><span class="t">'+fmtT(l[mi].t)+'</span></li>':""})()
       :'<li class="empty">아직 오늘 '+LVN[pz.lv]+' 문제를 푼 사람이 없어요. 첫 기록을 남겨 보세요.</li>';
-    if(!LB.db||!LB.uid)$("rkNote").textContent="지금은 이 기기 기록만 보여요. 로그인한 상태로 열면 다른 실무자와 순위를 겨뤄요.";
+    if(!LB.db||!LB.uid)$("rkNote").textContent="지금은 이 기기 기록만 보여요. 서버 연결을 마치면 공용 참고 순위를 볼 수 있어요.";
     if(typeof GAME==="undefined"||GAME==="s")$("stTop").textContent=l.length?fmtT(l[0].t):"--:--";
     var dn=lbRows().length;$("nudgeTxt").textContent=(pz.done?"오늘 "+fmtT(pz.elapsed)+"에 풀었어요":"아직 안 풀었어요 · 보통 5~10분")+(dn?" · "+dn+"명 완료":"");
   }
@@ -555,7 +556,7 @@
     $("stStreak").textContent=n+"일";var l=msRows();$("stTop").textContent=l.length?fmtT(l[0].t):"--:--"}
   function msSubmit(){
     var k=mrec(),rec={t:ms.st.e,at:Date.now()},mine=LS.get("ai_pz_best")||{};mine[k]=rec;LS.set("ai_pz_best",mine);
-    if(!LB.db||!LB.uid){drawMsRank();$("msRkNote").textContent="지금은 이 기기 기록만 보여요. 로그인한 상태로 열면 다른 실무자와 순위를 겨뤄요.";return}
+    if(!LB.db||!LB.uid){drawMsRank();$("msRkNote").textContent="지금은 이 기기 기록만 보여요. 서버 연결을 마치면 공용 참고 순위를 볼 수 있어요.";return}
     if(!nick()){$("msNickCard").hidden=false;$("msNickIn").focus();return}
     var cur=LB.me?JSON.parse(JSON.stringify(LB.me)):{rec:{}};cur.nick=nick();cur.sector=(PROFILE&&PROFILE.sector)||cur.sector||"";cur.rec=cur.rec||{};
     if(cur.rec[k]){drawMsRank();return}
@@ -946,7 +947,7 @@
   function acStats(){if("dckf".indexOf(GAME)<0)return;
     var k=acRec(),m=(LS.get("ai_ac_best")||{})[k],pl=(LS.get("ai_ac_plays")||{})[k]||0;
     $("pzLvLab").textContent="무한 모드";$("stMine").textContent=m?fmtN(m.t):"-";$("stStreak").textContent=pl+"판";var l=acRows();$("stTop").textContent=l.length?fmtN(l[0].t):"-"}
-  function acSubmit(sc){if(!LB.db||!LB.uid){drawAcRank();$("acRkNote").textContent="지금은 이 기기 기록만 보여요. 로그인한 상태로 열면 다른 실무자와 순위를 겨뤄요.";return}
+  function acSubmit(sc){if(!LB.db||!LB.uid){drawAcRank();$("acRkNote").textContent="지금은 이 기기 기록만 보여요. 서버 연결을 마치면 공용 참고 순위를 볼 수 있어요.";return}
     if(!nick()){$("acNickCard").hidden=false;AC.pending=sc;return}
     var k=acRec(),cur=LB.me?JSON.parse(JSON.stringify(LB.me)):{rec:{}};cur.nick=nick();cur.sector=(PROFILE&&PROFILE.sector)||cur.sector||"";cur.rec=cur.rec||{};
     if(cur.rec[k]&&cur.rec[k].t>=sc){drawAcRank();return}cur.rec[k]={t:sc,at:Date.now()};
@@ -991,7 +992,7 @@
   var TK={db:null,uid:null,owner:false,docs:[],mine:null,q:Promise.resolve(),ro:false,ready:false};
   function kday(d){return d.replace(/-/g,"")}
   function pollOf(ymd){var s="poll|"+ymd,a=0;for(var i=0;i<s.length;i++)a=Math.imul(a^s.charCodeAt(i),2654435761);return POLLS[(a>>>0)%POLLS.length]}
-  function myVote(d){var v=TK.mine&&TK.mine.votes&&TK.mine.votes[d];if(v==null){var lv=LS.get("ai_vote_"+d);if(lv!=null)v=lv}return v==null?null:+v}
+  function myVote(d){if(TK.pending&&TK.pending.day===d)return TK.pending.value;var v=TK.mine&&TK.mine.votes&&TK.mine.votes[d];if(v==null&&TK.aggregate)return null;if(v==null){var lv=LS.get("ai_vote_"+d);if(lv!=null)v=lv}return v==null?null:+v}
   function pollTally(d){if(TK.aggregate)return TK.aggregate.polls[d]||{c:[0,0,0,0],n:0,bySec:{}};var c=[0,0,0,0],bySec={},n=0;TK.docs.forEach(function(doc){var v=doc.votes&&doc.votes[d];if(v==null)return;v=+v;if(v<0||v>3)return;c[v]++;n++;var s=doc.sector||"기타";(bySec[s]=bySec[s]||[0,0,0,0])[v]++});
     if(!TK.db){var lv=myVote(d);if(lv!=null){c[lv]++;n++}}return{c:c,n:n,bySec:bySec}}
   function pct(a,b){return b?Math.round(100*a/b):0}
@@ -1000,12 +1001,12 @@
     TK.docs.forEach(function(doc){var lk=doc.likes||{},rp=doc.rep||{};Object.keys(lk).forEach(function(g){if(lk[g])likes[g]=(likes[g]||0)+1});Object.keys(rp).forEach(function(g){if(rp[g])reps[g]=(reps[g]||0)+1})});
     TK.docs.forEach(function(doc){var ps=doc.posts||{},v=doc.votes||{};Object.keys(ps).forEach(function(pid){var p=ps[pid];if(!p||p.del)return;var gid=doc._id+"~"+pid,d=(p.k||"").replace("q-","");
       out.push({gid:gid,pid:pid,uid:doc._id,nick:doc.nick||"익명",sector:doc.sector||"",k:p.k,d:d,t:p.t||"",at:p.at||0,hid:!!p.hid||(reps[gid]||0)>=3,likes:likes[gid]||0,reps:reps[gid]||0,vote:v[d]})})});return out}
-  function lgDraw(){var d=kday(pz.day),P=pollOf(d),mv=myVote(d),T=pollTally(d),voted=mv!=null;
+  function lgDraw(){var d=kday(pz.day),P=pollOf(d),mv=myVote(d),T=pollTally(d),voted=mv!=null,connecting=window.AMLPlatform&&(window.AML_SERVER_READY===undefined||(window.AML_SERVER_READY&&!TK.ready));
     $("lgQ").textContent=P[0];$("lgNudgeQ").textContent=P[0];
-    $("lgOpts").innerHTML=P[1].map(function(o,i){var p=pct(T.c[i],T.n);return '<button type="button" class="lg-opt'+(voted?' done':'')+(mv===i?' mine':'')+'" data-i="'+i+'"'+(voted?' disabled':'')+'><span class="bar" style="width:'+(voted?p:0)+'%"></span><span class="t">'+esc(o)+(mv===i?' <small>내 선택</small>':'')+'</span>'+(voted?'<span class="mono p">'+p+'%</span>':'')+'</button>'}).join("");
-    $("lgMeta").textContent=voted?(T.n+"명 참여"+(TK.db?"":" · 이 기기 결과만 보여요")):(T.n?T.n+"명이 답했어요. 고르면 결과가 보여요.":"고르면 다른 실무자 결과가 보여요.");
+    $("lgOpts").innerHTML=P[1].map(function(o,i){var p=pct(T.c[i],T.n);return '<button type="button" class="lg-opt'+(voted?' done':'')+(mv===i?' mine':'')+'" data-i="'+i+'"'+(voted||connecting?' disabled':'')+'><span class="bar" style="width:'+(voted?p:0)+'%"></span><span class="t">'+esc(o)+(mv===i?' <small>내 선택</small>':'')+'</span>'+(voted?'<span class="mono p">'+p+'%</span>':'')+'</button>'}).join("");
+    $("lgMeta").textContent=connecting?"공용 집계를 불러오고 있어요.":TK.pending?"투표를 저장하고 있어요.":voted?(T.n+"건 참여"+(TK.db?"":" · 이 기기 결과만 보여요")):(T.n?T.n+"건의 응답이 있어요. 고르면 결과가 보여요.":"고르면 다른 실무자 결과가 보여요.");
     var ms=$("lgSector").value||(TK.mine&&TK.mine.sector)||"";
-    if(voted&&ms&&T.bySec[ms]){var sc=T.bySec[ms],sn=sc.reduce(function(a,b){return a+b},0),top=sc.indexOf(Math.max.apply(null,sc));$("lgSec").textContent="· 내 업권("+ms+") "+sn+"명이 가장 많이 고른 답: "+P[1][top]+" "+pct(sc[top],sn)+"%"}else $("lgSec").textContent="";
+    if(voted&&ms&&T.bySec[ms]){var sc=T.bySec[ms],sn=sc.reduce(function(a,b){return a+b},0),top=sc.indexOf(Math.max.apply(null,sc));$("lgSec").textContent="· 내 업권("+ms+") "+sn+"건 중 가장 많은 답: "+P[1][top]+" "+pct(sc[top],sn)+"%"}else $("lgSec").textContent="";
     $("lgAfter").hidden=!voted;$("lgEd").textContent=P[2];
     var posts=allPosts(),myLikes=(TK.mine&&TK.mine.likes)||{},myRep=(TK.mine&&TK.mine.rep)||{};
     var list=posts.filter(function(p){return p.d===d&&(!p.hid||TK.owner||p.uid===TK.uid)}).sort(function(a,b){return b.likes-a.likes||b.at-a.at});
@@ -1028,14 +1029,14 @@
     lgAuto();
     if(TK.owner){$("lgAdmin").hidden=false;$("lgAdminTxt").textContent="오늘 "+T.n+"명 · 누적 투표 "+tot+" · 한 줄 의견 "+posts.length+"개"}
     lgFormState()}
-  function lgFormState(){var can=!!(TK.db&&TK.uid&&!TK.ro);["lgText","lgNick"].forEach(function(id){$(id).disabled=!can});$("lgSend").disabled=!can;
-    $("lgNote").textContent=!TK.db?"기기 연결을 마치면 한 줄 의견을 남길 수 있어요.":TK.ro?"이 링크 권한으로는 투표 결과를 보기만 할 수 있어요.":"회사명·고객 정보는 빼고 써 주세요. 남긴 글은 닉네임·업권과 함께 AML 인사이트 콘텐츠에 인용될 수 있어요."}
-  function tkWrite(fn){TK.q=TK.q.then(fn).catch(function(e){if(e&&e.code==="invalid_argument"){TK.ro=true;lgFormState()}else{$("lgNote").textContent="저장하지 못했어요. 잠시 뒤 다시 해 주세요."}});return TK.q}
+  function lgFormState(){var can=!!(TK.db&&TK.uid&&!TK.ro&&(!window.AML_DEVICE_MODE||PROFILE));["lgText","lgNick"].forEach(function(id){$(id).disabled=!can});$("lgSend").disabled=!can;
+    $("lgNote").textContent=!TK.db?"기기 연결을 마치면 한 줄 의견을 남길 수 있어요.":TK.ro?"이 링크 권한으로는 투표 결과를 보기만 할 수 있어요.":"회사명·고객 정보는 빼고 써 주세요. 남긴 글은 닉네임·업권과 함께 AML 인사이트 콘텐츠에 인용될 수 있어요.";if(window.AML_DEVICE_MODE&&!PROFILE&&TK.db){$("lgNote").textContent="의견을 남기려면 기기 프로필을 먼저 등록해 주세요. ";var b=document.createElement("button");b.type="button";b.className="btn sm line";b.textContent="기기 프로필 등록";b.onclick=function(){openJoin()};$("lgNote").appendChild(b)}}
+  function tkWrite(fn){TK.q=TK.q.then(fn).catch(function(e){TK.pending=null;if(e&&e.code==="invalid_argument"){TK.ro=true;lgFormState()}else{$("lgNote").textContent=e.message||"저장하지 못했어요. 잠시 뒤 다시 해 주세요.";showToast($("lgNote").textContent);lgDraw()}});return TK.q}
   function deepMerge(a,b){var o=Object.assign({},a);Object.keys(b).forEach(function(k){o[k]=b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object"?deepMerge(a[k],b[k]):b[k]});return o}
   function tkSave(patch,full){if(!TK.ready)return Promise.resolve();return tkWrite(function(){var ref=TK.db.doc("talk/"+TK.uid);if(!TK.mine||full){var base=Object.assign({nick:"",sector:"",votes:{},posts:{},likes:{},rep:{}},TK.mine||{});delete base._id;return ref.set(full||deepMerge(base,patch))}return ref.update(patch)})}
   $("lgOpts").addEventListener("click",function(e){var b=e.target.closest(".lg-opt");if(!b||b.disabled)return;var d=kday(pz.day),i=+b.getAttribute("data-i"),sc=$("lgSector").value;
     LS.set("ai_vote_"+d,i);var vd=LS.get("ai_vote_days")||{};vd[d]=1;LS.set("ai_vote_days",vd);if(sc)LS.set("ai_lg_sector",sc);
-    if(TK.db&&TK.uid&&!TK.ro){var o={votes:{},sector:sc||(TK.mine&&TK.mine.sector)||""};o.votes[d]=i;tkSave(o)}
+    if(TK.db&&TK.uid&&!TK.ro){var o={votes:{},sector:sc||(TK.mine&&TK.mine.sector)||""};o.votes[d]=i;TK.pending={day:d,value:i};tkSave(o)}
     try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}lgDraw()});
   $("lgSector").addEventListener("change",function(){LS.set("ai_lg_sector",this.value);if(TK.db&&TK.uid&&TK.mine&&!TK.ro)tkSave({sector:this.value});lgDraw()});
   $("lgText").addEventListener("input",function(){$("lgCount").textContent=this.value.length+" / 300"});
@@ -1067,7 +1068,7 @@
   function initTalk(){if(!window.claude||!window.claude.use){lgDraw();return}
     Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){var db=r[0],u=r[1];if(!db||!u){lgDraw();return}
       return Promise.all([u.id(),u.isOwner()]).then(function(x){if(!x[0]){lgDraw();return}TK.db=db;TK.uid=x[0];TK.owner=!!x[1];lgDraw();
-        db.collection("talk").onSnapshot(function(snap){TK.aggregate=snap.aggregate||null;TK.publicPosts=snap.posts||null;TK.docs=snap.docs.map(function(dd){var o=Object.assign({},dd.data());o._id=dd.id;return o});TK.mine=TK.docs.find(function(dd){return dd._id===TK.uid})||null;TK.ready=true;
+        db.collection("talk").onSnapshot(function(snap){TK.pending=null;TK.aggregate=snap.aggregate||null;TK.publicPosts=snap.posts||null;TK.docs=snap.docs.map(function(dd){var o=Object.assign({},dd.data());o._id=dd.id;return o});TK.mine=TK.docs.find(function(dd){return dd._id===TK.uid})||null;TK.ready=true;
           if(TK.mine){if(TK.mine.nick&&!$("lgNick").value)$("lgNick").value=TK.mine.nick;if(TK.mine.sector&&!$("lgSector").value)$("lgSector").value=TK.mine.sector;
             var lv=LS.get("ai_vote_"+kday(pz.day));if(lv!=null&&!(TK.mine.votes&&TK.mine.votes[kday(pz.day)]!=null)&&!TK.ro){var o={votes:{}};o.votes[kday(pz.day)]=lv;tkSave(o)}}
           lgDraw()},function(){lgDraw()})})}).catch(function(){lgDraw()})}
@@ -1177,7 +1178,7 @@
   $("admCsv").onclick=function(){if(!ADM.data)return;var rows=[["날짜","방문자","페이지뷰"]];lastDays(90).forEach(function(d){var u=0,p=0;ADM.data.v.forEach(function(v){var c=v.d&&v.d[d];if(c){u++;p+=c}});rows.push([d,u,p])});
     var csv="﻿"+rows.map(function(r){return r.join(",")}).join("\n");window.claude.use("downloads").then(function(dl){if(dl)return dl.save({filename:"AML인사이트_방문현황_"+kstDay()+".csv",data:csv})}).catch(function(){})};
   /* ---------- 회원가입 · 약관 ---------- */
-  function openJoin(why){if(PROFILE){go("wlf",true);return}$("jmWhy").textContent=why==="scrap"?"스크랩은 회원 기능이에요. 닉네임과 업권을 등록하면 이 기기에서 사용할 수 있어요.":"닉네임과 업권만 넣으면 기기 프로필 등록돼요. 기기 식별자로 서버에 저장해요. 다른 기기와 연결하는 로그인은 준비 중이에요.";
+  function openJoin(why){if(PROFILE){go("wlf",true);return}$("jmWhy").textContent=why==="scrap"?"스크랩은 회원 기능이에요. 닉네임과 업권을 등록하면 이 기기에서 사용할 수 있어요.":"닉네임과 업권으로 기기 프로필을 등록해요. 기기 식별자로 서버에 저장해요. 다른 기기와 연결하는 로그인은 준비 중이에요.";
     $("jmSec").innerHTML=SECT.map(function(s){return "<option>"+s+"</option>"}).join("");$("jmNick").value=nick()||"";$("joinModal").hidden=false;setTimeout(function(){$("jmNick").focus()},50)}
   $("jmForm").onsubmit=function(e){e.preventDefault();var n=$("jmNick").value.trim();if(!n){$("jmNick").focus();return}if(!$("jmT").checked||!$("jmP").checked){$("jmErr").textContent="필수 항목 두 가지에 동의해 주세요.";return}
     join(n,$("jmSec").value,{agreed:{terms:"2026-10-27",privacy:"2026-10-27",at:Date.now()}});$("joinModal").hidden=true;LS.set("ai_pz_nick",n);showToast("등록 내용을 저장하고 있어요.")};

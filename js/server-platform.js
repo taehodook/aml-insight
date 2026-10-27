@@ -2,7 +2,7 @@
 (function(){
   window.AML_DEVICE_MODE=true;
   var base=new URL('../',document.currentScript.src).href,stamp=new Date().toISOString().slice(0,13).replace(/\D/g,'');
-  var ready=fetch(base+'api/status',{cache:'no-store',credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).then(function(s){window.AML_SERVER_READY=!!(s&&s.ready);return window.AML_SERVER_READY}).catch(function(){return false});
+  var ready=fetch(base+'api/status',{cache:'no-store',credentials:'same-origin'}).then(function(r){return r.ok?r.json():null}).then(function(s){window.AML_SERVER_READY=!!(s&&s.ready);return window.AML_SERVER_READY}).catch(function(){window.AML_SERVER_READY=false;return false});
   var identity=null,watchers=[];
   function api(path,method,data){return fetch(base+'api/'+path,{method:method||'GET',credentials:'same-origin',cache:'no-store',headers:data?{'Content-Type':'application/json'}:{},body:data?JSON.stringify(data):undefined}).then(function(r){return r.json().then(function(v){if(!r.ok)throw Object.assign(new Error(v.message||'저장하지 못했어요.'),{code:v.error,status:r.status});return v})})}
   function uid(){if(!identity)identity=api('session','POST',{}).then(function(v){return v.uid});return identity}

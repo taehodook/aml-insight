@@ -45,4 +45,21 @@ test('invalid payload, historical vote changes and prototype keys rejected',()=>
   assert.throws(()=>sanitize('talk/a',{sector:'unknown'}));
   assert.throws(()=>sanitize('data/users/a/profile',{nick:'닉네임',agreed:{}}));
 });
+test('기존 스크랩 가져오기는 동의한 기기에서만 가능하고 통계에는 합계만 보여요',async()=>{
+  const db=new D1(),a=client(db),u=(await a('session',{method:'POST',data:{}})).body.uid;
+  const payload={items:[{id:'slegacy',data:{t:'이전 기사',u:'https://example.com/legacy',s:'비공개 스크랩 메모'}}]};
+  assert.equal((await a('import-scraps',{method:'POST',data:payload})).status,403);
+  await a('store?path=data/users/'+u+'/profile',{method:'PUT',data:{nick:'검증',agreed:{terms:'2026-10-27',privacy:'2026-10-27'}}});
+  assert.equal((await a('import-scraps',{method:'POST',data:payload})).status,200);
+  assert.equal((await a('import-scraps',{method:'POST',data:payload})).status,200);
+  const result=(await a('store?path=talk')).body;
+  assert.equal(result.aggregate.scraps.slegacy.n,1);
+  assert.ok(!JSON.stringify(result).includes('비공개 스크랩 메모'));
+});
+test('의견을 삭제하고 다시 올려도 하루 등록 제한을 우회할 수 없어요',()=>{
+  const now=Date.now(),posts=Object.fromEntries(Array.from({length:5},(_,i)=>['p'+i,{t:'검증 의견',k:'q-'+day(),at:now}]));
+  const removed=sanitize('talk/device',{posts:{}},{posts},now);
+  assert.ok(removed.posts.p0.del);
+  assert.throws(()=>sanitize('talk/device',{posts:{newpost:{t:'추가 의견'}}},removed,now));
+});
 

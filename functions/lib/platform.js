@@ -63,6 +63,13 @@ async function limit(db,key,max,now){
   if(r.count>max)throw failure(429,'요청이 많아요. 잠시 뒤 다시 이용해 주세요.');
 }
 async function session(request,db){const token=(request.headers.get('Cookie')||'').match(/(?:^|;\s*)__Host-aml_session=([a-f0-9]{64})(?:;|$)/)?.[1];if(!token)return null;return db.prepare('SELECT uid FROM sessions WHERE token=? AND expires>?').bind(await digest(token),Date.now()).first()}
+async function readBody(request){
+  if(+(request.headers.get('Content-Length')||0)>300000)throw failure(413,'저장할 내용이 너무 길어요.');
+  const reader=request.body?.getReader();if(!reader)throw failure(400,'저장할 내용이 없어요.');let size=0;const chunks=[];
+  while(true){const {value,done}=await reader.read();if(done)break;size+=value.byteLength;if(size>300000){await reader.cancel();throw failure(413,'저장할 내용이 너무 길어요.')}chunks.push(value)}
+  const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length}
+  try{return JSON.parse(new TextDecoder().decode(bytes))}catch{throw failure(400,'내용 형식을 확인해 주세요.')}
+}
 export async function handle(request,env){
   try{
     const db=env.AML_DB,url=new URL(request.url),route=url.pathname.slice(5),now=Date.now();
@@ -72,7 +79,11 @@ export async function handle(request,env){
     if(request.method!=='GET'&&(request.headers.get('Origin')!==url.origin||request.headers.get('Sec-Fetch-Site')==='cross-site'))throw failure(403,'사이트 안에서 다시 이용해 주세요.');
     let user=await session(request,db);
     if(route==='session'&&request.method==='POST'){
-      if(user)return json({uid:user.uid});
+      if(user){
+        const token=(request.headers.get('Cookie')||'').match(/(?:^|;\s*)__Host-aml_session=([a-f0-9]{64})(?:;|$)/)[1];
+        await db.prepare('UPDATE sessions SET expires=? WHERE token=?').bind(now+180*DAY,await digest(token)).run();
+        return json({uid:user.uid},200,{'Set-Cookie':`__Host-aml_session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=15552000`});
+      }
       const ip=request.headers.get('CF-Connecting-IP')||'local',bucket=await digest(ip+'|'+Math.floor(now/DAY));await limit(db,'session:'+bucket,100,now);
       const token=[...crypto.getRandomValues(new Uint8Array(32))].map(x=>x.toString(16).padStart(2,'0')).join(''),uid=crypto.randomUUID();
       await db.prepare('INSERT INTO sessions(token,uid,expires) VALUES(?,?,?)').bind(await digest(token),uid,now+180*DAY).run();
@@ -85,10 +96,21 @@ export async function handle(request,env){
       await db.batch([db.prepare('DELETE FROM documents WHERE owner=?').bind(uid),db.prepare('DELETE FROM sessions WHERE uid=?').bind(uid)]);
       return json({ok:true},200,{'Set-Cookie':'__Host-aml_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0'});
     }
+    if(route==='import-scraps'&&request.method==='POST'){
+      await limit(db,'write:'+uid+':'+Math.floor(now/60000),40,now);
+      const profile=await db.prepare('SELECT path FROM documents WHERE path=?').bind(`data/users/${uid}/profile`).first();if(!profile)throw failure(403,'기기 프로필을 먼저 등록해 주세요.');
+      const data=await readBody(request);if(!Array.isArray(data.items)||data.items.length>20)throw failure(400,'스크랩은 스무 개씩 가져올 수 있어요.');
+      const queries=data.items.map(item=>{if(!/^s[a-z0-9]{1,30}$/.test(item.id))throw failure(400,'스크랩 이름을 확인해 주세요.');const path=`data/users/${uid}/${item.id}`,value=sanitize(path,item.data,{},now);return db.prepare('INSERT OR IGNORE INTO documents(path,owner,data,updated) VALUES(?,?,?,?)').bind(path,uid,JSON.stringify(value),now)});
+      if(queries.length)await db.batch(queries);return json({ok:true,count:queries.length});
+    }
     const path=url.searchParams.get('path')||'';
     if(route!=='store')throw failure(404,'찾을 수 없는 기능이에요.');
     if(request.method==='GET'){
-      if(path==='talk'){const r=await db.prepare("SELECT owner,data FROM documents WHERE path LIKE 'talk/%' ORDER BY updated DESC LIMIT 10000").all();return json(community(r.results,uid))}
+      if(path==='talk'){
+        const r=await db.prepare("SELECT owner,data FROM documents WHERE path LIKE 'talk/%' ORDER BY updated DESC LIMIT 10000").all();
+        const result=community(r.results,uid),scraps=await db.prepare("SELECT substr(path,length(owner)+13) AS id,json_extract(data,'$.t') AS t,MAX(updated) AS at,COUNT(*) AS n FROM documents WHERE path LIKE 'data/users/%/s%' GROUP BY id ORDER BY n DESC LIMIT 1000").all();
+        result.aggregate.scraps=Object.fromEntries(scraps.results.map(x=>[x.id,{t:x.t,n:x.n,at:x.at}]));return json(result)
+      }
       if(path==='lb'){const r=await db.prepare("SELECT owner AS id,data FROM documents WHERE path LIKE 'lb/%' ORDER BY updated DESC LIMIT 1000").all();return json({docs:r.results.map(x=>({id:x.id,data:JSON.parse(x.data)}))})}
       if(path===`data/users/${uid}`){const r=await db.prepare('SELECT path,data FROM documents WHERE owner=? AND path LIKE ?').bind(uid,path+'/s%').all();return json({docs:r.results.map(x=>({id:x.path.split('/').pop(),data:JSON.parse(x.data)}))})}
       if(!allowed(path,uid))throw failure(403,'내 기록만 열 수 있어요.');const r=await db.prepare('SELECT data FROM documents WHERE path=? AND owner=?').bind(path,uid).first();return json({exists:!!r,data:r?JSON.parse(r.data):null});
@@ -98,8 +120,7 @@ export async function handle(request,env){
     if(request.method==='DELETE'){
       if(path.endsWith('/profile'))throw failure(400,'계정 삭제 기능을 이용해 주세요.');await db.prepare('DELETE FROM documents WHERE path=? AND owner=?').bind(path,uid).run();return json({ok:true});
     }
-    if(+(request.headers.get('Content-Length')||0)>100000)throw failure(413,'저장할 내용이 너무 길어요.');
-    const raw=await request.text();if(raw.length>100000)throw failure(413,'저장할 내용이 너무 길어요.');let body;try{body=JSON.parse(raw)}catch{throw failure(400,'내용 형식을 확인해 주세요.')}
+    const body=await readBody(request);
     for(let attempt=0;attempt<3;attempt++){
       const previous=await db.prepare('SELECT data,version FROM documents WHERE path=? AND owner=?').bind(path,uid).first(),old=previous?JSON.parse(previous.data):{};
       const value=sanitize(path,request.method==='PATCH'?merge(old,body):body,old,now);
