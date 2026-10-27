@@ -82,7 +82,7 @@
   function loadList(){
     if(LIST||loading)return loading;
     $("wlfState").textContent="불러오는 중";
-    loading=fetch("sanctions.json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    loading=fetch("sanctions.json?v="+new Date().toISOString().slice(0,13),{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
       LIST=j.rows.map(rowEntry);
       $("cOFAC").textContent=fmtN(j.counts.OFAC);$("cUN").textContent=fmtN(j.counts.UN);$("cEU").textContent=fmtN(j.counts.EU);if(j.counts.KoFIU)$("cKF").textContent=fmtN(j.counts.KoFIU);
       $("wlfTotal").textContent=fmtN(LIST.length);
