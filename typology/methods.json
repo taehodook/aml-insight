@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-12T12:13:42.673175+09:00",
-  "today": "2026-11-12",
-  "total_news": 528,
-  "kr": 412,
-  "en": 116,
+  "generated": "2026-11-13T11:46:10.527669+09:00",
+  "today": "2026-11-13",
+  "total_news": 510,
+  "kr": 402,
+  "en": 108,
   "methods": [
     {
       "id": "crypto",
@@ -16,39 +16,9 @@
         "트래블룰 회피용 분할 송금"
       ],
       "sql": "-- [테마룰] 가상자산 환전 세탁: 거래소 상대 분할·연계 거래\n-- 파라미터: :임계=10000000, :분할건수=3, :창구시간=24 (시간)\nSELECT t.cust_id, COUNT(*) cnt, SUM(t.amt) tot\nFROM   t_txn t\nWHERE  t.cp_acct_no IN (SELECT acct_no FROM t_vasp_acct)  -- 거래소 계좌 목록\n  AND  t.amt < :임계\n  AND  t.tx_ts >= CURRENT_TIMESTAMP - INTERVAL ':창구시간' HOUR\nGROUP BY t.cust_id\nHAVING COUNT(*) >= :분할건수;",
-      "count": 125,
-      "auth": 28,
+      "count": 117,
+      "auth": 24,
       "hits": [
-        {
-          "t": "북한 해커들, 가짜 밈코인으로 자금세탁? 바이낸스 해킹 자금 이동 수법 드러나 - 코인리더스",
-          "src": "코인리더스",
-          "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1KVkFyOWhpNzdUTWlwSVpiU0tSOTBPSjFhbGpRekl4YlZQcWtvRmhXM1g0Q1A3VElmWS00Z1djcTJWd3dRUjJ2T1pR?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "코인 팔았다 계좌 정지…모르는 새 범죄자금 세탁 동원 - 서울경제TV",
-          "src": "서울경제TV",
-          "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5pbVN5VGw2NWVzYkl3am5pM2NUNUkwdDZjTVQzeThlMkl0dnRnZENtQXZFUjM0a3Fyb1VRT1VzcFhMU1VNY3VtRzVtZFF0RnZGdENJS3VpTmVlMFJJWjdQS3NiR2M?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "상폐 코인 장외거래서 둥지… 보이스피싱 자금세탁 통로 전락 - 파이낸스투데이",
-          "src": "파이낸스투데이",
-          "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE92VU55SlJPMldwcFFwVFZNaEpMTE9vWkkxc29yTG9CSmtIcTJSLW9pb3VrbWs5aF9Yd3QzeTJRTXFJMDh5T0ZVZGpna2o1Wi04ZWVqQXItTFh3ZGVIei1RY1FBbjdzcHVDRTdlNA?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "\"거래소 쫓겨나고 OTC로\"… 퇴출 코인, 범죄자금 세탁 '사각지대' 변질 - 위키리크스한국",
-          "src": "위키리크스한국",
-          "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5HT0VBWC1GYWxnSzJETHl0WnVpZzBQNERoemE5b1lMYnJSaUlOZWlmOXVId0lSWGVzX2VJSUxUeXpibUg3MnhaVEtOaDFvNnV0ZTAwcVpHTWhKdjR2b0VRVHNBZlRMV0FxT1lpWVlFUkY?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "“북한 해킹자금, 세탁 경로는 ‘밈코인’ 발행” - 국민일보",
-          "src": "국민일보",
-          "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE90T2t4VDF0N0JmU2Y0dVVvcW9tVS1UMnlaZDd4U1ZFWi10QTVEQllUOGY3YWsyUWFyYzlnbkVjWE1aS3l0WmFLRjBLbTRHbWpmdk5sa01iRTE?oc=5",
-          "lang": "KR"
-        },
         {
           "t": "북한 해커, 1회용 밈코인으로 바이낸스 탈취 자금 세탁 - 연합뉴스TV",
           "src": "연합뉴스TV",
@@ -62,9 +32,9 @@
           "lang": "KR"
         },
         {
-          "t": "원화 스테이블코인 법제화 코앞…“상용화 열쇠는 자금세탁방지 역량” - 대한경제",
-          "src": "대한경제",
-          "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxQVGhtVXFDcEhuUXhKU1JXZ3lkb1NhV2trS3NfMGR5dWVJM1RuQ2tDTzlHLTl3eThaZDFnMllCVE1uWk9wOG5FcnBLWDhkTFptamlXTExZemFxNjVQQVppSGNDNVotQjRyekRZaHV0dnJtNWZVeVhQYVBrUnBieFkxQTN3ZDEzUQ?oc=5",
+          "t": "퇴출 코인이 범죄자금 세탁 수단으로…장외거래 '사각지대' - 연합뉴스",
+          "src": "연합뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5fazRXbXZvVGh6SEhNOHVzMEU0cDRPMGZlcEw2VzZoRmNoeU50R2EtRDF0OVdkd3dWdTdJeVduMDd0c2dtSDdycENLZFJQdEZ2TnZiQko1WTRETjdIQ2I1ddIBYEFVX3lxTE5fazRXbXZvVGh6SEhNOHVzMEU0cDRPMGZlcEw2VzZoRmNoeU50R2EtRDF0OVdkd3dWdTdJeVduMDd0c2dtSDdycENLZFJQdEZ2TnZiQko1WTRETjdIQ2I1dQ?oc=5",
           "lang": "KR"
         },
         {
@@ -74,9 +44,39 @@
           "lang": "KR"
         },
         {
+          "t": "[단독] 두나무, AI로 가상자산거래소 지갑 식별 기술 개발…자금세탁방지 등 기대 - 시사오늘",
+          "src": "시사오늘",
+          "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1JMGdReTlyZENCRnc2OHIyNFpObHFuQlFtVElfWWlVejBVcXQ5Z25FMWxuNEtPVU43di02Z1NVdVBzbDhpMUZESFhiVlpVV2xycWFTUUdHaXlBaHlsZWxFb1FITTMyVTRibVlR?oc=5",
+          "lang": "KR"
+        },
+        {
           "t": "“북한, 바이낸스 탈취 자금 ‘자체 밈코인’으로 세탁…추적 지연” - VOA 한국어 홈페이지",
           "src": "VOA 한국어 홈페이지",
           "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE95ZUpnekF5NHVkZ3VITzhqRGdZMmdrRFc1bFRwX29QR3llZkxBaXgtb29HNkRSaUNRSmhxZnlMRWh4YjhOLXNCYmFKSXBON2dOWHZreGJLRE1ieF9NVzlZU0gybU1TTVl4M1c3R0hLdjhJamZuVTZ1dk11YVB6QdIBgAFBVV95cUxPUnA4bkNNb0UyWjZIOUVFcEhNQ0V5VmtZVzZjS1B1OTF6VVJLUWFRQWljVFYtN0dOYU9kR3dta3F0M05QeUlDYXFyaHZveFdJelJwTTYzXzA0TnRkeTRkRjhPWXhHYk5EYTlZSU9EQ3NMZ0FvcEZTRUQ2QXpzSDhBNQ?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "퇴출 코인 악용한 자금세탁 '규제공백' - 세이프타임즈",
+          "src": "세이프타임즈",
+          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBHRmFvYUlBVVFPeWF5aDhHN19Nd3dHeHE0Sm5kbXJfRklRSEUybWhzQW0yWHlMdmNxMGdvN3JQUDU0YlFLUHZUZGUtOTIyWGVTVzRUNjVVeEFhd05uZGNnUUJSbUY3TlRtRHdZNnVuSdIBc0FVX3lxTE9vRXo1Q3ZpSEJ3RHJuY0pBN0VZaThJUlp6LUlNR1l5ZXMtTVlERHA0YTU5cTdqUzVaNW94X3VWejFxcnB4Z2pHNTZxcENIRDltR29IVXlmdEdkZDE4MGxGTndULVlhOWhFOThRdkF4SGJTR3c?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "\"北, 바이낸스 해킹 자금 세탁위해 밈 코인까지 발행\" - 매일경제 마켓",
+          "src": "매일경제 마켓",
+          "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE85NTVIUFc1eVloTEV6aElhcVYxNTV5Sm03a1hQdjlKakVPOURUM0J1N1JKcGUtSDFlVk5iRFZ5dzZBUGdfYWYwMDh6cDhxZ05Eanc?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "코인 팔았다 계좌 정지…모르는 새 범죄자금 세탁 동원 - 서울경제TV",
+          "src": "서울경제TV",
+          "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5pbVN5VGw2NWVzYkl3am5pM2NUNUkwdDZjTVQzeThlMkl0dnRnZENtQXZFUjM0a3Fyb1VRT1VzcFhMU1VNY3VtRzVtZFF0RnZGdENJS3VpTmVlMFJJWjdQS3NiR2M?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "[현장에서] 스테이블코인 상용화 '관건'은 자금세탁방지 - 메트로신문",
+          "src": "메트로신문",
+          "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE0xeDJSRVV2TUVleHV1blcza1Zza0l1U3Q4RmN2TkdxREFVZ09pSEpHS2VldW9sYTkxcGVjbWtMS1BnOEx4Z3JwZVBFSzd3VUExSDJxVVJ6UTFiTEhqeDFWMg?oc=5",
           "lang": "KR"
         }
       ],
@@ -93,15 +93,9 @@
         "수거→코인 환전 연계"
       ],
       "sql": "-- [테마룰] 보이스피싱 인출: 피해신고 연계 + 즉시 분산 인출\n-- 파라미터: :분산분=60, :인출건수=3\nSELECT t.acct_no, COUNT(*) wd_cnt, SUM(t.amt) wd_amt\nFROM   t_txn t\nWHERE  t.tx_type='출금'\n  AND  EXISTS (SELECT 1 FROM t_fraud_report f\n               WHERE f.acct_no=t.acct_no\n                 AND t.tx_ts BETWEEN f.report_ts - INTERVAL '1' DAY AND f.report_ts + INTERVAL '1' DAY)\nGROUP BY t.acct_no HAVING COUNT(*) >= :인출건수;",
-      "count": 107,
+      "count": 111,
       "auth": 48,
       "hits": [
-        {
-          "t": "상폐 코인 장외거래서 둥지… 보이스피싱 자금세탁 통로 전락 - 파이낸스투데이",
-          "src": "파이낸스투데이",
-          "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE92VU55SlJPMldwcFFwVFZNaEpMTE9vWkkxc29yTG9CSmtIcTJSLW9pb3VrbWs5aF9Yd3QzeTJRTXFJMDh5T0ZVZGpna2o1Wi04ZWVqQXItTFh3ZGVIei1RY1FBbjdzcHVDRTdlNA?oc=5",
-          "lang": "KR"
-        },
         {
           "t": "보이스피싱 자금세탁 조직·명의 대여자 12명 송치 - Tbc.co.kr",
           "src": "Tbc.co.kr",
@@ -118,6 +112,12 @@
           "t": "피싱 조직에 대포계좌 공급하고 자금 세탁 58명 검거 > 뉴스데스크 - MBC 강원영동",
           "src": "MBC 강원영동",
           "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE84S2FCQ1d6LUNuaTYzbUdvaFJ3dzlHYVdVTFRFX1d2eWk2b3ZBeDBqRzFEdUJtbmxiNHRlYjhfMk9KSk56T3NmcmxXUQ?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "상폐 코인 장외거래서 둥지… 보이스피싱 자금세탁 통로 전락 - 파이낸스투데이",
+          "src": "파이낸스투데이",
+          "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE92VU55SlJPMldwcFFwVFZNaEpMTE9vWkkxc29yTG9CSmtIcTJSLW9pb3VrbWs5aF9Yd3QzeTJRTXFJMDh5T0ZVZGpna2o1Wi04ZWVqQXItTFh3ZGVIei1RY1FBbjdzcHVDRTdlNA?oc=5",
           "lang": "KR"
         },
         {
@@ -157,7 +157,7 @@
           "lang": "KR"
         }
       ],
-      "score": 83
+      "score": 87
     },
     {
       "id": "mule",
@@ -180,15 +180,15 @@
           "lang": "KR"
         },
         {
-          "t": "구미경찰, 대포통장 모집·공급 보이스피싱 조직 12명 검거 - 경북구미신문",
-          "src": "경북구미신문",
-          "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8zRTE2dHVmNGM2Tm95aS13dU1PVHUzcUxiaEREaXdmY1FMQ2ppMmdIRGs3am1oUE1fcmVSY0lqZGFEQ0lqTGJpRzBMQVA0cWhVVFFndUt6Y3BEWlVDNFhWdmthSUpiRTZucEE?oc=5",
+          "t": "대포통장 모집·공급해 범죄 수익 세탁한 일당 공소청으로 송치 - 대구MBC",
+          "src": "대구MBC",
+          "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBoMGdlWDNWNjBxai02WnNfLWM5Z0MtdHE4Ty0yWUNJVU5SbkJveko5RWNLZGdaeEVpbFM1R0djaEpaeXpfMGc3Mm04X0s?oc=5",
           "lang": "KR"
         },
         {
-          "t": "'대포통장이 1,000개?' 유령 법인 만들어 대포계좌 유통한 조직 무더기 검거 - 대구MBC",
-          "src": "대구MBC",
-          "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5EYVI1eUhhMC1wb1gwX3JrRjgwUXF5eXotUmtqdjBtdE5CRFJka0hrVTFGVkY1bXFJTUN3Um5QTDIydm1MVUFxcldDanU?oc=5",
+          "t": "대포통장 모집 등 일당 58명 검거 - KBS 뉴스",
+          "src": "KBS 뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1ueGd6aVpEWjY3LVVTVkpFRXdKQmtqV0t2bGt6cGNmNEtncHM3TzVyMzdiU0ZWRjV3SlJ1bUZTNWliVlF5MFR1ejYyNWRXMmRYYmNzVW5IZW0zYk0?oc=5",
           "lang": "KR"
         },
         {
@@ -198,15 +198,15 @@
           "lang": "KR"
         },
         {
-          "t": "‘대포통장만 1021개, 오간 돈은 24조’...조폭이 운영한 대포통장 사업 - JTBC",
-          "src": "JTBC",
-          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9qajBadkk2bkhleGdmczdXQTJOWGdWSUp4SjNDbVIzcFpTVEp2ZXoyLThfZnVqZDJjVXQxM1liRXpmUXUwdjI3SHBNMkFNbEp0NktnTw?oc=5",
+          "t": "구미경찰, 대포통장 모집·공급 보이스피싱 조직 12명 검거 - 경북구미신문",
+          "src": "경북구미신문",
+          "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8zRTE2dHVmNGM2Tm95aS13dU1PVHUzcUxiaEREaXdmY1FMQ2ppMmdIRGs3am1oUE1fcmVSY0lqZGFEQ0lqTGJpRzBMQVA0cWhVVFFndUt6Y3BEWlVDNFhWdmthSUpiRTZucEE?oc=5",
           "lang": "KR"
         },
         {
-          "t": "유령법인 설립·대포통장·보이스피싱·도박…요즘 조폭이 사는 법 - 뉴스1",
-          "src": "뉴스1",
-          "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9jSWx1bzVVUEQ0VklEZDZSZWNBWUY0VC0ycjBFaURNeURhNWd0Tm1aLVFyVFAxdUo1RmJvTFlqVXhiZURDWU9MUlJDaUVCR0RMZU1Zclh4TTZuNDhiVHRZ?oc=5",
+          "t": "‘대포통장만 1021개, 오간 돈은 24조’...조폭이 운영한 대포통장 사업 - JTBC",
+          "src": "JTBC",
+          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9qajBadkk2bkhleGdmczdXQTJOWGdWSUp4SjNDbVIzcFpTVEp2ZXoyLThfZnVqZDJjVXQxM1liRXpmUXUwdjI3SHBNMkFNbEp0NktnTw?oc=5",
           "lang": "KR"
         },
         {
@@ -228,13 +228,13 @@
           "lang": "KR"
         },
         {
-          "t": "구미 경찰서 대포통장 모집·공급 보이스피싱 조직 12명 검거 - 대경일보",
-          "src": "대경일보",
-          "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8xTEhnSEc3Ti1GcXQ0WjJ4M2MwOHNRSmhiRk1BVXR3OThJbURKandUMFp6NmxscU5qZ21kNVgzcEZtZkZCUnNMVVQwNzBCU0h0Y2xpajdaakJoY0x4XzB2b0x5UkV2ejBJ?oc=5",
+          "t": "유령법인 설립·대포통장·보이스피싱·도박…요즘 조폭이 사는 법 - 뉴스1",
+          "src": "뉴스1",
+          "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9jSWx1bzVVUEQ0VklEZDZSZWNBWUY0VC0ycjBFaURNeURhNWd0Tm1aLVFyVFAxdUo1RmJvTFlqVXhiZURDWU9MUlJDaUVCR0RMZU1Zclh4TTZuNDhiVHRZ?oc=5",
           "lang": "KR"
         }
       ],
-      "score": 77
+      "score": 79
     },
     {
       "id": "fx",
@@ -251,12 +251,6 @@
       "auth": 35,
       "hits": [
         {
-          "t": "[단독]“1300억원 코인 세탁 완료”...北, 바이낸스 장물 ‘中 환치기상’에게 넘겼다 - 매일경제",
-          "src": "매일경제",
-          "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBBQVR4SlBMaEpQNDVOYmgtVXpSM0Q3TzN3LUxRSDF0SjZLaV9XbEtqSXFTUUItR2NnZlZYbkt3WkRGVnJqTnhPV0NJMkx3a25UaHc?oc=5",
-          "lang": "KR"
-        },
-        {
           "t": "‘불법 코인 환치기’ 80%가 ‘중국인’…가상자산 과세 앞두고 해외 자금 유출 심각 - Daily NTN",
           "src": "Daily NTN",
           "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9fZlJSWElHZEdjVHIwU1lCaXVKMzhySDRydWFLZ1BrNDk5TjE2V2RReC01RTVocXI5Wmh4RVhsOUVvRjlla0VFTEZKbFZ6QjFvTDM3RGtQc3U3eVlDUGw0Sm1oYkN2UEpHYWc?oc=5",
@@ -272,6 +266,12 @@
           "t": "\"코인 보내면 현금으로\"…중고차 뒤에 숨은 1,080억 환치기 - 연합뉴스TV",
           "src": "연합뉴스TV",
           "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBVN0JHTzNWbW1NZ19zNHNhMFNZZUJWNG9BNzVtSUhwYW9JejNXdXlPejE3OE1tSFpqa0xNWGpBMm8yRlB3eHlPRTJObzF0Q2dDN0VYQ0FubnppbWplV0dIVGdleFhoTUE?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "[단독]“1300억원 코인 세탁 완료”...北, 바이낸스 장물 ‘中 환치기상’에게 넘겼다 - 매일경제",
+          "src": "매일경제",
+          "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBBQVR4SlBMaEpQNDVOYmgtVXpSM0Q3TzN3LUxRSDF0SjZLaV9XbEtqSXFTUUItR2NnZlZYbkt3WkRGVnJqTnhPV0NJMkx3a25UaHc?oc=5",
           "lang": "KR"
         },
         {
@@ -293,25 +293,25 @@
           "lang": "KR"
         },
         {
-          "t": "관세청, 가상자산 이용 1천4백억 환치기 일당 적발 - MBC 뉴스",
-          "src": "MBC 뉴스",
-          "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBiNFNOWm5NSUUyM3AyN0ZUeWtvcVFrWHhnRGZ6UFdQU2c3Y3pEaVRaWUpuclgtN1dJb2dncHJNN2NvV2dTWldIcVd5WEhXWGRaV3daVVgxMzVqZTBrQjF0VzUzMHp6U28tTXhmOGpSa3dsNWIy0gF0QVVfeXFMUFhzSHV2MzZydE95V2h0bTdwWVRRWnJQSE5NdVF0Z04zRDhRRExIcWZRbVBxWFZqQmFkWlVlMW1EVFhIeENVV0tfQmUzd2ZYcDBQREQwSHBSNnBCQ3FGTEx3clhfV3lhWUVYNkZNRm5sS29kNTI?oc=5",
-          "lang": "KR"
-        },
-        {
           "t": "가상자산 ‘환치기’로 2796억 챙겨…제재국에 중고차 수출 일당 적발 - 한겨레",
           "src": "한겨레",
           "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1KblRKeFRWOFBCU3NHLXNYOWtrUWFaV0hwamJpQlV0MEdVaEQzQ2NxUzFjQXFRd3c5VTdQX2g2RHpmcVhxcWlmcEJ5X3ZxM0Vwcklrb1I3N3g5MEtyLS15blB4bw?oc=5",
           "lang": "KR"
         },
         {
-          "t": "1천100억원대 환치기 후 중국서 7년 도피한 60대 징역 1년 - 연합뉴스",
+          "t": "관세청, 가상자산 이용 1천4백억 환치기 일당 적발 - MBC 뉴스",
+          "src": "MBC 뉴스",
+          "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBiNFNOWm5NSUUyM3AyN0ZUeWtvcVFrWHhnRGZ6UFdQU2c3Y3pEaVRaWUpuclgtN1dJb2dncHJNN2NvV2dTWldIcVd5WEhXWGRaV3daVVgxMzVqZTBrQjF0VzUzMHp6U28tTXhmOGpSa3dsNWIy0gF0QVVfeXFMUFhzSHV2MzZydE95V2h0bTdwWVRRWnJQSE5NdVF0Z04zRDhRRExIcWZRbVBxWFZqQmFkWlVlMW1EVFhIeENVV0tfQmUzd2ZYcDBQREQwSHBSNnBCQ3FGTEx3clhfV3lhWUVYNkZNRm5sS29kNTI?oc=5",
+          "lang": "KR"
+        },
+        {
+          "t": "가상자산으로 중고차 수출대금 환치기…1천억원대 외환거래 덜미 - 연합뉴스",
           "src": "연합뉴스",
-          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE04bmNFM0x3RllPbGFOcFY1amNFUDVoMWluX1NLUjZ6cXp6Q3J0RHdaQzItbEMwaTlFY3NOSE5HQkRfaEQ4QlVickkwdlVkYmJ1T3lIY1NScmVHSHPSAWBBVV95cUxQWnAzTnNXZ3JtcUlqZmU3NUhaODc2eDhWeDUwQnhVa1hlMEh4RkRqMFk5Z2dYRlZETjhFZ0Y2NUU4VnRqRU91clpYQU9yMi1FeG81N21HQlVfRmRuUkpmd3o?oc=5",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE05RGRBZFdzRHdoUWdkeGh2RDlXTlVybW1oYWJOazNVbHF2U0w5dTkxbXpkc2ZydEFLSHlyZldJcnowZWlyYVBWc0dLbEFZWGduZ2JhSWFlb0lQX0HSAWBBVV95cUxQX3NsOWhpTHBTRHJvY1JsWm0xeFFpems0Zzh5ZVBRVEJKZHVpUjZvOW5pUHZZTkJaUlN4NWhkcGhpZU5fajNUSVY1TWY0Umd5c1BfMENDQ2JIMnkyaUdpOGE?oc=5",
           "lang": "KR"
         }
       ],
-      "score": 71
+      "score": 73
     },
     {
       "id": "giftcard",
@@ -324,7 +324,7 @@
         "법인카드 고액 한도로 상품권 반복 구매"
       ],
       "sql": "-- [테마룰] 상품권 깡: 상품권 업종 결제 집중·법인카드 반복\n-- 파라미터: :집중비율=0.7, :기간일=7, :최소금액=5000000\nSELECT m.mer_no, m.mer_nm, SUM(t.amt) gift_amt,\n       SUM(t.amt)/NULLIF(SUM(SUM(t.amt)) OVER (PARTITION BY t.cust_id),0) ratio\nFROM   t_txn t JOIN t_merchant m ON m.mer_no=t.mer_no\nWHERE  m.mcc IN ('5947','상품권')          -- 상품권 업종코드\n  AND  t.tx_ts >= CURRENT_DATE - :기간일\nGROUP BY m.mer_no, m.mer_nm, t.cust_id\nHAVING SUM(t.amt) >= :최소금액;",
-      "count": 54,
+      "count": 53,
       "auth": 30,
       "hits": [
         {
@@ -382,13 +382,13 @@
           "lang": "KR"
         },
         {
-          "t": "금융위 “KRWQ 상품권 서비스는 자금세탁 소지” - 서울경제",
-          "src": "서울경제",
-          "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE93Y1BOeHMteFNMbGJ0Q1BUNGRPLXlYRWIwSi00QVZiM1p0bnJZcVlrc1JTdEh2RUVkMHQ4OFVFMVh1VDJrNW9ja3FWSW5xM0JWV1HSAVNBVV95cUxPdzhQSHZFN1Y5ZDE2SmVWNGZ6V3BLallEWDNNOG5DTWxHbWlnZVJ1VktmR1lkc01TNS0wbWdwbldOVU5XSGdGbm1ESUt5MmFOUlZubw?oc=5",
+          "t": "‘상품권 업체’ 가장해 피싱 범죄수익 세탁…집 털었더니 현금 6억원·명품시계 - 한겨레",
+          "src": "한겨레",
+          "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9CamZ1cHJLdHN4Z21UdFpHeXlORV9MZUEwYzBlRG5aYzM3RXpLRlVzdURGaUc2aVJHMkdmM2xRR0FFdlNNSWFPUmVrZ0k2cEtCSlF3Z2NoWUlERzIyOUNPbV9KbnBkVUtWSUV4N2xQSnM3QQ?oc=5",
           "lang": "KR"
         }
       ],
-      "score": 62
+      "score": 63
     },
     {
       "id": "shell",
@@ -401,15 +401,9 @@
         "대표·주주가 다수 법인에 중복 등장"
       ],
       "sql": "-- [테마룰] 페이퍼컴퍼니: 설립 직후 고액 거래\n-- 파라미터: :설립일수=90, :고액=50000000\nSELECT c.corp_no, c.corp_nm, c.est_dt, SUM(t.amt) tot\nFROM   t_txn t JOIN t_corp c ON c.cust_id=t.cust_id\nWHERE  c.est_dt >= CURRENT_DATE - :설립일수\nGROUP BY c.corp_no, c.corp_nm, c.est_dt\nHAVING SUM(t.amt) >= :고액;",
-      "count": 19,
+      "count": 20,
       "auth": 16,
       "hits": [
-        {
-          "t": "'대포통장이 1,000개?' 유령 법인 만들어 대포계좌 유통한 조직 무더기 검거 - 대구MBC",
-          "src": "대구MBC",
-          "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5EYVI1eUhhMC1wb1gwX3JrRjgwUXF5eXotUmtqdjBtdE5CRFJka0hrVTFGVkY1bXFJTUN3Um5QTDIydm1MVUFxcldDanU?oc=5",
-          "lang": "KR"
-        },
         {
           "t": "유령법인 설립·대포통장·보이스피싱·도박…요즘 조폭이 사는 법 - 뉴스1",
           "src": "뉴스1",
@@ -435,9 +429,9 @@
           "lang": "KR"
         },
         {
-          "t": "유령법인 76곳에 대포계좌 1021개…범죄자금 24조원 오갔다 - https://www.seoulilbo.co.kr/",
-          "src": "https://www.seoulilbo.co.kr/",
-          "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5IMkVuMGZsUnFueGtzZ1NoQkEzdUpxQTNLbWYxN3kyalpvamxMallRaVdUdnVlbHMxLW1UMnpaWTFfRW5JbjJXNkl4YlhtSW9YRXJfZ19vX0V4b29CeTRrOE5GQzl5YldSOHl0UDR3?oc=5",
+          "t": "'대포통장이 1,000개?' 유령 법인 만들어 대포계좌 유통한 조직 무더기 검거 - 대구MBC",
+          "src": "대구MBC",
+          "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE5EYVI1eUhhMC1wb1gwX3JrRjgwUXF5eXotUmtqdjBtdE5CRFJka0hrVTFGVkY1bXFJTUN3Um5QTDIydm1MVUFxcldDanU?oc=5",
           "lang": "KR"
         },
         {
@@ -463,9 +457,15 @@
           "src": "문화일보",
           "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1ERGY4R2VUNk9lVGlQc2JNLTViQzZ0T0xHZ0haS2k0N0l1ZzhJU3M5NXJtRzZiOWUxQVJ4Nm9XSVE1aVZPX2IydkU5RWpkS29r?oc=5",
           "lang": "KR"
+        },
+        {
+          "t": "유령법인 76개로 대포계좌 1021개 공급…조폭 일당 68명 검거 - 경북일보",
+          "src": "경북일보",
+          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBWNklPTk9JWjhQQ2FHY2JlTXZ3Vm5kb2ZSZDY4bGNIWGswYzVDbGFhRTJUZ00ybmNlM2puZThuYUYzOU1RRkluU21XVlp2M1h2cXllcklOYUNtbVV0X2s0SHNBWVQtNHJZdkVRejdiUQ?oc=5",
+          "lang": "KR"
         }
       ],
-      "score": 58
+      "score": 59
     },
     {
       "id": "layer",
@@ -478,15 +478,9 @@
         "N단계 자금흐름 추적 시 단순 통과 계좌 다수"
       ],
       "sql": "-- [테마룰] 다단계 레이어링: 입금 후 단시간 연쇄 이체 (3단계+)\n-- 파라미터: :간격분=30, :최소단계=3\nWITH RECURSIVE chain AS (\n  SELECT tx_id, from_acct, to_acct, amt, tx_ts, 1 depth\n  FROM   t_txn WHERE tx_ts >= CURRENT_DATE - 1\n  UNION ALL\n  SELECT n.tx_id, c.from_acct, n.to_acct, n.amt, n.tx_ts, c.depth+1\n  FROM   chain c JOIN t_txn n ON n.from_acct=c.to_acct\n  WHERE  n.tx_ts BETWEEN c.tx_ts AND c.tx_ts + INTERVAL ':간격분' MINUTE\n    AND  c.depth < 6)\nSELECT * FROM chain WHERE depth >= :최소단계;",
-      "count": 7,
-      "auth": 4,
+      "count": 4,
+      "auth": 3,
       "hits": [
-        {
-          "t": "불법 자금세탁 조직, 수사 대비 증거인멸…20대 징역 1년 - 연합뉴스",
-          "src": "연합뉴스",
-          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1oMWFuSVlYaG40cWUtVVVyeUxmaVc0UFd1TjhSalJaWGdISDJKekI1MXJDM0t4cVFCN3RUdHhvZEFJbnNndVRrdmdQck9BejN3eXhVazZhUGRZUVHSAWBBVV95cUxPa09mWmNacmZfcVdXM3VuVm1lV1hUZmtMdTBVVW1wWlo0SE1wdUFYaDN0TUpOVDVvZ2tINHZDM2U3NVdUem0wUVJtOWVvajhqLWRCNGVXSDd2dUZvSHo1MmE?oc=5",
-          "lang": "KR"
-        },
         {
           "t": "보이스피싱 자금세탁 조직·명의 대여자 12명 송치 - Tbc.co.kr",
           "src": "Tbc.co.kr",
@@ -497,18 +491,6 @@
           "t": "\"검사 사칭 1억 5천만 원 뜯어\"…보이스피싱 자금세탁 조직 12명 검거 - 뉴스1",
           "src": "뉴스1",
           "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBEcU9LNi03a1h6Ti1Hc0ZhTTM4Y3kzQXFSNnA0UHlYUGF6WG9QZGpXVV9uUjBLWUcyMksyWGlVUG5mX1BreDI5elZKNHJhd0VIeDFheEdXekRjcy1BNjM4?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "불법 자금세탁 조직 증거인멸 20대 징역 1년 - 세계일보",
-          "src": "세계일보",
-          "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE54dENicmhOM25tNV90WWZSUHU0dDFTajZ0Vl83eURyRVdkZklUSS1fMTdQX3ktaVdfQXlPOGU5NGV6LUxERk5xNmhfMGVJSnFmcjRlWV9hU3VVYzNsMHZmU3k1Sm5rcmU5ZnpJ0gFUQVVfeXFMTnU4dWtrSG1ZcmJ5Q3NIWjVDRjc0Y3RHTlZFY1laQUFuc3RJLW15bTBYM2xyQ3E3NWxLbzhMLUtHVUFNbkFEOEtQY1VaMmVWdUlXTHUz?oc=5",
-          "lang": "KR"
-        },
-        {
-          "t": "중국 경찰, 가상화폐 이용한 268건 온라인 사기 및 자금 세탁 조직 검거 (BTC, 중국, 가상화폐, 2백만 위안) - 민심뉴스",
-          "src": "민심뉴스",
-          "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE55NU1pa1VZN1RZdVFpT2ZQVWlZdW1XMmZiRUIybW11T1FFM28wNUxDYXR4Z3Z6bWxGN0NkYkNXWVEyUHZfTTNKaVVieTJ0OTFELTFWS0UtNjZxTFFoMnAxb0l1UU9kR3hSckJWaQ?oc=5",
           "lang": "KR"
         },
         {
@@ -524,7 +506,7 @@
           "lang": "KR"
         }
       ],
-      "score": 45
+      "score": 41
     },
     {
       "id": "limit",
