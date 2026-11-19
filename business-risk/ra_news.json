@@ -1,9 +1,9 @@
 {
-  "generated": "2026-11-18T12:47:38.786760+09:00",
-  "today": "2026-11-18",
-  "total_news": 292,
-  "kr": 149,
-  "en": 143,
+  "generated": "2026-11-19T12:46:22.678394+09:00",
+  "today": "2026-11-19",
+  "total_news": 367,
+  "kr": 148,
+  "en": 219,
   "ranking": [
     {
       "name": "가상자산사업자",
@@ -13,15 +13,15 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 60,
+      "news_count": 49,
       "struct": 70,
       "hits": [
         {
-          "t": "김현정의원, 가상자산 자금세탁 대응 강화하는 `특정금융정보법` 개정안 대표발의 - 뉴스체인지",
-          "src": "뉴스체인지",
-          "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBoUC1nbG5KSTc3U1ZZZ0QyN2FvUEs3YXZFYWNfRF9EZ0VPMnZ1dTZoY0dBVWROWC1TQ0RSV21yU0p2VjRmSWlYalBYcw?oc=5",
+          "t": "8천억 대 도박 사이트 운영...테더코인으로 자금세탁 - YTN",
+          "src": "YTN",
+          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE54WnV2a0N5aVd3dlV2OUxYUmlnTTdPVFZlZjY4dVFzZGdPblRsV3hjalJhVUtlRHNXVTd3WVVTWUhldU9zWi1ENjYtaWRDbW5KS0tFZzhMT1RHc3Z3YUdmVlBSZXY1QmY0dWVlcTUyaw?oc=5",
           "lang": "KR",
-          "pub": "Mon, 16 Nov 2026 05:36:00 GMT"
+          "pub": "Mon, 16 Nov 2026 07:37:00 GMT"
         },
         {
           "t": "김현정 의원, 가상자산 자금세탁 방지법 발의…거래소·개인지갑 검증 강화 - 블루밍비트",
@@ -29,6 +29,13 @@
           "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE8zQVpSR083MW9FUC16RERrSFdEYmIzd21HZlRmS1c3NmtzQVIzSDU4LWtySXRTc2IwYXNQaTBnM0RBYTR5MnY2d2ZhYVh2TUpz?oc=5",
           "lang": "KR",
           "pub": "Mon, 16 Nov 2026 05:34:41 GMT"
+        },
+        {
+          "t": "김현정의원, 가상자산 자금세탁 대응 강화하는 `특정금융정보법` 개정안 대표발의 - 뉴스체인지",
+          "src": "뉴스체인지",
+          "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBoUC1nbG5KSTc3U1ZZZ0QyN2FvUEs3YXZFYWNfRF9EZ0VPMnZ1dTZoY0dBVWROWC1TQ0RSV21yU0p2VjRmSWlYalBYcw?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 16 Nov 2026 05:36:00 GMT"
         },
         {
           "t": "코인으로 '검은 돈' 세탁 못 한다…與, '자금세탁 방지 강화법' 발의 - 머니투데이 - 머니투데이",
@@ -73,13 +80,6 @@
           "pub": "Mon, 16 Nov 2026 09:10:22 GMT"
         },
         {
-          "t": "토스뱅크, 스테이블코인 해외송금 수십 초 처리 검증 - PRESS9",
-          "src": "PRESS9",
-          "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9tR3RtbmhqNDM4OUhTV1NSckJTa3c4cXdKdWJBd01rbmFLdlhpSm1UTDN4QlYwakw0RE4yeHh4b2t0cXdHMzlib1p0bmhwZUktb2ZTOHZqaGFtazhpQmhMeWZkZGk?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 16 Nov 2026 00:16:00 GMT"
-        },
-        {
           "t": "미 재무부 \"'이란 자금세탁' 가상화폐 거래소들 제재\" - MBC 뉴스",
           "src": "MBC 뉴스",
           "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFA3YWYzak5FelJ1am9tZWlUZEJWSFAxcWprYUQ4eDhUbGhybDJVdTg0WGt6Q3RBNXRaMFFBbWdGT1JHbk1EeDhUZS1zVjl5eS10S2ZkRWxkMWFaYVlpQVlJVGVGazVyUjRrejN3Q09MN0VWUUgw0gF0QVVfeXFMTzVFX3lYeVVKY3hSX2VBUS1POVdtR0RQZHNYMThCYlZnenVwTm5BU0tFQ1FKMVo4S29pZF95QlR3SW5XMm9WY3JNQzFEc1B6Q3Z1bGpNbDQwOUhoY3pXVkVBbkNPaEk4V3lWTXg1cno4Rmk0V2U?oc=5",
@@ -94,11 +94,11 @@
           "pub": "Thu, 05 Feb 2026 08:00:00 GMT"
         },
         {
-          "t": "비트코인 해커, 35 BTC만 남기고 자금 세탁 중… 추적 보니 (BTC, Bitget, 해커, 자금 세탁) - 민심뉴스",
-          "src": "민심뉴스",
-          "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBmeFZITnluZkRoM1AzVXpoSnNqWWtZY1M1bHI2RDhLNURKaHpZZ2RGRW85OEhRS3NGa3dlejhSRllaNm1pM3F5NjJCY09zUmlfSk1LRERFTGlkaXpSNURzSUliNU91ejVvbUtyYzVR?oc=5",
+          "t": "독일 법원, 피고인에게 비트코인 4만개 조건 합의 제안 - 블록미디어",
+          "src": "블록미디어",
+          "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9sR3dCTkV6dnFmaW1MR01lQkpIQnkzVF9BZzFKeDBMN255T2pFRzhpemxyX0xwczFldUh5cnBpblNHWUgyc1J0UUdQS2xSM2tLeWdpUzQwdG8?oc=5",
           "lang": "KR",
-          "pub": "Tue, 17 Nov 2026 04:28:25 GMT"
+          "pub": "Wed, 18 Nov 2026 19:53:52 GMT"
         }
       ],
       "news_score": 30,
@@ -112,16 +112,9 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 7,
+      "news_count": 5,
       "struct": 70,
       "hits": [
-        {
-          "t": "토스뱅크, 스테이블코인 해외송금 수십 초 처리 검증 - PRESS9",
-          "src": "PRESS9",
-          "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9tR3RtbmhqNDM4OUhTV1NSckJTa3c4cXdKdWJBd01rbmFLdlhpSm1UTDN4QlYwakw0RE4yeHh4b2t0cXdHMzlib1p0bmhwZUktb2ZTOHZqaGFtazhpQmhMeWZkZGk?oc=5",
-          "lang": "KR",
-          "pub": "Mon, 16 Nov 2026 00:16:00 GMT"
-        },
         {
           "t": "환전 알바로 하루 수백만 원을 이체했는데 범죄수익은닉도 붙나요 - 로톡",
           "src": "로톡",
@@ -156,17 +149,10 @@
           "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE4xVmNJQkE5TlFjU0c3ckZTcnBGN1BILTJ2RzYteVNkNnEweWVFVWd6QTNtQ2VjakpfTU54dFA2MFZqT29XRE1JOWpyUzBTaWtsajdaYTZB?oc=5",
           "lang": "KR",
           "pub": "Mon, 16 Nov 2026 15:06:00 GMT"
-        },
-        {
-          "t": "Brazil Central Bank Warns Stablecoin FX, Remittances May Amount to Money Laundering as It Tightens Cross-Border Rules - bloomingbit",
-          "src": "bloomingbit",
-          "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5zMWpuamtKRnpKOE9rUm9KbkZlM0RyYnRGWjdXMWtGcmFwVzJyU1BxYWh1TUdLVUt5LXcwRkQxUVNnWXVjZlFXSTd5X1FjRklGalpzVA?oc=5",
-          "lang": "EN",
-          "pub": "Mon, 16 Nov 2026 04:03:30 GMT"
         }
       ],
-      "news_score": 4,
-      "total": 74
+      "news_score": 3,
+      "total": 73
     },
     {
       "name": "카지노·사행산업",
@@ -176,9 +162,16 @@
         "특금법",
         "FinCEN"
       ],
-      "news_count": 5,
+      "news_count": 4,
       "struct": 70,
       "hits": [
+        {
+          "t": "8천억 대 도박 사이트 운영...테더코인으로 자금세탁 - YTN",
+          "src": "YTN",
+          "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE54WnV2a0N5aVd3dlV2OUxYUmlnTTdPVFZlZjY4dVFzZGdPblRsV3hjalJhVUtlRHNXVTd3WVVTWUhldU9zWi1ENjYtaWRDbW5KS0tFZzhMT1RHc3Z3YUdmVlBSZXY1QmY0dWVlcTUyaw?oc=5",
+          "lang": "KR",
+          "pub": "Mon, 16 Nov 2026 07:37:00 GMT"
+        },
         {
           "t": "광주공소청, 불법도박 범죄수익 271억 세탁 일당 구속 기소 - 연합뉴스",
           "src": "연합뉴스",
@@ -187,25 +180,11 @@
           "pub": "Tue, 03 Nov 2026 08:00:00 GMT"
         },
         {
-          "t": "Police uncovers money laundering linked to gambling, fuel abuse - Independent Observer",
-          "src": "Independent Observer",
-          "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPSGdXbWVRRU05TGRySllDTU5mTXZmVWdOU0htOE5KLW1qNHhzZXZSQXlENW9PV3RabWtVMnVRelpoVkNnUHZscnVCSmxkalRVM0JhMjhFMFhqR2o1cHZpNVpBVGVGYmRIVWR3Z3ZiX0RmV0Z2WktHN0dJdkVaMHp3U2lGemdkMDExUy0wcDJR?oc=5",
+          "t": "Convicted gambling ringleader charged again in major South Florida money laundering bust - WPEC",
+          "src": "WPEC",
+          "link": "https://news.google.com/rss/articles/CBMihANBVV95cUxNNjA0VGhKRXlpMDBaVXNEeFgxWEluYnpKOTZLVDl4b1NSZTB5TkxyU3pvSmg2am1DOGdraHNSN1pjWmpuaVp5UzNCNHpoSjMtZ25aZl96UXpBRHFma09reGJlbEVHVzV4Ml9YT1lPeF90eGtQMHdDdjJoOUJHdC1VRUk3VnR4cHRNSERpNncycjd3TmMwR3NTMHRQTFRVLTlQZG82WnpoU0RlUXRhVUNDQTJlZGItZmtuOG1ncEE2ZmdjeVBkWHdFRnNWTFlQbk91NlQ5c0VrS0p4MVZpejczRVkyeURDRWZueUpoUEEzdTBoOW1zSWdqZl9tZV9jSG5zaXR2TEprMWhQa2N6WEF0b2FZMENSdklVUEhqODVkN3Q5SjQta3N5TmxJd3cwaTFYejR0WmpXOVUtZzZoMlJZU2dXNnNZZVA4d2JTT21mZExvRGZIbFh0OENtX2tEOHFnbHdTM3B6alktb2VSX2xwZmZIZDlXZjIwaFhHN0dwRVlRWi1M?oc=5",
           "lang": "EN",
-          "pub": "Tue, 17 Nov 2026 06:00:19 GMT"
-        },
-        {
-          "t": "Govt orders high-level probe into Rs120 billion online gambling, money laundering scandal - Investify",
-          "src": "Investify",
-          "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNTm1QWWdZQnUtQlhsM21pTlNlV19TRDI0c0NKNm9jMHBaWUYwY05FV0VEbnZJRHRUclNnQWQ3WUxVMS14OHFWV0tPdWM4ZWVLZEZWR0NPMm13UkdrNjFBX2hkcVNIekZEZTE5dTg3SWJwb2hTcEI5aWpSUjY2Qk42ODBWSmR3Qk5NenZmSEZRT3BseVJFQWpjZldlNHJDcmtNMk1KVkVGdXpVYnBQYzJfcUtpd0F4ZGdUOVNpeW03RzRRRzFmNUEyVVZWYw?oc=5",
-          "lang": "EN",
-          "pub": "Wed, 18 Nov 2026 02:48:12 GMT"
-        },
-        {
-          "t": "16 charged in sweeping Houston-based multimillion-dollar illegal gambling, money laundering conspiracy - ICE | U.S. Immigration and Customs Enforcement (.gov)",
-          "src": "ICE | U.S. Immigration and Customs Enforcement (.gov)",
-          "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPVUItbnVmYWhGWWwtc0ZEVmVKdjhPN3FPUjNVajljQmh0ME13eE5nYkxJN3FmZmt1R2g4T1pMVnlpaFNpWXZMZ0cySHZVbVcwTHZIeWwteHlISXNwRGNPVHVBaFZzUUJvWDhMcXg5M0t4NUdNU0xISGtES3k5Q2tVUXZmLWVRZ0t6S3dTOXMwUlV2ZkN4dDRLc1J0aFc4bFFSSFRmVHlOdlQ0M2c4N09Z?oc=5",
-          "lang": "EN",
-          "pub": "Fri, 04 Apr 2025 07:00:00 GMT"
+          "pub": "Wed, 09 Sep 2026 07:00:00 GMT"
         },
         {
           "t": "Casinos and cryptocurrency: major drivers of money laundering, underground banking, and cyberfraud in East and Southeast Asia - United Nations Office on Drugs and Crime",
@@ -279,9 +258,16 @@
         "FATF",
         "FinCEN"
       ],
-      "news_count": 5,
+      "news_count": 6,
       "struct": 45,
       "hits": [
+        {
+          "t": "AMLA and EPPO forge partnership to enhance anti-money laundering efforts - European Interest",
+          "src": "European Interest",
+          "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOMWsyeTBtNTZSQkxNcUg0a05EOW8zZ19RSUVfMkNGM2VuNE0zc0N0QUZ0WDhVUi1lTHVTQ29iSmU3dzU3ckdmZVAyc0ptN0tXWHRhWkVUY3NoQ0VGT3g0Vjk0QnNka2h3cmpUd2pEVW9FR0R5ZVBaeWlUYkx5Q0dRbHM5bUpaM3kwWW8tc05Xd2JKMTl0Z29XVllwaktsZU9nSUZXZ3NoTnk?oc=5",
+          "lang": "EN",
+          "pub": "Wed, 18 Nov 2026 18:18:14 GMT"
+        },
         {
           "t": "Inside the multimillion-dollar auction turning Singapore’s biggest money-laundering case into a luxury sale - The Independent",
           "src": "The Independent",
@@ -290,36 +276,133 @@
           "pub": "Mon, 16 Nov 2026 03:14:00 GMT"
         },
         {
-          "t": "Interdepartmental AML/CFT Working Group Plenary Meeting – Macao SAR Government Portal - 澳門特別行政區政府入口網站",
-          "src": "澳門特別行政區政府入口網站",
-          "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFB2LWtISGh2aXMtV3dnNUttNWtCR2xVT0dFV1hKaHJkaGJOOTZLT1g5clBMNGNVazFLVnZ4X2NpaUZ6WWg3bkZBdWVB?oc=5",
+          "t": "Archived: HSI, Australian Federal Police and partners, announce takedown of multi-million dollar Chinese money laundering syndicate - ICE | U.S. Immigration and Customs Enforcement (.gov)",
+          "src": "ICE | U.S. Immigration and Customs Enforcement (.gov)",
+          "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQYm9QSGZVa0dDNXdQbl9zRHlraHZhT1dMT05EQ24yTHVoa3pWYnNYSTNodm5ESmhTQnpITTlxNnBHdlJmYjFzWkJGeVNQN2xjZGVTVE9vNEFkcjkzRmZ3M3pRMG5WQXNxTnR0bFBWbmJTWk1xdG5PLWlWY2c3XzdHWGczcDJfVUZOMC1EQzJrY2pyVDJvRXAwdHMtZ3FLazBpU1FkdElqb2Z1QnpxdnFZeFR3YjF5Zw?oc=5",
           "lang": "EN",
-          "pub": "Tue, 17 Nov 2026 06:33:00 GMT"
+          "pub": "Wed, 27 May 2026 07:00:00 GMT"
         },
         {
-          "t": "Hearing Entitled: “Converging Criminal Enterprises: Chinese Money Laundering Networks and Cartel Financing in the U.S. Financial System” | U.S - House Committee on Financial Services (.gov)",
-          "src": "House Committee on Financial Services (.gov)",
-          "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPQVpCNFJCUUlqOEw5MHRrY0IzWGpoZXVmNThqelpsVE93eVNpT1h0MVNlQ0k2OUFpb1c3eFV4dFRQME1NUVROMXVxXzI0QVFLUGIxRG1DMDZ0VzlYNjFBTzM2OGRHMTRnRVVzRXY0TlBtRF9hWFlwZ09rQ3hUODhmdUxB?oc=5",
+          "t": "Chief Financial Officer Blaise Ingoglia Announces Arrests of Life Insurance Agent and Her Husband After a Nearly $382,000 Insurance Fraud Scheme - The Florida Department of Financial Services",
+          "src": "The Florida Department of Financial Services",
+          "link": "https://news.google.com/rss/articles/CBMiwwJBVV95cUxOSVpIQ0RDMW9kNHZiX195ejZzeEo1MklkTzhNUlpjTFhPUWxqZ2ZfZUs5MktWcUVwQ3RzRkJnV0dqbk5TUk0wNlNucjgwN3VCRmR5YUQ5bGZoUllqdkNXN25XVHlXa18yclJ2RGFBMjdTdmY3LVNrQ0h5VENOVlF1Qm9VRU5NcHhoOFh4b1lYWlNvTi1JTTlma1J0ZWVyMnk5UXlSUXdHUFNCT2tSaTRTWTVyeVJLSlN4UDVWOVBXaFRJU1ZuWmhiZGdMTGsxMjZoM3Q2Q19ROFcwV1VFNnFra3lnSHRmbEZZaEdoUmo2RTFUU3YtM1VDOVVQTG9CSTkzT2RlSjhsTmZxSXpVYUpDWVBubjVyNFg4dnZXQncxX0lNUDdMQlZySm00aFktek9wbHdfNXNCNUF0TGN2amI3c3RMVQ?oc=5",
           "lang": "EN",
-          "pub": "Thu, 21 May 2026 13:02:57 GMT"
+          "pub": "Thu, 20 Aug 2026 07:00:00 GMT"
         },
         {
-          "t": "Anti-money laundering and counter-terrorism financing - Department of Home Affairs Website",
-          "src": "Department of Home Affairs Website",
-          "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQWp3YnV6cjN2X0p2NTlSZHJBQ2JHMlVTNU5keHNvZjRtZEJuMUNvcnpRcTU0cGF4SHRNX2pGSFQ3T3dhNkd0Wm5JSG04bXRJeDBqMTE2UkNaNEl6TW9Lem12MlctWk8yYVlpZXNnTTd4Vkw5OE9JWVFoamRBVGFxTDRWYjI0YVpfSE5rM1h3WXFPUldoSXZOc05KRzhzNGdvNENieEFyVDVjSDdmbk4tRm04c0pFazZsbV9xbmNuNWpIVTA?oc=5",
+          "t": "DPS Seizes Over $83,000 Cash During Hidalgo Co. Traffic Stop (South Texas Region) - Texas Department of Public Safety (DPS) (.gov)",
+          "src": "Texas Department of Public Safety (DPS) (.gov)",
+          "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPeElsejQ5RTBrTnItaFZ5bHQxZXVhLWhxblprSkJFQkdFak1LZXhVcV9ZelgzTnhKR0JjcC01V05rWXVxUGRuS29kWjc2dmdiY2hMWlp3MVpWOGMwLUtCejRDTHFuMjJMUnpVX0V2NkhBWktTMDdJRzZOSVlSY1B2VXhBSTljMkNSckhHQUdSTGFOaXlFZkE5am9jVFB1bFN6OUJONk5VT3BVekk?oc=5",
+          "lang": "EN",
+          "pub": "Wed, 04 Mar 2026 08:00:00 GMT"
+        },
+        {
+          "t": "Man charged with money laundering after deputy finds $64k in concealed compartment - KEYE",
+          "src": "KEYE",
+          "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQSGNlQWpWV3NQTk5ZZWQ5MGVrb01OdV9PUlpaTFRsVzdPWWVfOUhjZ0x2QWFRaG5DT3F3ekR5RFVGZF9rX290ZGttbGZCZEQ2bDRvb2tSalg2UU5RdFJDNzF0aEJ4UXU1d2M2YnoyVF9BTVBINGZzdVVsTk5wdS1DTFl3em04azBjMjBlaEdiY2FnbDd5RDA4QkFhY2NJV1ZoSllfdzREUzZXak92VmZUVms2UGQ?oc=5",
+          "lang": "EN",
+          "pub": "Tue, 03 Feb 2026 08:00:00 GMT"
+        }
+      ],
+      "news_score": 4,
+      "total": 49
+    },
+    {
+      "name": "변호사·회계 등 전문직",
+      "level": 2,
+      "flags": [
+        "FATF"
+      ],
+      "news_count": 13,
+      "struct": 40,
+      "hits": [
+        {
+          "t": "김만배, 김수남 소개 변호사 통해 범죄수익 은닉 - 연합뉴스",
+          "src": "연합뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE16WFNlU1BUbjFMbHE2S2x4empUTmd6eTJtQkNzYXVFcERLWUtHMDFyOU44alRrLXJRRUlwNWhSUlIwT1lBQ2F0ZEM1a2kyOE05OTBKOFlzMkRuRG_SAWBBVV95cUxNQjdQbGpHOGFmVENmTFJCeUZoUlZCcHRzTXJpby13VXgyWDYxRmVZZDFkS3lGUklUdFJTUTNJYXZLbHAtaXdMb1JXQ0d2QlV1OEtrWmtCU1ZFM3BUc1BCd1k?oc=5",
+          "lang": "KR",
+          "pub": "Wed, 15 Mar 2023 07:00:00 GMT"
+        },
+        {
+          "t": "“김만배, 김수남 소개 변호사 통해 범죄수익 은닉 지시” - KBS 뉴스",
+          "src": "KBS 뉴스",
+          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8wVDJNamJ6ZnlQZjdrYzlTVVVoaXhpNTlRY1FWdHNjY0JfZzZ1Ti1PLWNpRHdpOUlHcjU1UzBwNjhkVG0xVFJ1VkdmNnZwM0FieDI5bmdmUVkySnM?oc=5",
+          "lang": "KR",
+          "pub": "Wed, 15 Mar 2023 07:00:00 GMT"
+        },
+        {
+          "t": "Anti-money laundering and financial crime lawyer Rainer dela Fuente takes his oath as the defense witness for the continuation of VP Sara Duterte's impeachment trial on Thursday, November 19. Defense counsel Mark Vinluan presents a three-point offer of te - Facebook",
+          "src": "Facebook",
+          "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxPZU9EMjZUVTJnSzZCOFFQOXJtTEJxSlI1VWhYMlNoOWtDREREY1E5c1NMeGRZNGx6aFBUeU42WGVmRmMtcDVvYVdyT2FXZ0tJeUJkbXNFRUxiLS1RcVNJSW8wOTdnbXU2YTN6aDR1UG9URVZEaDRCU0cxYlRFbzc3Q0g1VWhRVm5tSFJtZ3RfS1NFM0xTTkZ4SUZITmVoUnBZX0JfTDJaWnpySXlLTUJkTmZYNEp2NDRfQUVZcW44aFIyVTE1S3JXb3VpWmJyUWdfdFdyeWtRdw?oc=5",
+          "lang": "EN",
+          "pub": "Thu, 19 Nov 2026 02:15:41 GMT"
+        },
+        {
+          "t": "Former Motley Rice attorney sentenced on wire fraud, money laundering charges - Live 5 News",
+          "src": "Live 5 News",
+          "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNQUJZQjkzSHYtZkNmejMwMXIzVU91RTJVcndpOXJ2cXQ3UFlBS0tCa0FEUUdhbXlyTkhSdldvMjRuVk9SODhxUzdNem05Y19aTm1XUmZQNHJXSXRXTWUxWVdVSHVoanp5VzZITlhDUHpkZnVZd1k2VEhjQTU1a25GUXdWdzhsSW90WWhJY3ZNLXN0TFZRVS1VZmNiaExvWERBN2hTTGVVX0k2V0VWWFJXWNIBxAFBVV95cUxNdkVuR09VT0MtR1ZFTjY0UklvN1Axa0JNV2U0NWNpMmN4OS1ybEtvSzNQR3ZCeHk0UE1Cc2ZrM0lrMnRwZVYwdXNWS0ZCeEhSbGYwcjFrWkl3WUg4cV9uOGxkNVpXVTVsZlJoamN2VTNDU29vWnFkb1VhWkRGV2pLVHBYQ3VVbXd3SzN3LWp3OXpwTzltempVbGR3ajlZMW9Wbkx3Nm1GX0RJanZiNWtqM0lDVGxEbjVwQVFfTHV4LXpnOVA1?oc=5",
+          "lang": "EN",
+          "pub": "Mon, 16 Nov 2026 20:48:00 GMT"
+        },
+        {
+          "t": "VIDEO: Former Motley Rice attorney sentenced on wire fraud, money laundering charges - Live 5 News",
+          "src": "Live 5 News",
+          "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQOFpwdzN3YzFNX3NPTk5MMnlUV3B4aHYxc1RBc3lIclpZSHdCNzh4UnoyZUdveFBNRkYyZS0tYkx4aUVaYUcyVGxHVmk0SllhbUtoM1RsQ0F1bHVZbktGT3JRcjdoRmRsblhQYUxyUzc0VlM1dThFSVFJMVgzS3VaTzdlWHdqbTE2b1Z2UHRNanJEY210SjAzM0F5cDU2d1NEMmRiejhEb3Q3aHlia3lWbGlMaXpHeVVEaU9VZUNGZVJWSDA?oc=5",
+          "lang": "EN",
+          "pub": "Mon, 16 Nov 2026 20:07:00 GMT"
+        },
+        {
+          "t": "Philippine Star. . ‘KAYA BANG GAWIN ANG EXTENSIVE FINANCIAL INVESTIGATION IN TWO WEEKS?’ Defense counsel Atty. Mark Vinluan asks witness Atty. Rainer dela Fuente, an anti-money laundering lawyer, whether an extensive financial investigation - Facebook",
+          "src": "Facebook",
+          "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQbEFJalFERmNuaUVjaUU5TktRTkFxb2pLZlVLb29EeUdOTGtmZ0JLX2tNYTFFVzIyajhya0Qwb2g0QmstM1drc2FXYWE1NXhiaFZJYmR3VkJoQlRfazNHbmdvRW1meG83amd5UkVvcFYxVkFUbzlaRWJRWE5Kbnh1OWZYOGtnX29ucGVIRUw1cGFmVjVFU3I3MHVyTDV6NzZfbVVZSzJpbFhDeG9zQmFrQ3hWSFRUVzBIa2dUVUtmT1ZOU2d1UWlVWHJmME9JVlh2NWx6anFGelRXUC1UWVE?oc=5",
+          "lang": "EN",
+          "pub": "Thu, 19 Nov 2026 03:12:29 GMT"
+        },
+        {
+          "t": "Charleston attorney sentenced to 87 months in prison for wire fraud, money laundering - WCIV",
+          "src": "WCIV",
+          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPWlZvRHVMOHFFX05oNzhvbW9EQkZXazV2T1lLVDZGemtpZ0xCb3VOMTdRYW5BYjFfZVE5QWs3MXM2OXlaTHh1RktXWFd1SUNRWHdqNWt5d3hFMUhhSThSa19RYUJQUF92NjFJaHVfelhvWXZBRTJjTlRsMXo2cFdybnNfY1YzTlQ5eUpQanJZVUFsWVU1eENQWktxckF0RnNZRHZ4dlVRb185SjVzTjVUV0hOUUxrXzQ?oc=5",
+          "lang": "EN",
+          "pub": "Tue, 17 Nov 2026 00:27:57 GMT"
+        },
+        {
+          "t": "​AN anti-money laundering expert and three government officials are expected to testify for Vice President Sara Duterte during her impeachment trial, as her lawyers challenge allegations of unexplained wealth and undisclosed business interests. - LinkedIn",
+          "src": "LinkedIn",
+          "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQdmRJV1JuSnUxdEhWTzYzam9GQUFRalJkc2NMVGp3RGRrUXk4TEdlRzBRLW1MbkNEekNzNWhyRHo1SFVOMDhMYWVmSDI4VUhBMnR6Z2tzRjhXVUFPREljR29ucFM1b2JaVVdpejBpRks1QVlJdHQ2bktMYTZFbjIyMzZKMndFU2R3YzVDWU1QaWlfUEg1V3JTNElDLXNjVVAybzBRTHVyWWp5LXpwTUhrTFo2UW5VdkNEOWtXYkI5MXM?oc=5",
+          "lang": "EN",
+          "pub": "Wed, 18 Nov 2026 17:16:54 GMT"
+        },
+        {
+          "t": "FINANCIAL CRIME LAWYER AS WITNESS IN VP SARA’S IMPEACHMENT TRIAL Anti-money laundering and financial crime lawyer Rainer dela Fuente took his oath as a defense witness during the continuation of Vice President Sara Duterte’s impeachment - Facebook",
+          "src": "Facebook",
+          "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPNURmUGZaQzlRSUNWQWtSQmVCNGJFZ0FWNExGa05vU05zbFVTSlZRbW1IdTZOYXFYekxCSzJNVURJT0ZNNjZpWExPNV9tREoteC16UFB4M2UzZk9lejZvNnBGdml4MmZ4aTFDaXA0eWo4TlhqQVd1N0hmWC1ZeFBhYUhndFFjaGFIMEY0djhWYXBtQ0QtcXNrTzlLUl9lcnhIbnYxek9ueUlnVE00NExkNUdNM3FuT3BORTNNMXRvWEprNkpJOVU0RzZJYU5jazhwMG5KTlBvVFA4cUdtVXNn?oc=5",
+          "lang": "EN",
+          "pub": "Thu, 19 Nov 2026 02:26:44 GMT"
+        },
+        {
+          "t": "Bolivia attorney general arrested on drug trafficking and money laundering charges - Jurist.org",
+          "src": "Jurist.org",
+          "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPaU9ZeVBVNVVlVnFXb0I4RlRudlFEM2htcmZpejdfVkhicVBGZ3MzU05qVnp5SkZTYm9xRFRET3JIdjlUUU1iMmtPYmk2SHIwQ2VMY0RtZ3U3MUlVOGFOYXBXSWR4QmNJMUNUQkdKb2g0V1J1ODdBOXVMYm5rS2ZZdFpaNzkzMV9ySXdObEdqUU50UVdOOWhiZ3FwU3hOU1hLWXNqQlV3VHNoam53ZWdic05Oc05oUkc5TnE4?oc=5",
+          "lang": "EN",
+          "pub": "Fri, 02 Oct 2026 07:00:00 GMT"
+        },
+        {
+          "t": "Bolivia's attorney general arrested on drugs, money laundering charges - France 24",
+          "src": "France 24",
+          "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPNjIyRFBNNms0N19YYmZiOElfSXBnbnhES1pwNTcyMC0tdjk1aVd4ZGZsYWhUcVNQYUxwQUhJUC1adVRyczZrZmszRUFta1ZFd3MtS1dJbjZnNGdDakhFNkxiTno2bmRxdEtzejJlZUhwaWpUejZ1M1g0eExmd0JvM0NyM2gwc2ZwSFV5RHg0aWNfVkN2MVNYdHpvalpOUnY3Z0Z5UTJSMzBPUFpZLUZCb2FoUENZRDhUQ1JoT0FuSm1WM002VUVMZnBacTU?oc=5",
           "lang": "EN",
           "pub": "Thu, 01 Oct 2026 07:00:00 GMT"
         },
         {
-          "t": "Allahabad HC grants Azam Khan interim bail over ED arrest procedure - Vartha Bharati",
-          "src": "Vartha Bharati",
-          "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQYjdWSEJzSmwxRmI4TlZfeTFYMEdoLVUxcmZuUHhPZno5N3kyREtWeFhPUnBTSjdzMC1WeWtvNXIwT0xDNlpMV0s3RjRkbEIzMmc5dExhanNVcW5SakJ5eHJFV0hVdTNsNlluMF96MnNQMXk2TnFJOHF4dktmYnl3WG05NlFiYjNQNW9vMmhCbTl0aUt1ZVRSa0ItN0llaUV3Xy16Ml9LSjFSa2JzSjN6MTh1MlTSAboBQVVfeXFMTXJOVDAxT1BrTTBPNEdYNUdXU1Nma3E0cGhoUWRkRHZYdzdPOENhaVZMSXVXUjFMMWdpemFPcGlKYlBhMU1TU1liVjR6MS1QTUdDemR3MTBvNmFFRHZJVlNVQjdVQUp0WFJfZHh4RGE1QzA5cEtZSFNjTU5aVHFtdVMzUDltMXFONjZHZjg0ZmhULU5oRjdjcFVPeHdvZVpkNXQxVkpTLWZfN24ydllWWndybFNaeFI5Vi13?oc=5",
+          "t": "Lawrence mayor charged with money laundering, his lawyer crashes into parked car after arraignment - WHDH",
+          "src": "WHDH",
+          "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNTWpoaW9aVzBkMWlrY3RObTJWbmR3cFhRcUpmejdDOE5lZ1NicFZXemRyRXNfYkhUZkRxZmg2NmFjckVqR2thTGk4QzhJdU1DbXJoS3lHc29XRjhSUldXRDhzelBOdFYxdHF4V2V5N0lwMUQ2SEEtd2xSQ1dMVHhzRkQ0N0JIY0ZfbXF1T0FQUFVtZmRESGItUzloRDlZaER2Y2xnc2tJQmlRZWQ1TmZDSVd0WEhMOGJfek51Qw?oc=5",
           "lang": "EN",
-          "pub": "Tue, 17 Nov 2026 15:47:39 GMT"
+          "pub": "Fri, 14 Aug 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 2,
-      "total": 47
+      "news_score": 8,
+      "total": 48
     },
     {
       "name": "상품권·선불수단",
@@ -339,56 +422,28 @@
           "pub": "Mon, 14 Sep 2026 07:00:00 GMT"
         }
       ],
-      "news_score": 0,
-      "total": 45
+      "news_score": 1,
+      "total": 46
     },
     {
-      "name": "변호사·회계 등 전문직",
+      "name": "PG·결제대행",
       "level": 2,
       "flags": [
-        "FATF"
+        "특금법"
       ],
-      "news_count": 5,
+      "news_count": 1,
       "struct": 40,
       "hits": [
         {
-          "t": "김만배, 김수남 소개 변호사 통해 범죄수익 은닉 - 연합뉴스",
-          "src": "연합뉴스",
-          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE16WFNlU1BUbjFMbHE2S2x4empUTmd6eTJtQkNzYXVFcERLWUtHMDFyOU44alRrLXJRRUlwNWhSUlIwT1lBQ2F0ZEM1a2kyOE05OTBKOFlzMkRuRG_SAWBBVV95cUxNQjdQbGpHOGFmVENmTFJCeUZoUlZCcHRzTXJpby13VXgyWDYxRmVZZDFkS3lGUklUdFJTUTNJYXZLbHAtaXdMb1JXQ0d2QlV1OEtrWmtCU1ZFM3BUc1BCd1k?oc=5",
+          "t": "가상계좌도 못 믿겠네…금감원, ‘보이스피싱 공모’ PG사 적발 - 한겨레",
+          "src": "한겨레",
+          "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE1BYXlBX0Ftc2ZXNnI1U3JsdjBOV1I3SFdiYkNEUm4tN21tNHNKLXZ5M0tXMDNoNk1xS204ZHhvVFdNdU5kMXA2TjVMWU9KbklVNV95dTMxcTZ6eXdlR1lfUXB0dkJ3ODF3bXV2ZWZRMDhCdw?oc=5",
           "lang": "KR",
-          "pub": "Wed, 15 Mar 2023 07:00:00 GMT"
-        },
-        {
-          "t": "“김만배, 김수남 소개 변호사 통해 범죄수익 은닉 지시” - KBS 뉴스",
-          "src": "KBS 뉴스",
-          "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE8wVDJNamJ6ZnlQZjdrYzlTVVVoaXhpNTlRY1FWdHNjY0JfZzZ1Ti1PLWNpRHdpOUlHcjU1UzBwNjhkVG0xVFJ1VkdmNnZwM0FieDI5bmdmUVkySnM?oc=5",
-          "lang": "KR",
-          "pub": "Wed, 15 Mar 2023 07:00:00 GMT"
-        },
-        {
-          "t": "VIDEO: Former Motley Rice attorney sentenced on wire fraud, money laundering charges - Live 5 News",
-          "src": "Live 5 News",
-          "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQOFpwdzN3YzFNX3NPTk5MMnlUV3B4aHYxc1RBc3lIclpZSHdCNzh4UnoyZUdveFBNRkYyZS0tYkx4aUVaYUcyVGxHVmk0SllhbUtoM1RsQ0F1bHVZbktGT3JRcjdoRmRsblhQYUxyUzc0VlM1dThFSVFJMVgzS3VaTzdlWHdqbTE2b1Z2UHRNanJEY210SjAzM0F5cDU2d1NEMmRiejhEb3Q3aHlia3lWbGlMaXpHeVVEaU9VZUNGZVJWSDA?oc=5",
-          "lang": "EN",
-          "pub": "Tue, 17 Nov 2026 09:19:13 GMT"
-        },
-        {
-          "t": "Former Motley Rice attorney sentenced on wire fraud, money laundering charges - Live 5 News",
-          "src": "Live 5 News",
-          "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNQUJZQjkzSHYtZkNmejMwMXIzVU91RTJVcndpOXJ2cXQ3UFlBS0tCa0FEUUdhbXlyTkhSdldvMjRuVk9SODhxUzdNem05Y19aTm1XUmZQNHJXSXRXTWUxWVdVSHVoanp5VzZITlhDUHpkZnVZd1k2VEhjQTU1a25GUXdWdzhsSW90WWhJY3ZNLXN0TFZRVS1VZmNiaExvWERBN2hTTGVVX0k2V0VWWFJXWNIBxAFBVV95cUxNdkVuR09VT0MtR1ZFTjY0UklvN1Axa0JNV2U0NWNpMmN4OS1ybEtvSzNQR3ZCeHk0UE1Cc2ZrM0lrMnRwZVYwdXNWS0ZCeEhSbGYwcjFrWkl3WUg4cV9uOGxkNVpXVTVsZlJoamN2VTNDU29vWnFkb1VhWkRGV2pLVHBYQ3VVbXd3SzN3LWp3OXpwTzltempVbGR3ajlZMW9Wbkx3Nm1GX0RJanZiNWtqM0lDVGxEbjVwQVFfTHV4LXpnOVA1?oc=5",
-          "lang": "EN",
-          "pub": "Mon, 16 Nov 2026 20:48:00 GMT"
-        },
-        {
-          "t": "Charleston attorney sentenced to 87 months in prison for wire fraud, money laundering - WCIV",
-          "src": "WCIV",
-          "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPWlZvRHVMOHFFX05oNzhvbW9EQkZXazV2T1lLVDZGemtpZ0xCb3VOMTdRYW5BYjFfZVE5QWs3MXM2OXlaTHh1RktXWFd1SUNRWHdqNWt5d3hFMUhhSThSa19RYUJQUF92NjFJaHVfelhvWXZBRTJjTlRsMXo2cFdybnNfY1YzTlQ5eUpQanJZVUFsWVU1eENQWktxckF0RnNZRHZ4dlVRb185SjVzTjVUV0hOUUxrXzQ?oc=5",
-          "lang": "EN",
-          "pub": "Tue, 17 Nov 2026 00:27:57 GMT"
+          "pub": "Tue, 22 Jul 2025 07:00:00 GMT"
         }
       ],
-      "news_score": 2,
-      "total": 42
+      "news_score": 1,
+      "total": 41
     },
     {
       "name": "무역(TBML)",
@@ -431,18 +486,6 @@
       "level": 2,
       "flags": [
         "FATF"
-      ],
-      "news_count": 0,
-      "struct": 40,
-      "hits": [],
-      "news_score": 0,
-      "total": 40
-    },
-    {
-      "name": "PG·결제대행",
-      "level": 2,
-      "flags": [
-        "특금법"
       ],
       "news_count": 0,
       "struct": 40,
